@@ -1,0 +1,18 @@
+pages:
+  image: node:6
+  stage: deploy
+  cache:
+    paths:
+      - node_modules/
+  script:
+    - npm install vue-material@beta --save
+    - npm i vuefire@next
+    - npm install
+    - npm run build
+    - mkdir public
+    - mv dist/* public
+  artifacts:
+    paths:
+      - public
+  only:
+  - master
