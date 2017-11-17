@@ -85,9 +85,7 @@ export default {
 		};
 	},
 	created: function () {
-		this.$bind("topics", firebase.firestore().collection("topics")).then(() => {
-			alert('true')
-		});
+		this.$bind("topics", firebase.firestore().collection("topics"))
 	},
 	watch: {
 		"topics": function () {
