@@ -37,10 +37,26 @@ var router = new Router({
 
 router.beforeEach(function (to, from, next) {
 	if (to.auth && !firebase.auth().currentUser) {
-		next('/login')
+		next({
+			path: '/login',
+			query: {
+				go: to.path,
+			}
+		})
 	} else {
 		next()
 	}
+});
+
+router.afterEach(function (to, from, next) {
+	if (to.path !== '/login' && !firebase.auth().currentUser) {
+		router.replace({
+			path: '/login',
+			query: {
+				go: to.fullPath,
+			},
+		});
+	};
 })
 
 export default router

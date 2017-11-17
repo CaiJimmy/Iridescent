@@ -1,10 +1,18 @@
 <template>
 	<div id="app" v-if="$root.firebaseReady">
-		<md-toolbar class="md-primary md-dense md-transparent" md-elevation="0">
+		<md-toolbar class="md-primary md-dense md-transparent" md-elevation="0" v-if="loggedIn">
 			<h3 class="md-title" style="flex:1">{{ $route.name }}</h3>
-			<md-avatar>
-				<img :src="user.photoURL" :alt="user.name">
-			</md-avatar>
+			<md-menu md-direction="bottom-start">
+				<md-avatar md-menu-trigger>
+					<img :src="user.photoURL" :alt="user.displayName">
+				</md-avatar>
+				<md-menu-content>
+					<md-menu-item v-on:click="logOut()">
+						<md-icon>exit_to_app</md-icon>
+						<span>Cerrar sesión</span>
+					</md-menu-item>
+				</md-menu-content>
+			</md-menu>
 		</md-toolbar>
 
 		<router-view />
@@ -24,13 +32,28 @@ export default {
 				photoURL: null,
 				name: null,
 				email: null
-			}
+			},
+			loggedIn: false
 		}
 	},
 	created: function () {
 		firebase.auth().onAuthStateChanged((user) => {
-			this.user = user;
+			if (user) {
+				this.user = user;
+				this.loggedIn = true;
+				this.$router.replace({
+					path: this.$route.query.go || '/'
+				});
+			}
+			else {
+				this.loggedIn = false;
+			}
 		});
+	},
+	methods: {
+		logOut: function () {
+			firebase.auth().signOut();
+		}
 	}
 };
 </script>
@@ -38,8 +61,8 @@ export default {
 @import "~vue-material/dist/theme/engine"; // Import the theme engine
 
 @include md-register-theme("default", (
-  primary: #3fffbe, 
-  accent: #1a11e8 
+  primary: #1de9b6, 
+  accent: #00bfa5 
 ));
 
 @import "~vue-material/dist/theme/all"; // Apply the theme

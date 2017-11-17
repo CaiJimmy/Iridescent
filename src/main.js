@@ -59,8 +59,6 @@ new Vue({
 					'email': user.email,
 					'photoURL': user.photoURL
 				});
-			} else {
-				this.$router.push('/login')
 			}
 			this.firebaseReady = true;
 		});
