@@ -117,7 +117,7 @@ export default {
                 this.$bind('questions', this.ref.questions);
             }
             else {
-                this.$router.go('/');
+                this.$router.replace('/');
             }
         })
     },
