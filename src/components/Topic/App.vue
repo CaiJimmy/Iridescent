@@ -11,12 +11,14 @@
             </div>
         </header>
 
-        <md-tabs md-sync-route class="md-primary" md-alignment="centered">
-            <md-tab id="tab-home" md-label="Inicio" :to="'/t/' + $route.params.id + '/'"></md-tab>
-            <md-tab id="tab-posts" md-label="Enviar" :to="'/t/' + $route.params.id + '/send'"></md-tab>
-        </md-tabs>
+        <div v-if="!loading.metadata">
+            <md-tabs md-sync-route class="md-primary" md-alignment="centered">
+                <md-tab id="tab-home" md-label="Inicio" :to="'/t/' + $route.params.id + '/'"></md-tab>
+                <md-tab id="tab-posts" md-label="Enviar" :to="'/t/' + $route.params.id + '/send'"></md-tab>
+            </md-tabs>
 
-        <router-view class="mainContent"></router-view>
+            <router-view class="mainContent"></router-view>
+        </div>
 
         <div class="questionsList container">
             <md-snackbar :md-active.sync="snackbar.display">{{ snackbar.message }}</md-snackbar>
@@ -129,7 +131,7 @@ export default {
   }
 }
 
-.mainContent{
-    margin: 2em auto;
+.mainContent {
+  margin: 2em auto;
 }
 </style>
