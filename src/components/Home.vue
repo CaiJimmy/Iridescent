@@ -17,8 +17,8 @@
 			</md-list-item>
 		</md-list>
 
-		<md-dialog :md-active.sync="showDialog.topics">
-			<Explore />
+		<md-dialog :md-active.sync="showDialog.topics" :md-fullscreen="false">
+			<Explore v-bind:firebaseRefs="ref" v-bind:levels="levels" v-bind:topics="topics" v-bind:user="user"/>
 		</md-dialog>
 
 	</div>
@@ -39,6 +39,7 @@ export default {
 	data () {
 		return {
 			topics: [],
+			levels: [],
 
 			user: {},
 
@@ -69,6 +70,10 @@ export default {
 
 		this.ref.topics = firebase.firestore().collection("topics");
 		this.$bind("topics", this.ref.topics);
+
+		this.ref.levels = firebase.firestore().collection("levels");
+		this.$bind("levels", this.ref.levels);
+
 	},
 	methods: {
 		getTopicByID (topicID) {
@@ -78,7 +83,7 @@ export default {
 }
 </script>
 <style scoped>
-.homepage{
-	margin: 2em auto;
+.homepage {
+  margin: 2em auto;
 }
 </style>
