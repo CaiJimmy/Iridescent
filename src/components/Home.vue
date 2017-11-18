@@ -55,12 +55,7 @@ export default {
 	},
 	computed: {
 		savedTopics: function () {
-			if (this.user.savedTopics) {
-				return this.user.savedTopics;
-			}
-			else {
-				return [];
-			}
+			return this.user.savedTopics ||  [];
 		}
 	},
 	created: function () {
