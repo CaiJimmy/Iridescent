@@ -53,6 +53,7 @@ export default {
 	methods: {
 		logOut: function () {
 			firebase.auth().signOut();
+			this.$router.push('/login');
 		}
 	}
 };
@@ -71,5 +72,8 @@ export default {
   max-width: 850px;
   padding: 0 15px;
   margin: 0 auto;
+  &.extend{
+	  max-width: 1200px;
+  }
 }
 </style>
