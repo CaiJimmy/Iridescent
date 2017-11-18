@@ -11,7 +11,7 @@ var router = new Router({
 	routes: [
 		{
 			path: '/',
-			component: require('@/components/HelloWorld.vue').default,
+			component: require('@/components/Home.vue').default,
 			auth: true
 		},
 		{
