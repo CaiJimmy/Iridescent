@@ -38,18 +38,20 @@ new Vue({
 	components: {
 		App
 	},
-	data () {
+	data() {
 		return {
 			firebaseReady: false
 		}
 	},
-	created () {
+	created() {
 		firebase.auth().onAuthStateChanged((user) => {
 			if (user) {
 				firestore.collection('users').doc(user.uid).set({
-					'name': user.displayName,
+					'displayName': user.displayName,
 					'email': user.email,
 					'photoURL': user.photoURL
+				}, {
+					merge: true
 				});
 			}
 			this.firebaseReady = true;
