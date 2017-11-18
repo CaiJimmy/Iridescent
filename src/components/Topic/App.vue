@@ -3,7 +3,7 @@
         <header class="topicHeader">
             <md-progress-spinner v-if="loading.metadata" class="md-accent" md-mode="indeterminate" :md-diameter="30" :md-stroke="3"></md-progress-spinner>
             <div v-else>
-                <div class="topicHeader--image" v-if="topic.image" :style="'background-image: url(' + topic.image + ')'"></div>
+                <div class="topicHeader--image" :style="'background-image: url(' + headerImage + ')'"></div>
                 <section class="topicHeader--meta">
                     <h1 class="md-title">{{ topic.name }}</h1>
                     <h2 v-if="topic.description">{{ topic.description }}</h2>
@@ -60,6 +60,14 @@ export default {
     computed: {
         user: () => {
             return firebase.auth().currentUser;
+        },
+        headerImage: function(){
+            if(this.topic.image){
+                return this.topic.image;
+            }
+            else{
+                return 'https://source.unsplash.com/1200x500/?technology';
+            }
         }
     },
     watch: {
