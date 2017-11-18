@@ -4,13 +4,16 @@
 			<md-button class="md-primary md-raised" v-on:click="showDialog.topics = true">Explorar</md-button>
 		</md-empty-state>
 
-		<md-list class="md-elevation-2" v-if="savedTopics.length">
+		<md-list class="md-elevation-2 md-double-line" v-if="savedTopics.length">
 			<md-subheader>
 				<span class="md-list-item-text">Temas Guardados</span>
 			</md-subheader>
 
 			<md-list-item v-for="topicID in savedTopics" :key="topicID">
-				<span class="md-list-item-text">{{ getTopicByID(topicID).name }}</span>
+				<span class="md-list-item-text">
+					<span>{{ getTopicByID(topicID).name }}</span>
+					<span>{{ getLevelById(getTopicByID(topicID).level).name }}</span>
+				</span>
 				<md-button class="md-icon-button" v-on:click="$router.push('/t/' + topicID)">
 					<md-icon>remove_red_eye</md-icon>
 				</md-button>
@@ -18,7 +21,7 @@
 		</md-list>
 
 		<md-dialog :md-active.sync="showDialog.topics" :md-fullscreen="false">
-			<Explore v-bind:firebaseRefs="ref" v-bind:levels="levels" v-bind:topics="topics" v-bind:user="user"/>
+			<Explore v-bind:firebaseRefs="ref" v-bind:levels="levels" v-bind:topics="topics" v-bind:user="user" />
 		</md-dialog>
 
 	</div>
@@ -55,7 +58,7 @@ export default {
 	},
 	computed: {
 		savedTopics: function () {
-			return this.user.savedTopics ||  [];
+			return this.user.savedTopics || [];
 		}
 	},
 	created: function () {
@@ -71,6 +74,9 @@ export default {
 
 	},
 	methods: {
+		getLevelById (levelId) {
+			return this.levels.filter(level => level.id == levelId)[0];
+		},
 		getTopicByID (topicID) {
 			return this.topics.filter(topic => topic.id == topicID)[0];
 		},
