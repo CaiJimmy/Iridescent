@@ -1,7 +1,8 @@
 <template>
 	<div id="app" v-if="$root.firebaseReady">
-		<md-toolbar class="md-primary md-dense md-transparent" md-elevation="0" v-if="loggedIn">
-			<h3 class="md-title" style="flex:1">{{ $route.name }}</h3>
+		<md-toolbar class="md-primary" md-elevation="0" v-if="loggedIn">
+			<h3 class="md-title" style="flex:1">{{ $meta().refresh().titleChunk }}</h3>
+
 			<md-menu md-direction="bottom-start">
 				<md-avatar md-menu-trigger>
 					<img :src="user.photoURL" :alt="user.displayName">
@@ -23,9 +24,13 @@
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
-
 export default {
 	name: "app",
+	metaInfo: {
+		title: 'Inicio',
+		titleTemplate: '%s | Elysian'
+	},
+
 	data () {
 		return {
 			user: {
@@ -72,8 +77,8 @@ export default {
   max-width: 850px;
   padding: 0 15px;
   margin: 0 auto;
-  &.extend{
-	  max-width: 1200px;
+  &.extend {
+    max-width: 1200px;
   }
 }
 </style>

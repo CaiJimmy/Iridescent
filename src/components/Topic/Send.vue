@@ -1,6 +1,5 @@
 <template>
-    <div class="container">
-    <form v-on:submit.prevent>
+    <form v-on:submit.prevent class="container">
         <md-card>
             <md-progress-bar md-mode="indeterminate" v-if="loading.form" />
 
@@ -10,7 +9,7 @@
                 </md-avatar>
 
                 <div class="md-title">{{ user.displayName }}</div>
-                <div class="md-subtitle">{{ user.email }}</div>
+                <div class="md-subhead">{{ user.email }}</div>
             </md-card-header>
 
             <md-card-content>
@@ -36,8 +35,9 @@
                 <md-button class="md-primary" @click.native="addQuestion()">Enviar</md-button>
             </md-card-actions>
         </md-card>
+        <md-snackbar :md-active.sync="snackbar.display">{{ snackbar.message }}</md-snackbar>
+
     </form>
-    </div>
 </template>
 <script>
 import * as firebase from "firebase/app";
@@ -45,7 +45,7 @@ import "firebase/firestore";
 import "firebase/auth";
 
 export default {
-    name: 'TopicPage-Send',
+    name: 'Send',
     data: () => ({
         question: {
             title: null,
@@ -60,6 +60,10 @@ export default {
         },
         loading: {
             form: false
+        },
+        snackbar: {
+            display: false,
+            message: null
         }
     }),
     computed: {
@@ -97,14 +101,14 @@ export default {
                         this.$validator.reset();
                         this.loading.form = false;
 
-                        this.$parent.snackbar.message = "La pregunta ha sido publicada";
-                        this.$parent.snackbar.display = true;
+                        this.snackbar.message = "La pregunta ha sido publicada";
+                        this.snackbar.display = true;
                     });
                 }
                 else {
                     this.loading.form = false;
-                    this.$parent.snackbar.message = "Corrige los errores";
-                    this.$parent.snackbar.display = true;
+                    this.snackbar.message = "Corrige los errores";
+                    this.snackbar.display = true;
                 }
             })
         }

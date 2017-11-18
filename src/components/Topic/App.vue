@@ -6,7 +6,7 @@
                 <div class="topicHeader--image" v-if="topic.image" :style="'background-image: url(' + topic.image + ')'"></div>
                 <section class="topicHeader--meta">
                     <h1 class="md-title">{{ topic.name }}</h1>
-                    <h2>{{ topic.description }}</h2>
+                    <h2 v-if="topic.description">{{ topic.description }}</h2>
                 </section>
             </div>
         </header>
@@ -33,11 +33,14 @@ import "firebase/auth";
 
 export default {
     name: 'TopicPage',
+    metaInfo () {
+        return {
+            title: this.topic.name
+        }
+    },
     data: () => ({
         topic: {
-            name: null,
-            description: null,
-            image: null
+            name: null
         },
 
         loading: {
@@ -71,8 +74,6 @@ export default {
         this.ref.topic.get().then((data) => {
             if (data.exists) {
                 this.$bind('topic', this.ref.topic);
-
-                this.ref.questions = firebase.firestore().collection('questions');
             }
             else {
                 this.$router.replace('/');

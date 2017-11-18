@@ -1,48 +1,42 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
-import Login from '@/components/Login'
-
+import Meta from 'vue-meta'
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 
+Vue.use(Meta)
 Vue.use(Router)
 
 var router = new Router({
 	routes: [
 		{
 			path: '/',
-			component: HelloWorld,
-			name: 'Dashboard',
+			component: require('@/components/HelloWorld.vue').default,
 			auth: true
 		},
 		{
 			path: '/settings/topics/',
-			name: "Administrar temas",
 			component: require('@/components/Settings/Topics.vue').default,
 			auth: true
 		},
 		{
 			path: '/t/:id/',
-			name: "Tema",
 			component: require('@/components/Topic/App.vue').default,
 			auth: true,
 			children: [
 				{
 					path: '',
-					name: "Ver Preguntas",
 					component: require('@/components/Topic/Home.vue').default
 				},
 				{
 					path: 'send',
-					name: "Enviar preguntas",
 					component: require('@/components/Topic/Send.vue').default
 				}
 			]
 		},
 		{
 			path: '/login',
-			component: Login
+			component: require('@/components/Login.vue').default
 		}
 	]
 })

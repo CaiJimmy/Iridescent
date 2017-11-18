@@ -1,91 +1,88 @@
 <template>
-	<div>
-		<form v-on:submit.prevent>
-			<md-card>
-				<md-card-header>
-					<div class="md-title">Añadir Tema</div>
-				</md-card-header>
+	<div class="container">
+		<md-dialog :md-active.sync="showDialog.addTopic">
+			<AddTopic v-bind:selectedLevel="selectedLevel" v-bind:callback="closeAddTopicDialog" />
+		</md-dialog>
 
-				<md-card-content>
-					<div class="md-layout md-layout-wrap md-gutter-16">
-						<md-field>
-							<label for="title">Título</label>
-							<md-input name="title" id="title" v-model="form.title" :disabled="sending" />
-						</md-field>
+		<md-dialog :md-active.sync="showDialog.addLevel">
+			<AddLevel v-bind:callback="closeAddLevelDialog" />
+		</md-dialog>
 
-						<md-field>
-							<label for="description">Descripcion</label>
-							<md-input name="description" id="description" v-model="form.description" :disabled="sending" />
-						</md-field>
-
-						<md-field>
-							<label>Imagen</label>
-							<md-file accept="image/*" v-model="image_file.name" />
-						</md-field>
-					</div>
-				</md-card-content>
-				<md-progress-bar md-mode="indeterminate" v-if="sending" />
-
-				<md-card-actions>
-					<md-button type="submit" class="md-primary" :disabled="sending" v-on:click="addTopic()">Añadir</md-button>
-				</md-card-actions>
-			</md-card>
-		</form>
-
-		<md-progress-spinner v-if="loading.topics" class="md-accent" md-mode="indeterminate" :md-diameter="30" :md-stroke="3"></md-progress-spinner>
+		<md-empty-state v-if="!levels.length" md-icon="add" md-label="Crear nivel" md-description="Para comenzar, crear un nivel">
+			<md-button class="md-primary md-raised" v-on:click="showDialog.addLevel = true">Crear</md-button>
+		</md-empty-state>
 
 		<div v-else>
-			<md-list class="md-double-line md-dense md-elevation-1" v-if="topics.length">
+			<md-list class="md-elevation-1 levelList" v-for="level in levels" :key="level.id">
+				<md-subheader>
+					<h1 class="md-title" style="flex: 1;">{{ level.name }}</h1>
+					<md-button v-on:click="addTopic(level.id)" class="md-icon-button md-list-action">
+						<md-icon class="md-primary">add</md-icon>
+					</md-button>
+				</md-subheader>
 
-				<md-list-item v-for="topic in topics" :key="topic.name">
+				<md-empty-state v-if="!topicFilter(level.id).length" md-icon="add" md-label="Nivel vacío" md-description="Añade temas a este nivel pulsando el botón de la esquina derecha">
+				</md-empty-state>
+
+				<md-list-item v-for="topic in topicFilter(level.id)" :key="topic.id">
 					<md-avatar v-if="topic.image">
 						<img :src="topic.image" :alt="topic.name">
 					</md-avatar>
 
 					<div class="md-list-item-text">
 						<span>{{ topic.name }}</span>
-						<span>{{ topic.description }}</span>
 					</div>
 
-					<md-button class="md-icon-button md-list-action">
-						<md-icon class="md-primary">edit</md-icon>
+					<md-button class="md-icon-button md-list-action" v-on:click="$router.push('/t/' + topic.id)">
+						<md-icon class="md-primary">remove_red_eye</md-icon>
 					</md-button>
 				</md-list-item>
-				<md-divider class="md-inset"></md-divider>
 			</md-list>
-			<md-empty-state v-else md-icon="assignment" md-label="Crear un tema">
-			</md-empty-state>
-		</div>
 
+			<md-button class="md-fab" v-on:click="showDialog.addLevel = true" id="addLevel">
+				<md-tooltip md-direction="left">Añadir Nivel</md-tooltip>
+				<md-icon>add</md-icon>
+			</md-button>
+		</div>
 	</div>
 </template>
 <script>
 import * as firebase from "firebase/app";
-import "firebase/auth";
 import "firebase/firestore";
-import "firebase/storage";
+
+import AddTopic from './Topics/Add.vue'
+import AddLevel from './Levels/Add.vue'
 
 export default {
 	name: "Topics",
+	components: {
+		AddTopic,
+		AddLevel
+	},
+	metaInfo () {
+		return {
+			title: 'Temas'
+		}
+	},
 	data () {
 		return {
 			topics: [],
-			image_file: {
-				name: null
-			},
-			form: {
-				title: null,
-				description: null,
-				image: null
-			},
-			sending: false,
+			levels: [],
 			loading: {
 				topics: true
-			}
+			},
+
+			showDialog: {
+				addTopic: false,
+				addLevel: false
+			},
+
+			selectedLevel: null
 		};
 	},
 	created: function () {
-		this.$bind("topics", firebase.firestore().collection("topics"))
+		this.$bind("topics", firebase.firestore().collection("topics"));
+		this.$bind("levels", firebase.firestore().collection("levels"));
 	},
 	watch: {
 		"topics": function () {
@@ -93,54 +90,38 @@ export default {
 		}
 	},
 	methods: {
-		onSelect: function (event, to, to2) {
-			let file = event[0];
-			this[to] = file;
-			this.selected[to] = true;
-			this.form[to2] = null;
+		closeAddLevelDialog: function (dialogRef) {
+			this.showDialog.addLevel = false;
 		},
-		uploadFile: function (file, path) {
-			var storageRef = firebase.storage().ref();
-			var metadata = {
-				contentType: file.type
-			};
-			return firebase
-				.storage()
-				.ref(path || "images/" + file.name)
-				.put(file, metadata)
-				.then(function (snapshot) {
-					console.log("Uploaded", snapshot.totalBytes, "bytes.");
-					console.log(snapshot.metadata);
-					var url = snapshot.downloadURL;
-					console.log("File available at", url);
+		closeAddTopicDialog: function (dialogRef) {
+			this.showDialog.addTopic = false;
+		},
+		addTopic: function (levelID) {
+			this.selectedLevel = levelID;
+			this.showDialog.addTopic = true;
+		},
+		topicFilter: function (levelID) {
+			let array = this.topics.filter((topic) => {
+				return topic.level == levelID;
+			});
 
-					return snapshot;
-				})
-				.catch(function (error) {
-					console.error("Upload failed:", error);
-				});
-		},
-		addTopic: function () {
-			if (this.form.title) {
-				this.sending = true;
-				firebase
-					.firestore()
-					.collection("topics")
-					.add(this.form)
-					.then(() => {
-						this.sending = false;
-					});
-				this.form = {
-					title: null,
-					description: null,
-					image: null
-				};
-			}
+			return array;
 		}
 	}
 };
 </script>
 
-<style>
+<style scoped>
+.container {
+  margin: 2em auto;
+}
+.levelList {
+  margin-bottom: 1em;
+}
 
+#addLevel {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+}
 </style>
