@@ -10,10 +10,7 @@ Vue.use(VueMaterial)
 Vue.config.productionTip = false;
 
 import * as firebase from 'firebase/app';
-
-// These imports load individual services into the firebase namespace.
 import 'firebase/auth';
-
 
 import VueFire from 'vuefire';
 Vue.use(VueFire);
@@ -44,11 +41,6 @@ new Vue({
 	data () {
 		return {
 			firebaseReady: false
-		}
-	},
-	firestore () {
-		return {
-			user: firebase.firestore().collection('users')
 		}
 	},
 	created () {
