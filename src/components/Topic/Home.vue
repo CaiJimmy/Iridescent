@@ -99,7 +99,7 @@ form {
 
 @media (max-width: 850px){
     .grid-wrapper{
-        flex-direction: column;
+        flex-direction: column!important;
     }
 }
 </style>
