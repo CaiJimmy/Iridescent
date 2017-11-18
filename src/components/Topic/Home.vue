@@ -1,6 +1,6 @@
 <template>
     <div class="container extend">
-        <div class="md-layout-row md-gutter">
+        <div class="md-layout-row md-gutter grid-wrapper">
             <div class="md-layout-column md-flex-25">
                 <md-card v-if="$parent.topic.questionCount">
                     <md-progress-bar md-mode="determinate" :md-value="question_bar"></md-progress-bar>
@@ -96,4 +96,10 @@ form {
         max-height: 90%;
     }
 };
+
+@media (max-width: 850px){
+    .grid-wrapper{
+        flex-direction: column;
+    }
+}
 </style>
