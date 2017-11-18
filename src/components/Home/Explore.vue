@@ -1,6 +1,6 @@
 <template>
     <md-list class="md-elevation-2">
-        <div v-for="level in levels" :key="level.id">
+        <div v-for="(level, index) in levels" :key="level.id">
             <md-subheader>{{ level.name }}</md-subheader>
             <md-list-item class="md-inset" v-for="topic in getTopicsByLevel(level.id)" :key="topic.id">
                 <div class="md-list-item-text">
@@ -16,6 +16,7 @@
                 </md-button>
 
             </md-list-item>
+            <md-divider v-if="index !== levels.length - 1"></md-divider>
         </div>
     </md-list>
 </template>
