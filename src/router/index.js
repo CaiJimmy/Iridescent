@@ -24,9 +24,21 @@ var router = new Router({
 		},
 		{
 			path: '/t/:id/',
-			name: "{{ id }}",
-			component: require('@/components/Topic/Index.vue').default,
-			auth: true
+			name: "Tema",
+			component: require('@/components/Topic/App.vue').default,
+			auth: true,
+			children: [
+				{
+					path: '',
+					name: "Ver Preguntas",
+					component: require('@/components/Topic/Home.vue').default
+				},
+				{
+					path: 'send',
+					name: "Enviar preguntas",
+					component: require('@/components/Topic/Send.vue').default
+				}
+			]
 		},
 		{
 			path: '/login',
