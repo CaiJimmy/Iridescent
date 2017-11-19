@@ -1,7 +1,7 @@
 <template>
     <div class="container extend">
-        <div class="md-layout-row md-gutter grid-wrapper">
-            <div class="md-layout-column md-flex-large-25 md-flex-100">
+        <div class="md-layout-row md-layout-column-small md-gutter">
+            <div class="md-layout-column md-flex-large-25">
                 <md-card v-if="$parent.topic.questionCount">
                     <md-progress-bar md-mode="determinate" :md-value="question_bar"></md-progress-bar>
                     <md-card-header>
@@ -11,15 +11,14 @@
                 </md-card>
             </div>
 
-            <div class="md-layout-column md-flex-large-75 md-flex-100">
-
+            <div class="md-layout-column md-flex-large-75 md-gutter">
                 <div v-if="questions.length">
-                    <md-card v-for="(item, index) in questions" :key="item['.key']">
+                    <md-card v-for="(item, index) in questions" :key="item['.key']" class="questionCard">
                         <md-card-content>
-                            {{ item.title }} {{item.id}}
+                            {{ item.title }}
                             <md-list>
                                 <md-list-item v-for="(value, letter, index) in item.answers" v-bind:key="index">
-                                    <div class="md-list-text-container">
+                                    <div class="md-list-item-text">
                                         {{letter.toUpperCase()}}. {{value}}
                                     </div>
                                     <md-button v-if="item.correctAnswer == letter" class="md-icon-button md-list-action">
@@ -80,7 +79,7 @@ export default {
         this.ref.questions = firebase.firestore().collection('questions').where('topic', '==', this.$parent.ref.topic);
         this.$bind('questions', this.ref.questions);
 
-        this.ref.userQuestions = ref.questions.where('author', '==', this.$parent.user.uid);
+        this.ref.userQuestions = this.ref.questions.where('author', '==', this.$parent.user.uid);
         this.$bind('userQuestions', this.ref.userQuestions);
     }
 }
@@ -90,16 +89,13 @@ form {
   overflow-y: auto;
 }
 
+.questionCard{
+    margin-bottom: 16px;
+}
 @media (min-width: 850px) {
     .md-dialog{
         width: 500px;
         max-height: 90%;
     }
 };
-
-@media (max-width: 850px){
-    .grid-wrapper{
-        flex-direction: column!important;
-    }
-}
 </style>
