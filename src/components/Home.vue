@@ -1,10 +1,11 @@
 <template>
 	<div class="homepage container compact">
 		<md-empty-state md-icon="add" md-label="Guardar Tema" md-description="Guardar temas a tu cuenta para accederlo más rápido">
-			<md-button class="md-primary md-raised" v-on:click="showDialog.topics = true">Explorar</md-button>
+			<md-progress-spinner md-mode="indeterminate" v-if="loading.savedTopics"></md-progress-spinner>
+			<md-button class="md-primary md-raised" v-else v-on:click="showDialog.topics = true">Explorar</md-button>
 		</md-empty-state>
 
-		<md-list class="md-elevation-2 md-double-line" v-if="savedTopics.length">
+		<md-list class="md-elevation-2 md-double-line" v-if="!loading.savedTopics">
 			<md-subheader>
 				<span class="md-list-item-text">Temas Guardados</span>
 			</md-subheader>
@@ -50,12 +51,27 @@ export default {
 
 			showDialog: {
 				topics: false
+			},
+
+			loading: {
+				savedTopics: true
 			}
 		}
 	},
 	computed: {
 		savedTopics: function () {
 			return this.user.savedTopics || [];
+		},
+        wathcing() {
+            return [this.savedTopics, this.levels, this.topics].join()
+        }
+	},
+	watch: {
+		wathcing: function(){
+			// TODO: Waiting for VueFire's callback methods
+			if(this.savedTopics.length && this.levels.length && this.topics.length){ // All loaded
+				this.loading.savedTopics = false;
+			}
 		}
 	},
 	created: function () {

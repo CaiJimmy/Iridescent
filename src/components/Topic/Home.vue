@@ -14,6 +14,21 @@
             <div class="md-layout-column md-flex-large-75 md-gutter">
                 <div v-if="questions.length">
                     <md-card v-for="(item, index) in questions" :key="item['.key']" class="questionCard">
+                        <md-card-header>
+                            <div v-if="users.hasOwnProperty(item.author)">
+                                <md-avatar>
+                                    <img :src="users[item.author].photoURL" :alt="users[item.author].displayName">
+                                </md-avatar>
+                                <div class="md-title">{{ users[item.author].displayName }}</div>
+                                <div class="md-subhead">
+                                    <span>
+                                        <timeago :auto-update="60" :since="item.date"></timeago>
+                                        <md-tooltip md-direction="bottom">{{ toDate(item.date) }}</md-tooltip>
+                                    </span>
+                                </div>
+                            </div>
+                            <md-progress-spinner :md-diameter="30" :md-stroke="3" md-mode="indeterminate" v-else></md-progress-spinner>
+                        </md-card-header>
                         <md-card-content>
                             {{ item.title }}
                             <md-list>
@@ -41,15 +56,16 @@
 import * as firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
+import moment from 'moment';
 
 export default {
     name: 'TopicPage',
 
     data: () => ({
         questions: [],
-
         userQuestions: [],
 
+        users: {},
         loading: {
             questions: true
         },
@@ -73,6 +89,15 @@ export default {
     watch: {
         questions: function () {
             this.loading.questions = false;
+
+            this.questions.forEach((question) => {
+                if (!this.users[question.author]) {
+                    firebase.firestore().collection('users').doc(question.author).get().then(snapshot => {
+                        this.users[question.author] = snapshot.data();
+                        this.$forceUpdate()
+                    })
+                }
+            })
         }
     },
     created: function () {
@@ -81,6 +106,11 @@ export default {
 
         this.ref.userQuestions = this.ref.questions.where('author', '==', this.$parent.user.uid);
         this.$bind('userQuestions', this.ref.userQuestions);
+    },
+    methods: {
+        toDate: function (date) {
+            return moment(date).format("MM/DD/YYYY HH:mm")
+        }
     }
 }
 </script>
@@ -89,13 +119,13 @@ form {
   overflow-y: auto;
 }
 
-.questionCard{
-    margin-bottom: 16px;
+.questionCard {
+  margin-bottom: 16px;
 }
 @media (min-width: 850px) {
-    .md-dialog{
-        width: 500px;
-        max-height: 90%;
-    }
-};
+  .md-dialog {
+    width: 500px;
+    max-height: 90%;
+  }
+}
 </style>

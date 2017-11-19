@@ -18,6 +18,24 @@ Vue.use(VueFire);
 import VeeValidate from 'vee-validate';
 Vue.use(VeeValidate);
 
+import VueTimeago from 'vue-timeago'
+
+Vue.use(VueTimeago, {
+	name: 'timeago',
+	locale: 'es-ES',
+	locales: {
+		'es-ES': [
+			"ahora", ["hace %s segundo", "hace %s segundos"],
+			["hace %s minuto", "hace %s minutos"],
+			["hace %s hora", "hace %s horas"],
+			["hace %s día", "hace %s días"],
+			["hace %s semana", "hace %s semanas"],
+			["hace %s mes", "hace %s meses"],
+			["hace %s año", "hace %s años"]
+		]
+	}
+})
+
 var config = {
 	apiKey: "AIzaSyB-E8FlF70tYS8Rq4fQURI2HcfeisSrSls",
 	authDomain: "elysian-9d52f.firebaseapp.com",
