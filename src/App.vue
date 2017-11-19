@@ -1,6 +1,9 @@
 <template>
 	<div id="app" v-if="$root.firebaseReady">
 		<md-toolbar class="md-primary" md-elevation="0" v-if="loggedIn">
+			<md-button class="md-icon-button" v-if="$route.path !== '/'" v-on:click="$router.push('/')">
+				<md-icon>keyboard_arrow_left</md-icon>
+			</md-button>
 			<h3 class="md-title" style="flex:1">{{ $meta().refresh().titleChunk }}</h3>
 
 			<md-menu md-direction="bottom-start">
@@ -72,13 +75,15 @@ export default {
 ));
 
 @import "~vue-material/dist/theme/all"; // Apply the theme
-
 .container {
   max-width: 850px;
   padding: 0 15px;
   margin: 0 auto;
   &.extend {
     max-width: 1200px;
+  }
+  &.compact {
+    max-width: 650px;
   }
 }
 </style>

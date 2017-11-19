@@ -1,5 +1,5 @@
 <template>
-	<div class="homepage container">
+	<div class="homepage container compact">
 		<md-empty-state md-icon="add" md-label="Guardar Tema" md-description="Guardar temas a tu cuenta para accederlo más rápido">
 			<md-button class="md-primary md-raised" v-on:click="showDialog.topics = true">Explorar</md-button>
 		</md-empty-state>
@@ -9,14 +9,11 @@
 				<span class="md-list-item-text">Temas Guardados</span>
 			</md-subheader>
 
-			<md-list-item v-for="topicID in savedTopics" :key="topicID">
+			<md-list-item v-for="topicID in savedTopics" :key="topicID"  v-on:click="$router.push('/t/' + topicID)">
 				<span class="md-list-item-text">
 					<span>{{ getTopicByID(topicID).name }}</span>
 					<span>{{ getLevelById(getTopicByID(topicID).level).name }}</span>
 				</span>
-				<md-button class="md-icon-button" v-on:click="$router.push('/t/' + topicID)">
-					<md-icon>remove_red_eye</md-icon>
-				</md-button>
 			</md-list-item>
 		</md-list>
 

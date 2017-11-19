@@ -1,15 +1,6 @@
 <template>
     <div>
-        <header class="topicHeader">
-            <md-progress-spinner v-if="loading.metadata" class="md-accent" md-mode="indeterminate" :md-diameter="30" :md-stroke="3"></md-progress-spinner>
-            <div v-else>
-                <div class="topicHeader--image" :style="'background-image: url(' + headerImage + ')'"></div>
-                <section class="topicHeader--meta">
-                    <h1 class="md-title">{{ topic.name }}</h1>
-                    <h2 v-if="topic.description">{{ topic.description }}</h2>
-                </section>
-            </div>
-        </header>
+        <md-progress-bar v-if="loading.metadata" class="md-accent" md-mode="indeterminate" :md-diameter="30" :md-stroke="3"></md-progress-bar>
 
         <div v-if="!loading.metadata">
             <md-tabs md-sync-route class="md-primary" md-alignment="centered">
@@ -40,7 +31,7 @@ export default {
     },
     data: () => ({
         topic: {
-            name: null
+            name: 'Tema'
         },
 
         loading: {
@@ -61,11 +52,11 @@ export default {
         user: () => {
             return firebase.auth().currentUser;
         },
-        headerImage: function(){
-            if(this.topic.image){
+        headerImage: function () {
+            if (this.topic.image) {
                 return this.topic.image;
             }
-            else{
+            else {
                 return 'https://source.unsplash.com/1200x500/?technology';
             }
         }
@@ -86,7 +77,7 @@ export default {
             else {
                 this.$router.replace('/');
             }
-        })
+        });
     }
 }
 </script>
