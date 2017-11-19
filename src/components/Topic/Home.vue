@@ -1,7 +1,7 @@
 <template>
     <div class="container extend">
         <div class="md-layout-row md-gutter grid-wrapper">
-            <div class="md-layout-column md-layout-large-25">
+            <div class="md-layout-column md-flex-large-25">
                 <md-card v-if="$parent.topic.questionCount">
                     <md-progress-bar md-mode="determinate" :md-value="question_bar"></md-progress-bar>
                     <md-card-header>
@@ -11,7 +11,7 @@
                 </md-card>
             </div>
 
-            <div class="md-layout-column md-layout-large-75">
+            <div class="md-layout-column md-flex-large-75">
 
                 <div v-if="questions.length">
                     <md-card v-for="(item, index) in questions" :key="item['.key']">
