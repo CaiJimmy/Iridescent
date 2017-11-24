@@ -1,25 +1,25 @@
 <template>
 	<div class="homepage container compact">
 		<md-empty-state md-icon="add" md-label="Guardar Tema" md-description="Guardar temas a tu cuenta para accederlo más rápido">
-			<md-progress-spinner md-mode="indeterminate" v-if="loading.savedTopics"></md-progress-spinner>
+			<md-progress-spinner md-mode="indeterminate" v-if="loading"></md-progress-spinner>
 			<md-button class="md-primary md-raised" v-else v-on:click="showDialog.topics = true">Explorar</md-button>
 		</md-empty-state>
 
-		<md-list class="md-elevation-2 md-double-line" v-if="!loading.savedTopics">
+		<md-list class="md-elevation-2 md-double-line" v-if="!loading">
 			<md-subheader>
 				<span class="md-list-item-text">Temas Guardados</span>
 			</md-subheader>
 
-			<md-list-item v-for="topicID in savedTopics" :key="topicID"  v-on:click="$router.push('/t/' + topicID)">
+			<md-list-item v-for="topicID in savedTopics" :key="topicID" v-on:click="$router.push('/t/' + topicID)">
 				<span class="md-list-item-text">
-					<span>{{ getTopicByID(topicID).name }}</span>
-					<span>{{ getLevelById(getTopicByID(topicID).level).name }}</span>
+					<span>{{ topics[topicID].name }}</span>
+					<span>{{ levels[topics[topicID].level].name }}</span>
 				</span>
 			</md-list-item>
 		</md-list>
 
 		<md-dialog :md-active.sync="showDialog.topics" :md-fullscreen="false">
-			<Explore v-bind:firebaseRefs="ref" v-bind:levels="levels" v-bind:topics="topics" v-bind:user="user" />
+			<Explore />
 		</md-dialog>
 
 	</div>
@@ -32,29 +32,17 @@ import 'firebase/firestore';
 
 import Explore from './Home/Explore.vue'
 
+import General from '@/mixins/general.js'
 export default {
 	name: 'Home',
 	components: {
 		Explore
 	},
+	mixins: [General],
 	data () {
 		return {
-			topics: [],
-			levels: [],
-
-			user: {},
-
-			ref: {
-				topics: null,
-				user: null,
-			},
-
 			showDialog: {
 				topics: false
-			},
-
-			loading: {
-				savedTopics: true
 			}
 		}
 	},
@@ -62,37 +50,9 @@ export default {
 		savedTopics: function () {
 			return this.user.savedTopics || [];
 		},
-        wathcing() {
-            return [this.savedTopics, this.levels, this.topics].join()
-        }
-	},
-	watch: {
-		wathcing: function(){
-			// TODO: Waiting for VueFire's callback methods
-			if(this.savedTopics.length && this.levels.length && this.topics.length){ // All loaded
-				this.loading.savedTopics = false;
-			}
+		loading: function () {
+			return this.$store.state.loading.levels | this.$store.state.loading.topics;
 		}
-	},
-	created: function () {
-		let userID = firebase.auth().currentUser.uid;
-		this.ref.user = firebase.firestore().collection("users").doc(userID);
-		this.$bind("user", this.ref.user);
-
-		this.ref.topics = firebase.firestore().collection("topics");
-		this.$bind("topics", this.ref.topics);
-
-		this.ref.levels = firebase.firestore().collection("levels");
-		this.$bind("levels", this.ref.levels);
-
-	},
-	methods: {
-		getLevelById (levelId) {
-			return this.levels.filter(level => level.id == levelId)[0];
-		},
-		getTopicByID (topicID) {
-			return this.topics.filter(topic => topic.id == topicID)[0];
-		},
 	}
 }
 </script>

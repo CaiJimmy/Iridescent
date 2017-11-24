@@ -57,10 +57,12 @@ import * as firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
 import moment from 'moment';
+import General from '@/mixins/general.js'
 
 export default {
     name: 'TopicPage',
-
+    
+    mixins: [General],
     data: () => ({
         showDialog: false
     }),
@@ -72,9 +74,6 @@ export default {
 
                 return current / total * 100
             }
-        },
-        users: function () {
-            return this.$store.state.users;
         },
         questions: function () {
             return this.$parent.questions

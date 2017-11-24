@@ -20,10 +20,11 @@
 <script>
 import * as firebase from "firebase/app";
 import "firebase/firestore";
-import "firebase/auth";
+import General from '@/mixins/general.js'
 
 export default {
     name: 'TopicPage',
+    mixins: [General],
     metaInfo () {
         return {
             title: this.topic.name
@@ -52,12 +53,6 @@ export default {
         }
     }),
     computed: {
-        user: () => {
-            return firebase.auth().currentUser;
-        },
-        users: function () {
-            return this.$store.state.users;
-        },
         headerImage: function () {
             if (this.topic.image) {
                 return this.topic.image;
@@ -65,6 +60,11 @@ export default {
             else {
                 return 'https://source.unsplash.com/1200x500/?technology';
             }
+        }
+    },
+    watch: {
+        questions: function(){
+            this.fetchUserDatas();
         }
     },
     created: function () {
@@ -78,7 +78,6 @@ export default {
                         this.loading.questions = false;
                         this.fetchUserDatas();
                     })
-
                     this.ref.userQuestions = this.ref.questions.where('author', '==', this.user.uid);
                     this.$bind('userQuestions', this.ref.userQuestions).then(() => {
                         this.loading.userQuestions = false;

@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import store from './store'
 
 import VueMaterial from 'vue-material'
 import 'vue-material/dist/vue-material.min.css'
@@ -48,20 +49,6 @@ var config = {
 firebase.initializeApp(config);
 window.firestore = firebase.firestore();
 
-
-import Vuex from 'vuex'
-Vue.use(Vuex)
-const store = new Vuex.Store({
-	state: {
-		users: {}
-	},
-	mutations: {
-		addUser(state, userData) {
-			console.log(userData);
-			Vue.set(state.users, userData.id, userData)
-		}
-	}
-})
 /* eslint-disable no-new */
 new Vue({
 	el: '#app',
@@ -86,6 +73,8 @@ new Vue({
 				}, {
 					merge: true
 				});
+
+				this.$store.dispatch('initApp');
 			}
 			this.firebaseReady = true;
 		});
