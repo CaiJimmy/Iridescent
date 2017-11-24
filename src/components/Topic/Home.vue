@@ -1,8 +1,8 @@
 <template>
     <div class="container extend">
         <div class="md-layout-row md-layout-column-small md-gutter">
-            <div class="md-layout-column md-flex-large-25" v-if="!loading.userQuestions">
-                <md-card v-if="$parent.topic.questionCount">
+            <div class="md-layout-column md-flex-large-25">
+                <md-card v-if="!loading.userQuestions && $parent.topic.questionCount">
                     <md-progress-bar md-mode="determinate" :md-value="question_bar"></md-progress-bar>
                     <md-card-header>
                         <div class="md-subhead">Preparar el examen</div>
@@ -12,23 +12,22 @@
             </div>
 
             <div class="md-layout-column md-flex-large-75 md-gutter">
-                <div v-if="questions.length" v-infinite-scroll="loadMore" infinite-scroll-disabled="loadMoreDisabled" infinite-scroll-distance="10">
+                <div v-if="!loading.questions || questions.length" v-infinite-scroll="loadMore" infinite-scroll-disabled="loadMoreDisabled" infinite-scroll-distance="10">
                     <md-card v-for="(item, index) in questions" :key="item['.key']" class="questionCard">
-                        <md-card-header>
-                            <div v-if="users.hasOwnProperty(item.author)">
-                                <md-avatar>
-                                    <img :src="users[item.author].photoURL" :alt="users[item.author].displayName">
-                                </md-avatar>
-                                <div class="md-title">{{ users[item.author].displayName }}</div>
-                                <div class="md-subhead">
-                                    <span>
-                                        <timeago :auto-update="60" :since="item.date"></timeago>
-                                        <md-tooltip md-direction="bottom">{{ toDate(item.date) }}</md-tooltip>
-                                    </span>
-                                </div>
+
+                        <md-card-header v-if="users.hasOwnProperty(item.author)">
+                            <md-avatar>
+                                <img :src="users[item.author].photoURL" :alt="users[item.author].displayName">
+                            </md-avatar>
+                            <div class="md-title">{{ users[item.author].displayName }}</div>
+                            <div class="md-subhead">
+                                <span>
+                                    <timeago :auto-update="60" :since="item.date"></timeago>
+                                    <md-tooltip md-direction="bottom">{{ toDate(item.date) }}</md-tooltip>
+                                </span>
                             </div>
-                            <md-progress-spinner :md-diameter="30" :md-stroke="3" md-mode="indeterminate" v-else></md-progress-spinner>
                         </md-card-header>
+                        <md-progress-bar v-else class="md-accent" md-mode="indeterminate" :md-diameter="30" :md-stroke="3"></md-progress-bar>
                         <md-card-content>
                             {{ item.title }}
                             <md-list>
@@ -86,12 +85,12 @@ export default {
         loading: function () {
             return this.$parent.loading
         },
-        loadMoreDisabled: function(){
+        loadMoreDisabled: function () {
             return this.loading.questions | this.$parent.paging.end;
         }
     },
     methods: {
-        loadMore: function(){
+        loadMore: function () {
             this.$parent.loadMore();
             console.log('Load More')
         },
