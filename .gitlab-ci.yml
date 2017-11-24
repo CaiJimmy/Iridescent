@@ -7,7 +7,7 @@ pages:
   script:
     - npm install vue-material@beta --save
     - git clone -b firestore https://github.com/vuejs/vuefire.git
-    - mv vuefire/* node_modules/vuefire
+    - mv vuefire/* node_modules/vuefire --backup=numbered
     - cd node_modules/vuefire
     - npm install
     - npm run build
