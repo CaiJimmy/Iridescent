@@ -1,7 +1,7 @@
 <template>
     <div class="container extend">
         <div class="md-layout-row md-layout-column-small md-gutter">
-            <div class="md-layout-column md-flex-large-25">
+            <div class="md-layout-column md-flex-large-25" v-if="!loading.userQuestions">
                 <md-card v-if="$parent.topic.questionCount">
                     <md-progress-bar md-mode="determinate" :md-value="question_bar"></md-progress-bar>
                     <md-card-header>
@@ -11,7 +11,7 @@
                 </md-card>
             </div>
 
-            <div class="md-layout-column md-flex-large-75 md-gutter">
+            <div class="md-layout-column md-flex-large-75 md-gutter" v-if="!loading.questions">
                 <div v-if="questions.length">
                     <md-card v-for="(item, index) in questions" :key="item['.key']" class="questionCard">
                         <md-card-header>
@@ -66,7 +66,8 @@ export default {
         userQuestions: [],
 
         loading: {
-            questions: true
+            questions: true,
+            userQuestions: true
         },
 
         ref: {
@@ -84,14 +85,24 @@ export default {
                 return current / total * 100
             }
         },
-        users: function(){
+        users: function () {
             return this.$store.state.users;
         }
     },
-    watch: {
-        questions: function () {
+    created: function () {
+        this.ref.questions = firebase.firestore().collection('questions').where('topic', '==', this.$parent.ref.topic);
+        this.$bind('questions', this.ref.questions).then(() => {
             this.loading.questions = false;
+            this.fetchUserDatas();
+        })
 
+        this.ref.userQuestions = this.ref.questions.where('author', '==', this.$parent.user.uid);
+        this.$bind('userQuestions', this.ref.userQuestions).then(() => {
+            this.loading.userQuestions = false;
+        });
+    },
+    methods: {
+        fetchUserDatas: function () {
             this.questions.forEach((question) => {
                 if (!this.users.hasOwnProperty(question.author)) {
                     firebase.firestore().collection('users').doc(question.author).get().then(snapshot => {
@@ -101,16 +112,7 @@ export default {
                     })
                 }
             })
-        }
-    },
-    created: function () {
-        this.ref.questions = firebase.firestore().collection('questions').where('topic', '==', this.$parent.ref.topic);
-        this.$bind('questions', this.ref.questions);
-
-        this.ref.userQuestions = this.ref.questions.where('author', '==', this.$parent.user.uid);
-        this.$bind('userQuestions', this.ref.userQuestions);
-    },
-    methods: {
+        },
         toDate: function (date) {
             return moment(date).format("MM/DD/YYYY HH:mm")
         }
