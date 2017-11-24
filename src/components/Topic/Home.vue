@@ -65,7 +65,6 @@ export default {
         questions: [],
         userQuestions: [],
 
-        users: {},
         loading: {
             questions: true
         },
@@ -84,6 +83,9 @@ export default {
 
                 return current / total * 100
             }
+        },
+        users: function(){
+            return this.$store.state.users;
         }
     },
     watch: {
@@ -91,10 +93,11 @@ export default {
             this.loading.questions = false;
 
             this.questions.forEach((question) => {
-                if (!this.users[question.author]) {
+                if (!this.users.hasOwnProperty(question.author)) {
                     firebase.firestore().collection('users').doc(question.author).get().then(snapshot => {
-                        this.users[question.author] = snapshot.data();
-                        this.$forceUpdate()
+                        let userData = snapshot.data();
+                        userData.id = question.author;
+                        this.$store.commit('addUser', userData);
                     })
                 }
             })

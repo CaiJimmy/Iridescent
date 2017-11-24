@@ -48,10 +48,25 @@ var config = {
 firebase.initializeApp(config);
 window.firestore = firebase.firestore();
 
+
+import Vuex from 'vuex'
+Vue.use(Vuex)
+const store = new Vuex.Store({
+	state: {
+		users: {}
+	},
+	mutations: {
+		addUser(state, userData) {
+			console.log(userData);
+			Vue.set(state.users, userData.id, userData)
+		}
+	}
+})
 /* eslint-disable no-new */
 new Vue({
 	el: '#app',
 	router,
+	store,
 	template: '<App/>',
 	components: {
 		App
