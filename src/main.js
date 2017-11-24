@@ -20,7 +20,6 @@ import VeeValidate from 'vee-validate';
 Vue.use(VeeValidate);
 
 import VueTimeago from 'vue-timeago'
-
 Vue.use(VueTimeago, {
 	name: 'timeago',
 	locale: 'es-ES',
@@ -36,6 +35,9 @@ Vue.use(VueTimeago, {
 		]
 	}
 })
+
+import infiniteScroll from 'vue-infinite-scroll'
+Vue.use(infiniteScroll)
 
 var config = {
 	apiKey: "AIzaSyB-E8FlF70tYS8Rq4fQURI2HcfeisSrSls",

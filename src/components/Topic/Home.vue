@@ -12,7 +12,7 @@
             </div>
 
             <div class="md-layout-column md-flex-large-75 md-gutter">
-                <div v-if="questions.length">
+                <div v-if="questions.length" v-infinite-scroll="loadMore" infinite-scroll-disabled="loadMoreDisabled" infinite-scroll-distance="10">
                     <md-card v-for="(item, index) in questions" :key="item['.key']" class="questionCard">
                         <md-card-header>
                             <div v-if="users.hasOwnProperty(item.author)">
@@ -85,9 +85,16 @@ export default {
         },
         loading: function () {
             return this.$parent.loading
+        },
+        loadMoreDisabled: function(){
+            return this.loading.questions | this.$parent.paging.end;
         }
     },
     methods: {
+        loadMore: function(){
+            this.$parent.loadMore();
+            console.log('Load More')
+        },
         toDate: function (date) {
             return moment(date).format("MM/DD/YYYY HH:mm")
         }

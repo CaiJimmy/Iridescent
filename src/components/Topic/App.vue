@@ -39,7 +39,7 @@ export default {
 
         paging: {
             current: 1,/// Current Page
-            question_per_page: 20, /// Number of questions per page
+            question_per_page: 5, /// Number of questions per page
             clone: null,  /// Workaround: https://github.com/vuejs/vuefire/issues/83#issuecomment-338427854
             end: false
         },
@@ -112,6 +112,8 @@ export default {
 
                 if (oldCount == this.questions.length) {  /// If new data is same as old one, then there's no more data to be loaded
                     this.paging.end = true;
+                    this.snackbar.message = 'Todas las preguntas han sido cargadas'
+                    this.snackbar.display = true;
                 };
             })
         },
