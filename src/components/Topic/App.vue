@@ -37,6 +37,13 @@ export default {
 
         questions: [],
 
+        paging: {
+            current: 1,/// Current Page
+            question_per_page: 20, /// Number of questions per page
+            clone: null,  /// Workaround: https://github.com/vuejs/vuefire/issues/83#issuecomment-338427854
+            end: false
+        },
+
         loading: {
             metadata: true,
             questions: true,
@@ -76,7 +83,7 @@ export default {
                 this.$bind('topic', this.ref.topic).then(() => {
                     this.loading.metadata = false;
                     this.ref.questions = firebase.firestore().collection('questions').where('topic', '==', this.ref.topic).orderBy("date", 'desc');
-                    this.$bind('questions', this.ref.questions).then(() => {
+                    this.$bind('questions', this.ref.questions.limit(this.paging.question_per_page)).then(() => {
                         this.loading.questions = false;
                     })
                     this.ref.userQuestions = this.ref.questions.where('author', '==', this.user.uid);
@@ -91,6 +98,23 @@ export default {
         });
     },
     methods: {
+        loadMore () {
+            /// TODO: https://github.com/vuejs/vuefire/issues/83
+            this.paging.clone = this.questions;
+
+            let oldCount = this.paging.clone.length;
+
+            this.loading.questions = true;
+            this.$bind('questions', this.ref.questions.limit((this.paging.current + 1) * this.paging.question_per_page)).then(() => {
+                this.paging.clone = null
+                this.paging.current += 1;
+                this.loading.questions = false;
+
+                if (oldCount == this.questions.length) {  /// If new data is same as old one, then there's no more data to be loaded
+                    this.paging.end = true;
+                };
+            })
+        },
         fetchUserDatas: function () {
             this.questions.forEach((question) => {
                 if (!this.users.hasOwnProperty(question.author)) {

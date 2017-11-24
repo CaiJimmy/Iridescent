@@ -11,7 +11,7 @@
                 </md-card>
             </div>
 
-            <div class="md-layout-column md-flex-large-75 md-gutter" v-if="!loading.questions">
+            <div class="md-layout-column md-flex-large-75 md-gutter">
                 <div v-if="questions.length">
                     <md-card v-for="(item, index) in questions" :key="item['.key']" class="questionCard">
                         <md-card-header>
@@ -45,6 +45,8 @@
                             </md-list>
                         </md-card-content>
                     </md-card>
+                    <md-progress-spinner class="md-accent" :md-stroke="3" md-mode="indeterminate" v-if="$parent.loading.questions"></md-progress-spinner>
+                    <md-button class="md-primary md-raised" v-on:click="$parent.loadMore()" v-if="!$parent.paging.end & !$parent.loading.questions">Cargar más</md-button>
                 </div>
                 <md-empty-state v-else md-icon="question_answer" md-label="Crear preguntas" md-description="Parece ser que no hay ninguna pregunta en este tema">
                 </md-empty-state>
@@ -61,7 +63,7 @@ import General from '@/mixins/general.js'
 
 export default {
     name: 'TopicPage',
-    
+
     mixins: [General],
     data: () => ({
         showDialog: false
@@ -76,12 +78,12 @@ export default {
             }
         },
         questions: function () {
-            return this.$parent.questions
+            return (this.$parent.paging.clone || this.$parent.questions)
         },
         userQuestions: function () {
             return this.$parent.userQuestions
         },
-        loading: function(){
+        loading: function () {
             return this.$parent.loading
         }
     },
