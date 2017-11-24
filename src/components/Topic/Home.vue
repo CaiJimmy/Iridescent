@@ -11,8 +11,8 @@
                 </md-card>
             </div>
 
-            <div class="md-layout-column md-flex-large-75 md-gutter">
-                <div v-if="!loading.questions || questions.length" v-infinite-scroll="loadMore" infinite-scroll-disabled="loadMoreDisabled" infinite-scroll-distance="10">
+            <div class="md-layout-column md-flex-large-75 md-gutter" v-if="!loading.questions">
+                <div v-if="questions.length" v-infinite-scroll="loadMore" infinite-scroll-disabled="loadMoreDisabled" infinite-scroll-distance="100">
                     <md-card v-for="(item, index) in questions" :key="item['.key']" class="questionCard">
 
                         <md-card-header v-if="users.hasOwnProperty(item.author)">
@@ -45,7 +45,7 @@
                         </md-card-content>
                     </md-card>
                     <md-progress-spinner class="md-accent" :md-stroke="3" md-mode="indeterminate" v-if="$parent.loading.questions"></md-progress-spinner>
-                    <md-button class="md-primary md-raised" v-on:click="$parent.loadMore()" v-if="!$parent.paging.end & !$parent.loading.questions">Cargar más</md-button>
+                    <md-button class="md-primary md-raised" v-on:click="$parent.loadMore()" v-if="!loadMoreDisabled">Cargar más</md-button>
                 </div>
                 <md-empty-state v-else md-icon="question_answer" md-label="Crear preguntas" md-description="Parece ser que no hay ninguna pregunta en este tema">
                 </md-empty-state>
@@ -86,7 +86,7 @@ export default {
             return this.$parent.loading
         },
         loadMoreDisabled: function () {
-            return this.loading.questions | this.$parent.paging.end;
+            return this.$parent.paging.loading | this.$parent.paging.end;
         }
     },
     methods: {

@@ -41,7 +41,8 @@ export default {
             current: 1,/// Current Page
             question_per_page: 5, /// Number of questions per page
             clone: null,  /// Workaround: https://github.com/vuejs/vuefire/issues/83#issuecomment-338427854
-            end: false
+            end: false,
+            loading: false
         },
 
         loading: {
@@ -104,11 +105,11 @@ export default {
 
             let oldCount = this.paging.clone.length;
 
-            this.loading.questions = true;
+            this.paging.loading = true;
             this.$bind('questions', this.ref.questions.limit((this.paging.current + 1) * this.paging.question_per_page)).then(() => {
                 this.paging.clone = null
                 this.paging.current += 1;
-                this.loading.questions = false;
+                this.paging.loading = false;
 
                 if (oldCount == this.questions.length) {  /// If new data is same as old one, then there's no more data to be loaded
                     this.paging.end = true;
