@@ -35,6 +35,8 @@ export default {
             name: 'Tema'
         },
 
+        questions: [],
+
         loading: {
             metadata: true,
             questions: true,
