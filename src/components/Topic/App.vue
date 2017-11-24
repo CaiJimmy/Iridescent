@@ -63,7 +63,7 @@ export default {
         }
     },
     watch: {
-        questions: function(){
+        questions: function () {
             this.fetchUserDatas();
         }
     },
@@ -73,7 +73,7 @@ export default {
             if (data.exists) {
                 this.$bind('topic', this.ref.topic).then(() => {
                     this.loading.metadata = false;
-                    this.ref.questions = firebase.firestore().collection('questions').where('topic', '==', this.ref.topic);
+                    this.ref.questions = firebase.firestore().collection('questions').where('topic', '==', this.ref.topic).orderBy("date", 'desc');
                     this.$bind('questions', this.ref.questions).then(() => {
                         this.loading.questions = false;
                         this.fetchUserDatas();
