@@ -63,7 +63,7 @@ export default new Vuex.Store({
 			});
 
 			let user = firebase.auth().currentUser;
-			firestore.collection('users').doc(user.uid).get().then((snapshot) => {
+			firestore.collection('users').doc(user.uid).onSnapshot((snapshot) => {
 				let userData = snapshot.data();
 				userData.uid = user.uid;
 				commit('setUserData', userData);
