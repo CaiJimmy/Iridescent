@@ -76,7 +76,6 @@ export default {
                     this.ref.questions = firebase.firestore().collection('questions').where('topic', '==', this.ref.topic).orderBy("date", 'desc');
                     this.$bind('questions', this.ref.questions).then(() => {
                         this.loading.questions = false;
-                        this.fetchUserDatas();
                     })
                     this.ref.userQuestions = this.ref.questions.where('author', '==', this.user.uid);
                     this.$bind('userQuestions', this.ref.userQuestions).then(() => {
