@@ -26,10 +26,10 @@ import * as firebase from 'firebase/app';
 import 'firebase/firestore';
 
 import General from '@/mixins/general.js'
-
+import Methods from './Methods.js'
 export default {
     name: 'ExploreTopics',
-    mixins: [General],
+    mixins: [General, Methods],
     computed: {
         savedTopics: function () {
             if (this.user.savedTopics) {
@@ -38,25 +38,6 @@ export default {
             else {
                 return [];
             }
-        }
-    },
-    methods: {
-        removeTopic (topicID) {
-            let savedTopics = this.user.savedTopics,
-                index = savedTopics.indexOf(topicID);
-            if (index > -1) {
-                savedTopics.splice(index, 1);
-                this.ref.user.update(this.user);
-            }
-        },
-        saveTopic (topicID) {
-            if (!this.user.savedTopics) {
-                this.user.savedTopics = [];
-            };
-            if (!this.user.savedTopics.includes(topicID)) {
-                this.user.savedTopics.push(topicID);
-                this.ref.user.update(this.user);
-            };
         }
     }
 }

@@ -31,6 +31,7 @@ import 'firebase/auth';
 import 'firebase/firestore';
 
 import Explore from './Home/Explore.vue'
+import Methods from './Home/Methods.js'
 
 import General from '@/mixins/general.js'
 export default {
@@ -38,7 +39,7 @@ export default {
 	components: {
 		Explore
 	},
-	mixins: [General],
+	mixins: [General, Methods],
 	data () {
 		return {
 			showDialog: {
@@ -52,6 +53,20 @@ export default {
 		},
 		loading: function () {
 			return this.$store.state.loading.levels | this.$store.state.loading.topics;
+		}
+	},
+	created(){
+		this.deleteInvalidTopics(); // TODO: Move this function to somewhere else
+	},
+	methods: {
+		deleteInvalidTopics: function(){
+			this.savedTopics.forEach((topicID) => {
+				firebase.firestore().collection('topics').doc(topicID).get().then((doc) => {
+					if(!doc.exist){
+						this.removeTopic(topicID);
+					}
+				})
+			})
 		}
 	}
 }
