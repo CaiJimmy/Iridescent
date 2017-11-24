@@ -35,12 +35,15 @@ export default {
         },
 
         loading: {
-            metadata: true
+            metadata: true,
+            questions: true,
+            userQuestions: true
         },
 
         ref: {
             topic: null,
-            questions: null
+            questions: null,
+            userQuestions: null
         },
 
         snackbar: {
@@ -52,6 +55,9 @@ export default {
         user: () => {
             return firebase.auth().currentUser;
         },
+        users: function () {
+            return this.$store.state.users;
+        },
         headerImage: function () {
             if (this.topic.image) {
                 return this.topic.image;
@@ -61,23 +67,41 @@ export default {
             }
         }
     },
-    watch: {
-        topic: function () {
-            if (this.topic.name !== null) {
-                this.loading.metadata = false;
-            }
-        }
-    },
     created: function () {
         this.ref.topic = firebase.firestore().collection('topics').doc(this.$route.params.id);
         this.ref.topic.get().then((data) => {
             if (data.exists) {
-                this.$bind('topic', this.ref.topic);
+                this.$bind('topic', this.ref.topic).then(() => {
+                    this.loading.metadata = false;
+                    this.ref.questions = firebase.firestore().collection('questions').where('topic', '==', this.ref.topic);
+                    this.$bind('questions', this.ref.questions).then(() => {
+                        this.loading.questions = false;
+                        this.fetchUserDatas();
+                    })
+
+                    this.ref.userQuestions = this.ref.questions.where('author', '==', this.user.uid);
+                    this.$bind('userQuestions', this.ref.userQuestions).then(() => {
+                        this.loading.userQuestions = false;
+                    });
+                })
             }
             else {
                 this.$router.replace('/');
             }
         });
+    },
+    methods: {
+        fetchUserDatas: function () {
+            this.questions.forEach((question) => {
+                if (!this.users.hasOwnProperty(question.author)) {
+                    firebase.firestore().collection('users').doc(question.author).get().then(snapshot => {
+                        let userData = snapshot.data();
+                        userData.id = question.author;
+                        this.$store.commit('addUser', userData);
+                    })
+                }
+            })
+        },
     }
 }
 </script>

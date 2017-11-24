@@ -62,18 +62,6 @@ export default {
     name: 'TopicPage',
 
     data: () => ({
-        questions: [],
-        userQuestions: [],
-
-        loading: {
-            questions: true,
-            userQuestions: true
-        },
-
-        ref: {
-            questions: null,
-            userQuestions: null
-        },
         showDialog: false
     }),
     computed: {
@@ -87,32 +75,18 @@ export default {
         },
         users: function () {
             return this.$store.state.users;
+        },
+        questions: function () {
+            return this.$parent.questions
+        },
+        userQuestions: function () {
+            return this.$parent.userQuestions
+        },
+        loading: function(){
+            return this.$parent.loading
         }
     },
-    created: function () {
-        this.ref.questions = firebase.firestore().collection('questions').where('topic', '==', this.$parent.ref.topic);
-        this.$bind('questions', this.ref.questions).then(() => {
-            this.loading.questions = false;
-            this.fetchUserDatas();
-        })
-
-        this.ref.userQuestions = this.ref.questions.where('author', '==', this.$parent.user.uid);
-        this.$bind('userQuestions', this.ref.userQuestions).then(() => {
-            this.loading.userQuestions = false;
-        });
-    },
     methods: {
-        fetchUserDatas: function () {
-            this.questions.forEach((question) => {
-                if (!this.users.hasOwnProperty(question.author)) {
-                    firebase.firestore().collection('users').doc(question.author).get().then(snapshot => {
-                        let userData = snapshot.data();
-                        userData.id = question.author;
-                        this.$store.commit('addUser', userData);
-                    })
-                }
-            })
-        },
         toDate: function (date) {
             return moment(date).format("MM/DD/YYYY HH:mm")
         }
