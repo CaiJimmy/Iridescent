@@ -101,6 +101,10 @@ export default {
     },
     methods: {
         loadMore () {
+            if(this.paging.loading){
+                return;
+            };
+            
             /// TODO: https://github.com/vuejs/vuefire/issues/83
             this.paging.clone = this.questions;
 
