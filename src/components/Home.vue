@@ -61,11 +61,9 @@ export default {
 	methods: {
 		deleteInvalidTopics: function(){
 			this.savedTopics.forEach((topicID) => {
-				firebase.firestore().collection('topics').doc(topicID).get().then((doc) => {
-					if(!doc.exist){
-						this.removeTopic(topicID);
-					}
-				})
+				if(!this.$store.state.topics.hasOwnProperty(topicID)){
+					removeTopic(topicID);
+				}
 			})
 		}
 	}
