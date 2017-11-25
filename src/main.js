@@ -36,9 +36,6 @@ Vue.use(VueTimeago, {
 	}
 })
 
-import infiniteScroll from 'vue-infinite-scroll'
-Vue.use(infiniteScroll)
-
 var config = {
 	apiKey: "AIzaSyB-E8FlF70tYS8Rq4fQURI2HcfeisSrSls",
 	authDomain: "elysian-9d52f.firebaseapp.com",

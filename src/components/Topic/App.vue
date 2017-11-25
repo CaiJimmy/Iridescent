@@ -42,7 +42,8 @@ export default {
             question_per_page: 5, /// Number of questions per page
             clone: null,  /// Workaround: https://github.com/vuejs/vuefire/issues/83#issuecomment-338427854
             end: false,
-            loading: false
+            loading: false,
+            oldCount: 0
         },
 
         loading: {
@@ -103,15 +104,15 @@ export default {
             /// TODO: https://github.com/vuejs/vuefire/issues/83
             this.paging.clone = this.questions;
 
-            let oldCount = this.paging.clone.length;
+            this.paging.oldCount = this.paging.clone.length;
 
             this.paging.loading = true;
-            this.$bind('questions', this.ref.questions.limit((this.paging.current + 1) * this.paging.question_per_page)).then(() => {
+            return this.$bind('questions', this.ref.questions.limit((this.paging.current + 1) * this.paging.question_per_page)).then(() => {
                 this.paging.clone = null
                 this.paging.current += 1;
                 this.paging.loading = false;
-
-                if (oldCount == this.questions.length) {  /// If new data is same as old one, then there's no more data to be loaded
+            }).then(() => {
+                if (this.paging.oldCount == this.questions.length) {  /// If new data is same as old one, then there's no more data to be loaded
                     this.paging.end = true;
                     this.snackbar.message = 'Todas las preguntas han sido cargadas'
                     this.snackbar.display = true;

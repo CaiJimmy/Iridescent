@@ -12,7 +12,7 @@
             </div>
 
             <div class="md-layout-column md-flex-large-75 md-gutter" v-if="!loading.questions">
-                <div v-if="questions.length" v-infinite-scroll="loadMore" infinite-scroll-disabled="loadMoreDisabled" infinite-scroll-distance="100">
+                <div v-if="questions.length">
                     <md-card v-for="(item, index) in questions" :key="item['.key']" class="questionCard">
 
                         <md-card-header v-if="users.hasOwnProperty(item.author)">
@@ -44,6 +44,8 @@
                             </md-list>
                         </md-card-content>
                     </md-card>
+                    <infinite-loading :distance="400" @infinite="loadMore" v-if="!loadMoreDisabled"></infinite-loading>
+
                     <md-progress-spinner class="md-accent" :md-stroke="3" md-mode="indeterminate" v-if="$parent.loading.questions"></md-progress-spinner>
                     <md-button class="md-primary md-raised" v-on:click="$parent.loadMore()" v-if="!loadMoreDisabled">Cargar más</md-button>
                 </div>
@@ -60,6 +62,8 @@ import "firebase/auth";
 import moment from 'moment';
 import General from '@/mixins/general.js'
 
+import InfiniteLoading from 'vue-infinite-loading';
+
 export default {
     name: 'TopicPage',
 
@@ -67,6 +71,9 @@ export default {
     data: () => ({
         showDialog: false
     }),
+    components: {
+        InfiniteLoading,
+    },
     computed: {
         question_bar: function () {
             if (this.$parent.topic.questionCount) {
@@ -90,9 +97,12 @@ export default {
         }
     },
     methods: {
-        loadMore: function () {
-            this.$parent.loadMore();
-            console.log('Load More')
+        loadMore: function ($state) {
+            this.$parent.loadMore().then(() => {
+                console.log('Load More')
+                $state.loaded();
+            });
+
         },
         toDate: function (date) {
             return moment(date).format("MM/DD/YYYY HH:mm")
