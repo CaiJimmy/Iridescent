@@ -19,7 +19,7 @@
 			</md-menu>
 		</md-toolbar>
 
-		<router-view />
+		<router-view v-if="$root.ready" />
 	</div>
 </template>
 

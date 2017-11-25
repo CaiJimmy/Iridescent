@@ -65,6 +65,11 @@ new Vue({
 			firebaseReady: false
 		}
 	},
+	computed: {
+		ready(){
+			return this.firebaseReady && !store.state.loading.levels && !store.state.loading.topics
+		}
+	},
 	created() {
 		firebase.auth().onAuthStateChanged((user) => {
 			if (user) {
