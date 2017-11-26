@@ -1,26 +1,37 @@
 <template>
-	<div class="homepage container compact">
-		<md-empty-state md-icon="add" md-label="Guardar Tema" md-description="Guardar temas a tu cuenta para accederlo más rápido">
+	<div class="homepage container extend" v-if="!loading">
+		<md-empty-state md-icon="add" md-label="Guardar Tema" md-description="Guardar temas a tu cuenta para accederlo más rápido" v-if="!savedTopics.length">
 			<md-progress-spinner md-mode="indeterminate" v-if="loading"></md-progress-spinner>
 			<md-button class="md-primary md-raised" v-else v-on:click="showDialog.topics = true">Explorar</md-button>
 		</md-empty-state>
 
-		<md-list class="md-elevation-2 md-double-line" v-if="!loading">
-			<md-subheader>
-				<span class="md-list-item-text">Temas Guardados</span>
-			</md-subheader>
+		<div class="md-layout-row md-layout-column-small md-gutter" v-else>
+			<div class="md-layout-column md-flex-large-25 md-gutter" v-for="topicID in savedTopics" :key="topicID">
+				<router-link :to="'/t/' + topicID">
+					<md-card>
+						<md-card-media-cover md-solid>
+							<md-card-media>
+								<img src="https://source.unsplash.com/random/300x300">
+							</md-card-media>
 
-			<md-list-item v-for="topicID in savedTopics" :key="topicID" v-on:click="$router.push('/t/' + topicID)">
-				<span class="md-list-item-text">
-					<span>{{ topics[topicID].name }}</span>
-					<span>{{ levels[topics[topicID].level].name }}</span>
-				</span>
-			</md-list-item>
-		</md-list>
-
+							<md-card-area>
+								<md-card-header>
+									<div class="md-title">{{ topics[topicID].name }}</div>
+									<div class="md-subhead">{{ levels[topics[topicID].level].name }}</div>
+								</md-card-header>
+							</md-card-area>
+						</md-card-media-cover>
+					</md-card>
+				</router-link>
+			</div>
+		</div>
 		<md-dialog :md-active.sync="showDialog.topics" :md-fullscreen="false">
 			<Explore />
 		</md-dialog>
+
+		<md-button class="md-fab md-primary exploreButton" v-on:click="showDialog.topics = true">
+			<md-icon>add</md-icon>
+		</md-button>
 
 	</div>
 </template>
@@ -55,13 +66,13 @@ export default {
 			return this.$store.state.loading.levels | this.$store.state.loading.topics;
 		}
 	},
-	created(){
+	created () {
 		this.deleteInvalidTopics(); // TODO: Move this function to somewhere else
 	},
 	methods: {
-		deleteInvalidTopics: function(){
+		deleteInvalidTopics: function () {
 			this.savedTopics.forEach((topicID) => {
-				if(!this.$store.state.topics.hasOwnProperty(topicID)){
+				if (!this.$store.state.topics.hasOwnProperty(topicID)) {
 					removeTopic(topicID);
 				}
 			})
@@ -72,5 +83,11 @@ export default {
 <style scoped>
 .homepage {
   margin: 2em auto;
+}
+
+.exploreButton {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
 }
 </style>
