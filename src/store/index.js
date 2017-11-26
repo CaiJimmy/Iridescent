@@ -19,7 +19,7 @@ export default new Vuex.Store({
 	},
 	mutations: {
 		addUser(state, userData) {
-			Vue.set(state.users, userData.id, userData)
+			Vue.set(state.users, userData.uid, userData)
 		},
 		setUserData(state, userData) {
 			state.user = userData;
@@ -67,6 +67,7 @@ export default new Vuex.Store({
 				let userData = snapshot.data();
 				userData.uid = user.uid;
 				commit('setUserData', userData);
+				commit('addUser', userData);
 				commit('ready', 'user');
 			});
 

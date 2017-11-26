@@ -39,7 +39,7 @@ export default {
 
         paging: {
             current: 1,/// Current Page
-            question_per_page: 5, /// Number of questions per page
+            question_per_page: 20, /// Number of questions per page
             clone: null,  /// Workaround: https://github.com/vuejs/vuefire/issues/83#issuecomment-338427854
             end: false,
             loading: false,
@@ -71,6 +71,9 @@ export default {
             else {
                 return 'https://source.unsplash.com/1200x500/?technology';
             }
+        },
+        paginatedQuestions: function () {
+            return this.questions.slice(0, this.paging.question_per_page * this.paging.current);
         }
     },
     watch: {
@@ -85,7 +88,7 @@ export default {
                 this.$bind('topic', this.ref.topic).then(() => {
                     this.loading.metadata = false;
                     this.ref.questions = firebase.firestore().collection('questions').where('topic', '==', this.ref.topic).orderBy("date", 'desc');
-                    this.$bind('questions', this.ref.questions.limit(this.paging.question_per_page)).then(() => {
+                    this.$bind('questions', this.ref.questions).then(() => {
                         this.loading.questions = false;
                     })
                     this.ref.userQuestions = this.ref.questions.where('author', '==', this.user.uid);
@@ -101,10 +104,24 @@ export default {
     },
     methods: {
         loadMore () {
-            if(this.paging.loading){
+            if (this.paging.end) {
                 return;
             };
-            
+
+            if (this.paging.question_per_page * this.paging.current >= this.questions.length) {
+                this.paging.end = true;
+                this.snackbar.message = 'Todas las preguntas han sido cargadas'
+                this.snackbar.display = true;
+                return;
+            };
+
+            this.paging.current += 1;
+        },
+        loadMore_old () {   /// Real paging, without fetching all questions
+            if (this.paging.loading) {
+                return;
+            };
+
             /// TODO: https://github.com/vuejs/vuefire/issues/83
             this.paging.clone = this.questions;
 
@@ -128,7 +145,7 @@ export default {
                 if (!this.users.hasOwnProperty(question.author)) {
                     firebase.firestore().collection('users').doc(question.author).get().then(snapshot => {
                         let userData = snapshot.data();
-                        userData.id = question.author;
+                        userData.uid = question.author;
                         this.$store.commit('addUser', userData);
                     })
                 }
