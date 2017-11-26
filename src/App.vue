@@ -1,6 +1,6 @@
 <template>
 	<div id="app" v-if="$root.firebaseReady">
-		<md-toolbar class="md-primary" md-elevation="0" v-if="loggedIn">
+		<md-toolbar class="md-primary" md-elevation="0" v-if="loggedIn && !$route.meta.hideNav">
 			<md-button class="md-icon-button" v-if="$route.path !== '/'" v-on:click="$router.push('/')">
 				<md-icon>keyboard_arrow_left</md-icon>
 			</md-button>
