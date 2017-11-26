@@ -10,6 +10,13 @@ Vue.use(Router)
 var router = new Router({
 	routes: [
 		{
+			path: '*',
+			component: require('@/components/NotFound.vue').default,
+			meta: {
+				hideNav: true
+			}
+		},
+		{
 			path: '/',
 			component: require('@/components/Home.vue').default,
 			auth: true
