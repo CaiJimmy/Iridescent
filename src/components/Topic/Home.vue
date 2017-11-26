@@ -44,7 +44,7 @@
                             </md-list>
                         </md-card-content>
                     </md-card>
-                    <infinite-loading @infinite="loadMore" v-if="!loadMoreDisabled"></infinite-loading>
+                    <infinite-loading @infinite="loadMore" :distance="200"></infinite-loading>
 
                     <md-progress-spinner class="md-accent" :md-stroke="3" md-mode="indeterminate" v-if="$parent.loading.questions"></md-progress-spinner>
                     <md-button class="md-primary md-raised" v-on:click="$parent.loadMore()" v-if="!loadMoreDisabled">Cargar más</md-button>
