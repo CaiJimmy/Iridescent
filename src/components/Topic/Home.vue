@@ -106,10 +106,7 @@ export default {
     },
     methods: {
         loadMore: function () {
-            this.$parent.loadMore().then(() => {
-                console.log('Load More')
-            });
-
+            this.$parent.loadMore();
         },
         toDate: function (date) {
             return moment(date).format("MM/DD/YYYY HH:mm")
