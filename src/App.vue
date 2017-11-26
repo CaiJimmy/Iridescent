@@ -1,14 +1,21 @@
 <template>
-	<div id="app" v-if="$root.firebaseReady">
-		<md-toolbar class="md-primary" md-elevation="0" v-if="loggedIn && !$route.meta.hideNav">
-			<md-button class="md-icon-button" v-if="$route.path !== '/'" v-on:click="$router.push('/')">
+	<div id="app"
+	    v-if="firebaseReady">
+		<md-toolbar class="md-primary"
+		    md-elevation="0"
+		    v-if="loggedIn && !$route.meta.hideNav">
+			<md-button class="md-icon-button"
+			    v-if="$route.path !== '/'"
+			    v-on:click="$router.push('/')">
 				<md-icon>keyboard_arrow_left</md-icon>
 			</md-button>
-			<h3 class="md-title" style="flex:1">{{ $meta().refresh().titleChunk }}</h3>
+			<h3 class="md-title"
+			    style="flex:1">{{ $meta().refresh().titleChunk }}</h3>
 
 			<md-menu md-direction="bottom-start">
 				<md-avatar md-menu-trigger>
-					<img :src="user.photoURL" :alt="user.displayName">
+					<img :src="user.photoURL"
+					    :alt="user.displayName">
 				</md-avatar>
 				<md-menu-content>
 					<md-menu-item v-on:click="logOut()">
@@ -20,6 +27,8 @@
 		</md-toolbar>
 
 		<router-view />
+
+		<md-snackbar :md-active.sync="snackbar.display">{{ snackbar.message }}</md-snackbar>
 	</div>
 </template>
 
@@ -41,21 +50,43 @@ export default {
 				name: null,
 				email: null
 			},
-			loggedIn: false
+			loggedIn: false,
+			firebaseReady: false,
+
+			snackbar: {
+				display: false,
+				message: null
+			}
 		}
 	},
 	created: function () {
 		firebase.auth().onAuthStateChanged((user) => {
 			if (user) {
-				this.user = user;
-				this.loggedIn = true;
-				this.$router.replace({
-					path: this.$route.query.go || '/'
-				});
+				firestore.collection('users').doc(user.uid).set({
+					'displayName': user.displayName,
+					'email': user.email,
+					'photoURL': user.photoURL
+				}, {
+						merge: true
+					}).then(() => {
+						this.$store.dispatch('initApp');
+
+						this.user = user;
+						this.loggedIn = true;
+						this.$router.replace({
+							path: this.$route.query.go || '/'
+						});
+					}).catch((err) => {  // Not a while-listed domain
+						this.snackbar.message = 'No es una cuenta válida';
+						this.snackbar.display = true;
+						this.logOut();
+						console.log(err);
+					});
 			}
 			else {
 				this.loggedIn = false;
-			}
+			};
+			this.firebaseReady = true;
 		});
 	},
 	methods: {

@@ -38,6 +38,11 @@ var router = new Router({
 				{
 					path: 'send',
 					component: require('@/components/Topic/Send.vue').default
+				},
+				{
+					path: 'edit',
+					component: require('@/components/Topic/Edit.vue').default,
+					isAdmin: true
 				}
 			]
 		},

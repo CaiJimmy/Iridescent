@@ -56,31 +56,5 @@ new Vue({
 	template: '<App/>',
 	components: {
 		App
-	},
-	data() {
-		return {
-			firebaseReady: false
-		}
-	},
-	computed: {
-		ready(){
-			return this.firebaseReady && !store.state.loading.levels && !store.state.loading.topics
-		}
-	},
-	created() {
-		firebase.auth().onAuthStateChanged((user) => {
-			if (user) {
-				firestore.collection('users').doc(user.uid).set({
-					'displayName': user.displayName,
-					'email': user.email,
-					'photoURL': user.photoURL
-				}, {
-					merge: true
-				});
-
-				this.$store.dispatch('initApp');
-			}
-			this.firebaseReady = true;
-		});
 	}
 });
