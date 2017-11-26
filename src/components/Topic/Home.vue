@@ -54,35 +54,10 @@
                             <div class="loader-wrapper" v-if="!loadMoreDisabled">
                                 <md-progress-spinner :md-diameter="30" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner>
                             </div>
-<<<<<<< HEAD
                         </mugen-scroll>
                     </div>
                     <md-empty-state v-else md-icon="question_answer" md-label="Crear preguntas" md-description="Parece ser que no hay ninguna pregunta en este tema">
                     </md-empty-state>
-=======
-                        </md-card-header>
-                        <md-progress-bar v-else class="md-accent" md-mode="indeterminate" :md-diameter="30" :md-stroke="3"></md-progress-bar>
-                        <md-card-content>
-                            {{ item.title }}
-                            <md-list>
-                                <md-list-item v-for="(value, letter, index) in item.answers" v-bind:key="index">
-                                    <div class="md-list-item-text">
-                                        {{letter.toUpperCase()}}. {{value}}
-                                    </div>
-                                    <md-button v-if="item.correctAnswer == letter" class="md-icon-button md-list-action">
-                                        <md-icon class="md-primary">star</md-icon>
-                                        <md-tooltip md-direction="bottom">Respuesta Correcta</md-tooltip>
-                                    </md-button>
-                                    <md-divider v-if="letter !== 'd'"></md-divider>
-                                </md-list-item>
-                            </md-list>
-                        </md-card-content>
-                    </md-card>
-                    <infinite-loading @infinite="loadMore" :distance="200"></infinite-loading>
-
-                    <md-progress-spinner class="md-accent" :md-stroke="3" md-mode="indeterminate" v-if="$parent.loading.questions"></md-progress-spinner>
-                    <md-button class="md-primary md-raised" v-on:click="$parent.loadMore()" v-if="!loadMoreDisabled">Cargar más</md-button>
->>>>>>> 3c8ccadd47b34e556bf647d699128f9334fe9a28
                 </div>
             </div>
         </div>
