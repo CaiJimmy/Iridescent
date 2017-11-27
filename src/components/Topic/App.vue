@@ -93,7 +93,7 @@ export default {
         }
     },
     watch: {
-        questions: function () {
+        paginatedQuestions: function () {
             this.fetchUserDatas();
         }
     },
@@ -158,7 +158,7 @@ export default {
             })
         },
         fetchUserDatas: function () {
-            this.questions.forEach((question) => {
+            this.paginatedQuestions.forEach((question) => {
                 if (!this.users.hasOwnProperty(question.author)) {
                     firebase.firestore().collection('users').doc(question.author).get().then(snapshot => {
                         let userData = snapshot.data();
