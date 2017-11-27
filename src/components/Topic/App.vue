@@ -160,9 +160,17 @@ export default {
         fetchUserDatas: function () {
             this.paginatedQuestions.forEach((question) => {
                 if (!this.users.hasOwnProperty(question.author)) {
+
+                    let tempData = {  /// Prevent fetch multiple time same user's data
+                        uid: question.author,
+                        loading: true
+                    };
+                    this.$store.commit('addUser', tempData);
+
                     firebase.firestore().collection('users').doc(question.author).get().then(snapshot => {
                         let userData = snapshot.data();
                         userData.uid = question.author;
+                        userData.loading = false;
                         this.$store.commit('addUser', userData);
                     })
                 }

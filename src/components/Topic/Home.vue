@@ -23,7 +23,7 @@
                     <div v-if="questions.length">
                         <md-card v-for="(item, index) in questions" :key="item['.key']" class="questionCard">
 
-                            <md-card-header v-if="users.hasOwnProperty(item.author)">
+                            <md-card-header v-if="users.hasOwnProperty(item.author) && !users[item.author].loading">
                                 <md-avatar>
                                     <img :src="users[item.author].photoURL" :alt="users[item.author].displayName">
                                 </md-avatar>
