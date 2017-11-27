@@ -70,12 +70,8 @@ export default {
 						merge: true
 					}).then(() => {
 						this.$store.dispatch('initApp');
-
 						this.user = user;
 						this.loggedIn = true;
-						this.$router.replace({
-							path: this.$route.query.go || '/'
-						});
 					}).catch((err) => {  // Not a while-listed domain
 						this.snackbar.message = 'No es una cuenta válida';
 						this.snackbar.display = true;
