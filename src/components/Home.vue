@@ -1,35 +1,39 @@
 <template>
-	<div class="homepage container extend" v-if="!loading">
-		<md-empty-state md-icon="add" md-label="Guardar Tema" md-description="Guardar temas a tu cuenta para accederlo más rápido" v-if="!savedTopics.length">
-			<md-progress-spinner md-mode="indeterminate" v-if="loading"></md-progress-spinner>
-			<md-button class="md-primary md-raised" v-else v-on:click="showDialog.topics = true">Explorar</md-button>
+	<div class="homepage container extend"
+	    v-if="!loading">
+		<md-empty-state md-icon="add"
+		    md-label="Guardar Tema"
+		    md-description="Guardar temas a tu cuenta para accederlo más rápido"
+		    v-if="!savedTopics.length">
+			<md-progress-spinner md-mode="indeterminate"
+			    v-if="loading"></md-progress-spinner>
+			<md-button class="md-primary md-raised"
+			    v-else
+			    v-on:click="showDialog.topics = true">Explorar</md-button>
 		</md-empty-state>
 
-		<div class="md-layout-row md-layout-column-small md-gutter" v-else>
-			<div class="md-layout-column md-flex-large-25 md-gutter" v-for="topicID in savedTopics" :key="topicID">
+		<div class="savedTopics--wrapper"
+		    v-else>
+			<div class="savedTopics--grid"
+			    v-for="topicID in savedTopics"
+			    :key="topicID">
 				<router-link :to="'/t/' + topicID">
 					<md-card>
-						<md-card-media-cover md-solid>
-							<md-card-media>
-								<img src="https://source.unsplash.com/random/300x300">
-							</md-card-media>
-
-							<md-card-area>
-								<md-card-header>
-									<div class="md-title">{{ topics[topicID].name }}</div>
-									<div class="md-subhead">{{ levels[topics[topicID].level].name }}</div>
-								</md-card-header>
-							</md-card-area>
-						</md-card-media-cover>
+						<md-card-header>
+							<div class="md-title">{{ topics[topicID].name }}</div>
+							<div class="md-subhead">{{ levels[topics[topicID].level].name }}</div>
+						</md-card-header>
 					</md-card>
 				</router-link>
 			</div>
 		</div>
-		<md-dialog :md-active.sync="showDialog.topics" :md-fullscreen="false">
+		<md-dialog :md-active.sync="showDialog.topics"
+		    :md-fullscreen="false">
 			<Explore />
 		</md-dialog>
 
-		<md-button class="md-fab md-primary exploreButton" v-on:click="showDialog.topics = true">
+		<md-button class="md-fab md-primary exploreButton"
+		    v-on:click="showDialog.topics = true">
 			<md-icon>add</md-icon>
 		</md-button>
 
@@ -80,7 +84,7 @@ export default {
 	}
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .homepage {
   margin: 2em auto;
 }
@@ -89,5 +93,37 @@ export default {
   position: fixed;
   bottom: 20px;
   right: 20px;
+}
+
+.savedTopics--wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  &:after {
+    content: "";
+    flex-grow: 1;
+    flex-basis: 1000000px;
+  }
+  .savedTopics--grid {
+    flex-grow: 1;
+    flex-basis: auto;
+    width: 23%;
+    margin: 5px;
+    max-width: 23%;
+    @media (max-width: 750px) {
+      flex: 0 1 100%;
+      max-width: 100%;
+    }
+
+    @media (max-width: 1100px) {
+      flex: 0 1 48%;
+      max-width: 48%;
+    }
+
+    .md-card {
+      height: 100%;
+    }
+  }
 }
 </style>
