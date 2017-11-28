@@ -34,7 +34,14 @@ Vue.use(VueTimeago, {
 			["hace %s año", "hace %s años"]
 		]
 	}
+});
+
+import VueAnalytics from 'vue-analytics'
+Vue.use(VueAnalytics, {
+	id: 'UA-109882635-1',
+	router
 })
+
 
 var config = {
 	apiKey: "AIzaSyB-E8FlF70tYS8Rq4fQURI2HcfeisSrSls",
