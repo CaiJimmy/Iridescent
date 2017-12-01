@@ -19,6 +19,10 @@
 			    :key="topicID">
 				<router-link :to="'/t/' + topicID">
 					<md-card>
+						<md-card-media v-if="topics[topicID].image">
+							<img :src="topics[topicID].image">
+						</md-card-media>
+
 						<md-card-header>
 							<div class="md-title">{{ topics[topicID].name }}</div>
 							<div class="md-subhead">{{ levels[topics[topicID].level].name }}</div>
@@ -98,7 +102,7 @@ export default {
 .savedTopics--wrapper {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: flex-start;
 
   &:after {
     content: "";
