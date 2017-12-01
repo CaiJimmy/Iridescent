@@ -53,6 +53,8 @@
                     <md-button class="md-accent"
                         v-on:click="deleteQuestionConfirm()">Eliminar</md-button>
                     <md-button class="md-primary"
+                        v-on:click="callback(questionID)">Cancelar</md-button>
+                    <md-button class="md-primary"
                         @click.native="editQuestion()"
                         :disabled="loading.form">Editar</md-button>
                 </div>
@@ -105,11 +107,11 @@ export default {
         }
     },
     computed: {
-        user() {
-            if(this.type == 'edit'){
+        user () {
+            if (this.type == 'edit') {
                 return this.$store.state.users[this.questionData.author];
             }
-            else{
+            else {
                 return firebase.auth().currentUser
             }
         }
