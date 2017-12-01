@@ -105,8 +105,13 @@ export default {
         }
     },
     computed: {
-        user: () => {
-            return firebase.auth().currentUser;
+        user() {
+            if(this.type == 'edit'){
+                return this.$store.state.users[this.questionData.author];
+            }
+            else{
+                return firebase.auth().currentUser
+            }
         }
     },
     methods: {
