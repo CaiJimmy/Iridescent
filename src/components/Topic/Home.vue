@@ -229,6 +229,6 @@ form {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  z-index: 5;
+  z-index: 2;
 }
 </style>
