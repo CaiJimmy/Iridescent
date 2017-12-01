@@ -95,12 +95,11 @@ import "firebase/auth";
 import moment from 'moment';
 import General from '@/mixins/general.js'
 import MugenScroll from 'vue-mugen-scroll';
-import Auth from '@/mixins/auth.js';
 
 export default {
     name: 'TopicPage',
 
-    mixins: [General, Auth],
+    mixins: [General],
     data: () => ({
         showDialog: false
     }),

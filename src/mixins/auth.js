@@ -6,7 +6,6 @@ import 'firebase/auth';
 export default {
 	data() {
 		return {
-			isAdmin: false,
 			firebaseReady: false,
 			loggedIn: false
 		}

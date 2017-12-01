@@ -25,6 +25,8 @@
                 </md-card>
             </div>
             <div v-else>
+                <TopicHeader :topic="topic"
+                    :topicRef="ref.topic" />
                 <md-tabs md-sync-route
                     class="md-primary"
                     md-alignment="centered">
@@ -47,10 +49,14 @@
 import * as firebase from "firebase/app";
 import "firebase/firestore";
 import General from '@/mixins/general.js'
+import TopicHeader from './components/Header.vue';
 
 export default {
     name: 'TopicPage',
     mixins: [General],
+    components: {
+        TopicHeader
+    },
     metaInfo () {
         return {
             title: this.topic.name
@@ -250,7 +256,9 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate3d(-50%, -50%, 0);
-
+  max-width: 400px;
+  width: 100%;
+  
   .md-card {
     padding: 15px;
   }
