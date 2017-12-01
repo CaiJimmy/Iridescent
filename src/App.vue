@@ -2,7 +2,6 @@
 	<div id="app"
 	    v-if="firebaseReady">
 		<md-toolbar class="md-primary"
-		    md-elevation="0"
 		    v-if="loggedIn && !$route.meta.hideNav">
 			<md-button class="md-icon-button"
 			    v-if="$route.path !== '/'"
