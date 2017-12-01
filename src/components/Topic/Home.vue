@@ -1,12 +1,17 @@
 <template>
     <div class="container extend">
-        <div class="md-layout-row md-layout-column-small md-gutter">
-            <div class="md-layout-column md-flex-large-25">
-                <div class="loader-wrapper" v-if="loading.userQuestions">
-                    <md-progress-spinner md-mode="indeterminate" :md-diameter="30" :md-stroke="3"></md-progress-spinner>
+        <div id="mainGrid"
+            class="md-layout md-gutter md-layout-column-xsmall md-alignment">
+            <div class="md-layout-column md-layout-item md-size-25 md-small-size-100">
+                <div class="loader-wrapper"
+                    v-if="loading.userQuestions">
+                    <md-progress-spinner md-mode="indeterminate"
+                        :md-diameter="30"
+                        :md-stroke="3"></md-progress-spinner>
                 </div>
                 <md-card v-if="!loading.userQuestions && $parent.topic.questionCount">
-                    <md-progress-bar md-mode="determinate" :md-value="question_bar"></md-progress-bar>
+                    <md-progress-bar md-mode="determinate"
+                        :md-value="question_bar"></md-progress-bar>
                     <md-card-header>
                         <div class="md-subhead">Preparar el examen</div>
                     </md-card-header>
@@ -14,35 +19,48 @@
                 </md-card>
             </div>
 
-            <div class="md-layout-column md-flex-large-75 md-gutter">
-                <div class="loader-wrapper" v-if="loading.questions">
-                    <md-progress-spinner md-mode="indeterminate" :md-diameter="30" :md-stroke="3"></md-progress-spinner>
+            <div class="md-layout-column md-layout-item md-size-75 md-small-size-100 md-gutter ">
+                <div class="loader-wrapper"
+                    v-if="loading.questions">
+                    <md-progress-spinner md-mode="indeterminate"
+                        :md-diameter="30"
+                        :md-stroke="3"></md-progress-spinner>
                 </div>
 
                 <div v-else>
-                    <div v-if="questions.length">
-                        <md-card v-for="(item, index) in questions" :key="item['.key']" class="questionCard">
-
+                    <div v-if="questions.length"
+                        v-on:copy="copyBlock">
+                        <md-card v-for="(item, index) in questions"
+                            :key="item['.key']"
+                            class="questionCard">
                             <md-card-header v-if="users.hasOwnProperty(item.author) && !users[item.author].loading">
                                 <md-avatar>
-                                    <img :src="users[item.author].photoURL" :alt="users[item.author].displayName">
+                                    <img :src="users[item.author].photoURL"
+                                        :alt="users[item.author].displayName">
                                 </md-avatar>
                                 <div class="md-title">{{ users[item.author].displayName }}</div>
                                 <div class="md-subhead">
                                     <span>
-                                        <timeago :auto-update="60" :since="item.date"></timeago>
+                                        <timeago :auto-update="60"
+                                            :since="item.date"></timeago>
                                     </span>
                                 </div>
                             </md-card-header>
-                            <md-progress-bar v-else class="md-accent" md-mode="indeterminate" :md-diameter="30" :md-stroke="3"></md-progress-bar>
+                            <md-progress-bar v-else
+                                class="md-accent"
+                                md-mode="indeterminate"
+                                :md-diameter="30"
+                                :md-stroke="3"></md-progress-bar>
                             <md-card-content>
                                 {{ item.title }}
                                 <md-list>
-                                    <md-list-item v-for="(value, letter, index) in item.answers" v-bind:key="index">
+                                    <md-list-item v-for="(value, letter, index) in item.answers"
+                                        v-bind:key="index">
                                         <div class="md-list-item-text">
                                             {{letter.toUpperCase()}}. {{value}}
                                         </div>
-                                        <md-button v-if="item.correctAnswer == letter" class="md-icon-button md-list-action">
+                                        <md-button v-if="item.correctAnswer == letter"
+                                            class="md-icon-button md-list-action">
                                             <md-icon class="md-primary">star</md-icon>
                                         </md-button>
                                         <md-divider v-if="letter !== 'd'"></md-divider>
@@ -50,13 +68,20 @@
                                 </md-list>
                             </md-card-content>
                         </md-card>
-                        <mugen-scroll :handler="loadMore" :should-handle="!loadMoreDisabled">
-                            <div class="loader-wrapper" v-if="!loadMoreDisabled">
-                                <md-progress-spinner :md-diameter="30" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner>
+                        <mugen-scroll :handler="loadMore"
+                            :should-handle="!loadMoreDisabled">
+                            <div class="loader-wrapper"
+                                v-if="!loadMoreDisabled">
+                                <md-progress-spinner :md-diameter="30"
+                                    :md-stroke="3"
+                                    md-mode="indeterminate"></md-progress-spinner>
                             </div>
                         </mugen-scroll>
                     </div>
-                    <md-empty-state v-else md-icon="question_answer" md-label="Crear preguntas" md-description="Parece ser que no hay ninguna pregunta en este tema">
+                    <md-empty-state v-else
+                        md-icon="question_answer"
+                        md-label="Crear preguntas"
+                        md-description="Parece ser que no hay ninguna pregunta en este tema">
                     </md-empty-state>
                 </div>
             </div>
@@ -69,13 +94,13 @@ import "firebase/firestore";
 import "firebase/auth";
 import moment from 'moment';
 import General from '@/mixins/general.js'
-
-import MugenScroll from 'vue-mugen-scroll'
+import MugenScroll from 'vue-mugen-scroll';
+import Auth from '@/mixins/auth.js';
 
 export default {
     name: 'TopicPage',
 
-    mixins: [General],
+    mixins: [General, Auth],
     data: () => ({
         showDialog: false
     }),
@@ -110,11 +135,19 @@ export default {
         },
         toDate: function (date) {
             return moment(date).format("MM/DD/YYYY HH:mm")
+        },
+        copyBlock: function (e) {
+            console.log('Copy event triggered');
+            if (!isAdmin) {
+                e.clipboardData.setData('text/plain', 'Pa k kieres copiar eso jaja salu2');
+                e.preventDefault();
+            };
         }
     }
 }
 </script>
-<style scoped>
+
+<style lang="scss" scoped>
 form {
   overflow-y: auto;
 }
@@ -131,5 +164,11 @@ form {
 
 .loader-wrapper {
   text-align: center;
+}
+
+#mainGrid {
+  & > .md-layout-item {
+    margin-bottom: 16px;
+  }
 }
 </style>
