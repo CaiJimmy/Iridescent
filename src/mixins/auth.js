@@ -11,7 +11,7 @@ export default {
 		}
 	},
 	methods: {
-		roleCheck: function () {
+		validAccountCheck: function () {
 			let user = firebase.auth().currentUser;
 
 			if (!user) {
@@ -30,6 +30,22 @@ export default {
 				console.log(err);
 				return false;
 			});
+		},
+		roleCheck: function () {
+			let user = firebase.auth().currentUser;
+
+			if (!user) {
+				return false;
+			};
+
+			return firestore.collection('admins').get().then(() => {
+                this.isAdmin = true;
+				return true;
+            }).catch((err) => { // The account is not in admin-list
+                console.log(err);
+				return false;
+			});
+
 		}
 	}
 }

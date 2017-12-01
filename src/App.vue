@@ -59,7 +59,7 @@ export default {
 		firebase.auth().onAuthStateChanged((user) => {
 			if (user) {
 				this.user = user;
-				this.roleCheck(user).then((validAccount) => {  /// Check if user has a valid email account
+				this.validAccountCheck().then((validAccount) => {  /// Check if user has a valid email account
 
 					if (validAccount) {
 						this.redirect();
@@ -70,6 +70,11 @@ export default {
 						this.snackbar.display = true;
 						this.logOut();
 					}
+				}).then(() => {
+					this.roleCheck().then((isAdmin) => {
+						console.log(isAdmin);
+						this.user.isAdmin = true;
+					});
 				})
 			};
 			this.firebaseReady = true;
