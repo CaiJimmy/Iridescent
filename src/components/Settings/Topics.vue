@@ -98,8 +98,14 @@ export default {
 		};
 	},
 	created: function () {
+
+		if(!this.$store.state.isAdmin){
+			console.log(this.$store.state.isAdmin)
+		};
+
 		this.$bind("topics", firebase.firestore().collection("topics"));
 		this.$bind("levels", firebase.firestore().collection("levels"));
+		
 	},
 	watch: {
 		"topics": function () {

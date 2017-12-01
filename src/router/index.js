@@ -3,7 +3,6 @@ import Router from 'vue-router'
 import Meta from 'vue-meta'
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
-import store from '@/store';
 
 Vue.use(Meta)
 Vue.use(Router)
@@ -69,13 +68,7 @@ router.beforeEach(function (to, from, next) {
 			}
 		})
 	} else {
-		if (to.meta.isAdmin && !store.state.isAdmin) {
-			next({
-				path: '/403'
-			})
-		} else {
-			next();
-		}
+		next();
 	}
 });
 
