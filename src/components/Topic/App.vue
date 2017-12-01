@@ -1,7 +1,7 @@
 <template>
     <div>
         <md-progress-bar v-if="loading.metadata"
-            class="md-accent"
+            class="md-primary"
             md-mode="indeterminate"
             :md-diameter="30"
             :md-stroke="3"></md-progress-bar>

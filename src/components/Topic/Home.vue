@@ -57,7 +57,7 @@
                                     </div>
                                 </md-card-header>
                                 <md-progress-bar v-else
-                                    class="md-accent"
+                                    class="md-primary"
                                     md-mode="indeterminate"
                                     :md-diameter="30"
                                     :md-stroke="3"></md-progress-bar>

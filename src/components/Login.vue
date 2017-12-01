@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<md-progress-bar class="md-accent"
+		<md-progress-bar class="md-primary"
 		    md-mode="indeterminate"
 		    v-if="loading.login"></md-progress-bar>
 		<div id="loginScreen">
