@@ -19,9 +19,10 @@
 <script>
 import * as firebase from "firebase/app";
 import "firebase/auth";
-
+import Auth from '@/mixins/auth.js'
 export default {
 	name: "Login",
+	mixins: [Auth],
 	data: function () {
 		return {
 			loading: {
@@ -46,7 +47,6 @@ export default {
 			var provider = new firebase.auth.GoogleAuthProvider();
 			firebase.auth().signInWithPopup(provider).then(result => {
 				this.loading.login = false;
-				this.redirect();
 			}).catch(error => {
 				var errorCode = error.code;
 				var errorMessage = error.message;
