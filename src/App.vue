@@ -52,6 +52,7 @@ export default {
 				message: null
 			},
 			firebaseReady: false,
+			loggedIn: false,
 			user: {},
 		}
 	},
@@ -69,7 +70,8 @@ export default {
 						this.snackbar.message = 'No es una cuenta válida';
 						this.snackbar.display = true;
 						this.logOut();
-					}
+					};
+
 				}).then(() => {
 					this.roleCheck().then((isAdmin) => {
 						let user = this.$store.state.user;
@@ -78,7 +80,12 @@ export default {
 						this.$store.commit('setUserData', user);
 					});
 				})
-			};
+
+				this.loggedIn = true;
+			}
+			else {
+				this.loggedIn = false;
+			}
 			this.firebaseReady = true;
 			console.log('Firebase Auth Initialized');
 		});
