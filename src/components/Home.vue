@@ -99,7 +99,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .homepage {
-  margin: 2em auto;
+  margin: 0 auto;
+  padding: 2em 0;
 }
 
 .exploreButton {

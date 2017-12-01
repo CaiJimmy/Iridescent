@@ -5,7 +5,7 @@ export default {
 				index = savedTopics.indexOf(topicID);
 			if (index > -1) {
 				savedTopics.splice(index, 1);
-				this.ref.user.update(this.user);
+				firebase.firestore().collection("users").doc(firebase.auth().currentUser.uid).update(this.user);
 			}
 		},
 		saveTopic(topicID) {
@@ -14,7 +14,7 @@ export default {
 			};
 			if (!this.user.savedTopics.includes(topicID)) {
 				this.user.savedTopics.push(topicID);
-				this.ref.user.update(this.user);
+				firebase.firestore().collection("users").doc(firebase.auth().currentUser.uid).update(this.user);
 			};
 		}
 	}

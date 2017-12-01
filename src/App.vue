@@ -2,28 +2,54 @@
 	<div id="app"
 	    v-if="firebaseReady">
 		<md-toolbar class="md-primary"
+		    md-elevation="0"
 		    v-if="loggedIn && !$route.meta.hideNav">
-			<md-button class="md-icon-button"
-			    v-if="$route.path !== '/'"
-			    v-on:click="$router.push('/')">
-				<md-icon>keyboard_arrow_left</md-icon>
-			</md-button>
-			<h3 class="md-title"
-			    style="flex:1">{{ $meta().refresh().titleChunk }}</h3>
 
-			<md-menu md-direction="bottom-start">
-				<md-avatar md-menu-trigger>
-					<img :src="user.photoURL"
-					    :alt="user.displayName">
-				</md-avatar>
-				<md-menu-content>
-					<md-menu-item v-on:click="logOut()">
-						<md-icon>exit_to_app</md-icon>
-						<span>Cerrar sesión</span>
-					</md-menu-item>
-				</md-menu-content>
-			</md-menu>
+			<md-button class="md-icon-button"
+			    @click="toggleMenu"
+			    v-if="!menuVisible">
+				<md-icon>menu</md-icon>
+			</md-button>
+			<span class="md-title">{{ $meta().refresh().titleChunk }}</span>
 		</md-toolbar>
+
+		<md-drawer :md-active.sync="menuVisible"
+		    v-if="loggedIn && !$route.meta.hideNav">
+			<md-list>
+				<md-list-item v-on:click="$router.push('/')">
+					<md-icon>home</md-icon>
+					<span class="md-list-item-text">Inicio</span>
+				</md-list-item>
+
+			</md-list>
+			<md-list v-if="user.savedTopics.length">
+				<md-subheader>Temas Guardados</md-subheader>
+
+				<md-list-item v-for="topicID in user.savedTopics"
+				    v-on:click="$router.push('/t/' + topicID)"
+				    :key="topicID">
+					<md-avatar>
+						<img :src="topics[topicID].image"
+						    :alt="topics[topicID].name">
+					</md-avatar>
+					<span class="md-list-item-text">{{ topics[topicID].name }}</span>
+				</md-list-item>
+			</md-list>
+			<md-list class="bottomList">
+				<md-list-item v-on:click="$router.push('/settings/topics')">
+					<md-icon>settings</md-icon>
+					<span class="md-list-item-text">Temas</span>
+				</md-list-item>
+
+				<md-list-item>
+					<md-avatar>
+						<img :src="user.photoURL"
+						    :alt="user.displayName">
+					</md-avatar>
+					<span class="md-list-item-text">{{ user.displayName }}</span>
+				</md-list-item>
+			</md-list>
+		</md-drawer>
 
 		<router-view />
 
@@ -36,14 +62,15 @@ import * as firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
 
-import Auth from '@/mixins/auth.js'
+import Auth from '@/mixins/auth.js';
+import General from '@/mixins/general.js'
 export default {
 	name: "app",
 	metaInfo: {
 		title: 'Inicio',
 		titleTemplate: '%s | Elysian'
 	},
-	mixins: [Auth],
+	mixins: [Auth, General],
 	data () {
 		return {
 			snackbar: {
@@ -52,13 +79,12 @@ export default {
 			},
 			firebaseReady: false,
 			loggedIn: false,
-			user: {},
+			menuVisible: false
 		}
 	},
 	created () {
 		firebase.auth().onAuthStateChanged((user) => {
 			if (user) {
-				this.user = user;
 				this.validAccountCheck().then((validAccount) => {  /// Check if user has a valid email account
 
 					if (validAccount) {
@@ -86,7 +112,15 @@ export default {
 			console.log('Firebase Auth Initialized');
 		});
 	},
+	watch: {
+		"$route.fullPath": function(){
+			this.menuVisible = false;
+		}
+	},
 	methods: {
+		toggleMenu () {
+			this.menuVisible = !this.menuVisible
+		},
 		logOut: function () {
 			firebase.auth().signOut().then(() => {
 				if (!this.$route.query.go || this.$route.path !== '/login') {
@@ -128,5 +162,18 @@ export default {
   &.compact {
     max-width: 650px;
   }
+}
+
+.md-drawer {
+  width: 230px;
+  max-width: calc(100vw - 125px);
+  position: fixed;
+}
+
+.bottomList {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
 }
 </style>

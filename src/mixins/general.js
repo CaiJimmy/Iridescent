@@ -7,7 +7,6 @@ export default {
 	data() {
 		return {
 			ref: {
-				user: firebase.firestore().collection("users").doc(firebase.auth().currentUser.uid),
 				topics: firebase.firestore().collection("topics"),
 				levels: firebase.firestore().collection("levels")
 			}
