@@ -3,15 +3,22 @@ import Router from 'vue-router'
 import Meta from 'vue-meta'
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
+import store from '@/store';
 
 Vue.use(Meta)
 Vue.use(Router)
 
 var router = new Router({
-	routes: [
-		{
+	routes: [{
 			path: '*',
 			component: require('@/components/NotFound.vue').default,
+			meta: {
+				hideNav: true
+			}
+		},
+		{
+			path: '/403',
+			component: require('@/components/NotAllowed.vue').default,
 			meta: {
 				hideNav: true
 			}
@@ -24,21 +31,25 @@ var router = new Router({
 		{
 			path: '/settings/topics/',
 			component: require('@/components/Settings/Topics.vue').default,
-			auth: true
+			auth: true,
+			meta: {
+				isAdmin: true
+			}
 		},
 		{
 			path: '/t/:id/',
 			component: require('@/components/Topic/App.vue').default,
 			auth: true,
-			children: [
-				{
+			children: [{
 					path: '',
 					component: require('@/components/Topic/Home.vue').default
 				},
 				{
 					path: 'edit',
 					component: require('@/components/Topic/Edit.vue').default,
-					isAdmin: true
+					meta: {
+						isAdmin: true
+					}
 				}
 			]
 		},
@@ -58,7 +69,13 @@ router.beforeEach(function (to, from, next) {
 			}
 		})
 	} else {
-		next()
+		if (to.meta.isAdmin && !store.state.isAdmin) {
+			next({
+				path: '/403'
+			})
+		} else {
+			next();
+		}
 	}
 });
 
