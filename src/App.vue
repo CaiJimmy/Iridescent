@@ -3,7 +3,7 @@
 	    v-if="firebaseReady">
 		<md-toolbar class="md-primary"
 		    md-elevation="0"
-		    v-if="user && !$route.meta.hideNav">
+		    v-if="loggedIn && !$route.meta.hideNav">
 			<md-button class="md-icon-button"
 			    v-if="$route.path !== '/'"
 			    v-on:click="$router.push('/')">
@@ -95,9 +95,11 @@ export default {
 			});
 		},
 		redirect: function () {
-			this.$router.replace({
-				path: this.$route.query.go || '/'
-			});
+			if (this.$route.query.go) {
+				this.$router.replace({
+					path: this.$route.query.go
+				});
+			}
 		}
 	}
 };
