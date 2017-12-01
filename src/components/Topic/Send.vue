@@ -1,6 +1,5 @@
 <template>
-    <form v-on:submit.prevent
-        class="container">
+    <form v-on:submit.prevent>
         <md-card>
             <md-progress-bar md-mode="indeterminate"
                 v-if="loading.form" />
@@ -49,8 +48,6 @@
                     @click.native="addQuestion()">Enviar</md-button>
             </md-card-actions>
         </md-card>
-        <md-snackbar :md-active.sync="snackbar.display">{{ snackbar.message }}</md-snackbar>
-
     </form>
 </template>
 <script>
@@ -60,6 +57,7 @@ import "firebase/auth";
 
 export default {
     name: 'Send',
+    props: ['topicRef', 'snackbar', 'callback'],
     data: () => ({
         question: {
             title: null,
@@ -75,10 +73,6 @@ export default {
         loading: {
             form: false
         },
-        snackbar: {
-            display: false,
-            message: null
-        }
     }),
     computed: {
         user: () => {
@@ -90,7 +84,7 @@ export default {
             this.loading.form = true;
             this.$validator.validateAll().then((result) => {
                 if (result) {
-                    this.question.topic = this.$parent.ref.topic;
+                    this.question.topic = this.topicRef;
                     this.question.author = firebase.auth().currentUser.uid;
 
                     var ref = firebase.firestore().collection('questions/');
@@ -117,6 +111,10 @@ export default {
 
                         this.snackbar.message = "La pregunta ha sido publicada";
                         this.snackbar.display = true;
+
+                        if(this.callback){
+                            this.callback();
+                        }
                     });
                 }
                 else {

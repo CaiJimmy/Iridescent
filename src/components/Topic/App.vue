@@ -27,17 +27,6 @@
             <div v-else>
                 <TopicHeader :topic="topic"
                     :topicRef="ref.topic" />
-                <md-tabs md-sync-route
-                    class="md-primary"
-                    md-alignment="centered">
-                    <md-tab id="tab-home"
-                        md-label="Inicio"
-                        :to="'/t/' + $route.params.id + '/'"></md-tab>
-                    <md-tab id="tab-posts"
-                        md-label="Enviar"
-                        :to="'/t/' + $route.params.id + '/send'"></md-tab>
-                </md-tabs>
-
                 <router-view class="mainContent"></router-view>
             </div>
         </div>

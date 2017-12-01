@@ -86,6 +86,17 @@
                 </div>
             </div>
         </div>
+        <md-snackbar :md-active.sync="snackbar.display">{{ snackbar.message }}</md-snackbar>
+
+        <md-dialog :md-fullscreen="false"
+            :md-active.sync="showQuestionForm">
+            <question-form :topicRef="$parent.ref.topic" :callback="closeDialog" :snackbar="snackbar" />
+        </md-dialog>
+
+        <md-button class="md-fab md-primary addQuestion"
+            v-on:click="showQuestionForm = true;">
+            <md-icon>add</md-icon>
+        </md-button>
     </div>
 </template>
 <script>
@@ -96,15 +107,23 @@ import moment from 'moment';
 import General from '@/mixins/general.js'
 import MugenScroll from 'vue-mugen-scroll';
 
+import QuestionForm from './Send.vue';
+
 export default {
     name: 'TopicPage',
 
     mixins: [General],
     data: () => ({
-        showDialog: false
+        showQuestionForm: false,
+        
+        snackbar: {
+            display: false,
+            message: null
+        }
     }),
     components: {
-        MugenScroll
+        MugenScroll,
+        QuestionForm
     },
     computed: {
         question_bar: function () {
@@ -129,6 +148,9 @@ export default {
         }
     },
     methods: {
+        closeDialog(){
+            this.showQuestionForm = false;
+        },
         loadMore: function () {
             this.$parent.loadMore();
         },
@@ -154,12 +176,11 @@ form {
 .questionCard {
   margin-bottom: 16px;
 }
-@media (min-width: 850px) {
+
   .md-dialog {
     width: 500px;
     max-height: 90%;
   }
-}
 
 .loader-wrapper {
   text-align: center;
@@ -169,5 +190,11 @@ form {
   & > .md-layout-item {
     margin-bottom: 16px;
   }
+}
+
+.addQuestion {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
 }
 </style>
