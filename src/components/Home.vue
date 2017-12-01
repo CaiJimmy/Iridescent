@@ -1,34 +1,45 @@
 <template>
-	<div class="homepage container extend"
-	    v-if="!loading">
-		<md-empty-state md-icon="add"
-		    md-label="Guardar Tema"
-		    md-description="Guardar temas a tu cuenta para accederlo más rápido"
-		    v-if="!savedTopics.length">
-			<md-progress-spinner md-mode="indeterminate"
-			    v-if="loading"></md-progress-spinner>
-			<md-button class="md-primary md-raised"
-			    v-else
-			    v-on:click="showDialog.topics = true">Explorar</md-button>
-		</md-empty-state>
+	<div>
+		<md-progress-bar class="md-accent"
+		    md-mode="indeterminate"
+		    v-if="loading"></md-progress-bar>
 
-		<div class="savedTopics--wrapper"
+		<div class="homepage container extend"
 		    v-else>
-			<div class="savedTopics--grid"
-			    v-for="topicID in savedTopics"
-			    :key="topicID">
-				<router-link :to="'/t/' + topicID">
-					<md-card>
-						<md-card-media v-if="topics[topicID].image">
-							<img :src="topics[topicID].image">
-						</md-card-media>
+			<md-empty-state md-icon="add"
+			    md-label="Guardar Tema"
+			    md-description="Guardar temas a tu cuenta para accederlo más rápido"
+			    v-if="!savedTopics.length">
+				<md-progress-spinner md-mode="indeterminate"
+				    v-if="loading"></md-progress-spinner>
+				<md-button class="md-primary md-raised"
+				    v-else
+				    v-on:click="showDialog.topics = true">Explorar</md-button>
+			</md-empty-state>
 
-						<md-card-header>
-							<div class="md-title">{{ topics[topicID].name }}</div>
-							<div class="md-subhead">{{ levels[topics[topicID].level].name }}</div>
-						</md-card-header>
-					</md-card>
-				</router-link>
+			<div class="savedTopics--wrapper"
+			    v-else>
+				<div class="savedTopics--grid"
+				    v-for="topicID in savedTopics"
+				    :key="topicID">
+					<router-link :to="'/t/' + topicID">
+						<md-card>
+							<md-card-media-cover md-solid>
+								<md-card-media v-if="topics[topicID].image">
+									<img :src="topics[topicID].image">
+								</md-card-media>
+
+								<md-card-area>
+									<md-card-header>
+										<div class="md-title">{{ topics[topicID].name }}</div>
+										<div class="md-subhead">{{ levels[topics[topicID].level].name }}</div>
+									</md-card-header>
+								</md-card-area>
+							</md-card-media-cover>
+						</md-card>
+
+					</router-link>
+				</div>
 			</div>
 		</div>
 		<md-dialog :md-active.sync="showDialog.topics"
@@ -63,7 +74,8 @@ export default {
 		return {
 			showDialog: {
 				topics: false
-			}
+			},
+			checkingTopics: true
 		}
 	},
 	computed: {
@@ -71,7 +83,7 @@ export default {
 			return this.user.savedTopics || [];
 		},
 		loading: function () {
-			return this.$store.state.loading.levels | this.$store.state.loading.topics;
+			return this.$store.state.loading.levels | this.$store.state.loading.topics | this.checkingTopics;
 		}
 	},
 	created () {
@@ -81,9 +93,10 @@ export default {
 		deleteInvalidTopics: function () {
 			this.savedTopics.forEach((topicID) => {
 				if (!this.$store.state.topics.hasOwnProperty(topicID)) {
-					removeTopic(topicID);
+					this.removeTopic(topicID);
 				}
-			})
+			});
+			this.checkingTopics = false
 		}
 	}
 }
@@ -115,12 +128,13 @@ export default {
     width: 23%;
     margin: 5px;
     max-width: 23%;
-    @media (max-width: 750px) {
+
+    @media only screen and (max-width: 768px) {
       flex: 0 1 100%;
       max-width: 100%;
     }
 
-    @media (max-width: 1100px) {
+    @media only screen and (min-width: 768px) and (max-width: 1024px) {
       flex: 0 1 48%;
       max-width: 48%;
     }
