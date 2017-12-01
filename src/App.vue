@@ -52,7 +52,7 @@ export default {
 				message: null
 			},
 			firebaseReady: false,
-			user: {}
+			user: {},
 		}
 	},
 	created () {

@@ -28,7 +28,8 @@
                 <div class="md-layout"
                     v-for="(value, letter, index) in question.answers"
                     :key="index">
-                    <md-field class="md-layout-item" :class="{ 'md-invalid': errors.has(letter) }">
+                    <md-field class="md-layout-item"
+                        :class="{ 'md-invalid': errors.has(letter) }">
                         <label>Repuesta {{letter.toUpperCase()}}</label>
                         <md-input :disabled="loading.form"
                             v-model="question.answers[letter]"
@@ -45,9 +46,28 @@
 
             <md-card-actions>
                 <md-button class="md-primary"
-                    @click.native="addQuestion()">Enviar</md-button>
+                    @click.native="addQuestion()"
+                    v-if="type == 'send'"
+                    :disabled="loading.form">Enviar</md-button>
+                <div v-if="type == 'edit'">
+                    <md-button class="md-accent"
+                        v-on:click="deleteQuestionConfirm()">Eliminar</md-button>
+                    <md-button class="md-primary"
+                        @click.native="editQuestion()"
+                        :disabled="loading.form">Editar</md-button>
+                </div>
             </md-card-actions>
         </md-card>
+
+        <md-dialog-confirm :md-active.sync="deleteConfirm.show"
+            v-if="deleteConfirm.selected"
+            md-title="Confirmación"
+            :md-content="'Estas seguro de que quieres eliminar la pregunta <strong>' + deleteConfirm.selected.title + '</strong>, publicado por <strong>' + $store.state.users[deleteConfirm.selected.author].displayName +'</strong>?'"
+            md-confirm-text="Sí"
+            md-cancel-text="Nope"
+            @md-cancel="deleteConfirm.show = false;"
+            @md-confirm="deleteQuestion(questionID)" />
+
     </form>
 </template>
 <script>
@@ -57,7 +77,7 @@ import "firebase/auth";
 
 export default {
     name: 'Send',
-    props: ['topicRef', 'snackbar', 'callback'],
+    props: ['topicRef', 'snackbar', 'callback', 'type', 'questionData', 'questionID'],
     data: () => ({
         question: {
             title: null,
@@ -73,13 +93,55 @@ export default {
         loading: {
             form: false
         },
+        deleteConfirm: {
+            show: false,
+            selected: null
+        },
+
     }),
+    created () {
+        if (this.type == 'edit') {
+            this.question = this.questionData;
+        }
+    },
     computed: {
         user: () => {
             return firebase.auth().currentUser;
         }
     },
     methods: {
+        deleteQuestionConfirm (questionIndex) {
+            this.deleteConfirm.selected = this.questionData;
+            this.deleteConfirm.show = true;
+        },
+        deleteQuestion (questionID) {
+            firebase.firestore().collection('questions').doc(questionID).delete().then(() => {
+                this.snackbar.message = 'La pregunta ha sido eliminada';
+                this.snackbar.display = true;
+            });
+        },
+        editQuestion () {
+            this.loading.form = true;
+            this.$validator.validateAll().then((result) => {
+                if (result) {
+                    var ref = firebase.firestore().collection('questions/').doc(this.questionID);
+                    ref.set(this.question, { merge: true }).then((ref) => {
+
+                        this.snackbar.message = "La pregunta ha sido editada correctamente";
+                        this.snackbar.display = true;
+
+                        if (this.callback) {
+                            this.callback(this.questionID);
+                        }
+                    });
+                }
+                else {
+                    this.loading.form = false;
+                    this.snackbar.message = "Corrige los errores";
+                    this.snackbar.display = true;
+                }
+            })
+        },
         addQuestion () {
             this.loading.form = true;
             this.$validator.validateAll().then((result) => {
@@ -112,7 +174,7 @@ export default {
                         this.snackbar.message = "La pregunta ha sido publicada";
                         this.snackbar.display = true;
 
-                        if(this.callback){
+                        if (this.callback) {
                             this.callback();
                         }
                     });
