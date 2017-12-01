@@ -26,10 +26,10 @@
                     <span class="md-error">{{errors.first('title')}}</span>
                 </md-field>
 
-                <div class="md-layout-row"
+                <div class="md-layout"
                     v-for="(value, letter, index) in question.answers"
                     :key="index">
-                    <md-field :class="{ 'md-invalid': errors.has(letter) }">
+                    <md-field class="md-layout-item" :class="{ 'md-invalid': errors.has(letter) }">
                         <label>Repuesta {{letter.toUpperCase()}}</label>
                         <md-input :disabled="loading.form"
                             v-model="question.answers[letter]"
