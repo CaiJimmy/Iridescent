@@ -5,7 +5,8 @@
             md-icon="error"
             md-label="404 Not Found"
             md-description="Comprueba de nuevo el link">
-            <md-button class="md-primary md-raised" v-on:click="$router.replace('/')">Volver al inicio</md-button>
+            <md-button class="md-primary md-raised"
+                v-on:click="$router.replace('/')">Volver al inicio</md-button>
         </md-empty-state>
     </div>
 </template>

@@ -1,11 +1,14 @@
 <template>
-    <form v-on:submit.prevent class="container">
+    <form v-on:submit.prevent
+        class="container">
         <md-card>
-            <md-progress-bar md-mode="indeterminate" v-if="loading.form" />
+            <md-progress-bar md-mode="indeterminate"
+                v-if="loading.form" />
 
             <md-card-header>
                 <md-avatar>
-                    <img :src="user.photoURL" :alt="user.displayName">
+                    <img :src="user.photoURL"
+                        :alt="user.displayName">
                 </md-avatar>
 
                 <div class="md-title">{{ user.displayName }}</div>
@@ -16,23 +19,34 @@
                 <md-field :class="{ 'md-invalid': errors.has('title') }">
                     <md-icon>title</md-icon>
                     <label>Pregunta</label>
-                    <md-input v-model="question.title" data-vv-name="title" v-validate data-vv-rules="required"></md-input>
+                    <md-input v-model="question.title"
+                        data-vv-name="title"
+                        v-validate
+                        data-vv-rules="required"></md-input>
                     <span class="md-error">{{errors.first('title')}}</span>
                 </md-field>
 
-                <div class="md-layout-row" v-for="(value, letter, index) in question.answers" :key="index">
+                <div class="md-layout-row"
+                    v-for="(value, letter, index) in question.answers"
+                    :key="index">
                     <md-field :class="{ 'md-invalid': errors.has(letter) }">
                         <label>Repuesta {{letter.toUpperCase()}}</label>
-                        <md-input :disabled="loading.form" v-model="question.answers[letter]" :data-vv-name="letter" v-validate data-vv-rules="required"></md-input>
+                        <md-input :disabled="loading.form"
+                            v-model="question.answers[letter]"
+                            :data-vv-name="letter"
+                            v-validate
+                            data-vv-rules="required"></md-input>
                         <span class="md-error">{{errors.first(letter)}}</span>
                     </md-field>
-                    <md-radio v-model="question.correctAnswer" :value="letter"></md-radio>
+                    <md-radio v-model="question.correctAnswer"
+                        :value="letter"></md-radio>
                 </div>
 
             </md-card-content>
 
             <md-card-actions>
-                <md-button class="md-primary" @click.native="addQuestion()">Enviar</md-button>
+                <md-button class="md-primary"
+                    @click.native="addQuestion()">Enviar</md-button>
             </md-card-actions>
         </md-card>
         <md-snackbar :md-active.sync="snackbar.display">{{ snackbar.message }}</md-snackbar>

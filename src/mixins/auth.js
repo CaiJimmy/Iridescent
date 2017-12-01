@@ -39,10 +39,10 @@ export default {
 			};
 
 			return firestore.collection('admins').get().then(() => {
-                this.isAdmin = true;
+				this.isAdmin = true;
 				return true;
-            }).catch((err) => { // The account is not in admin-list
-                console.log(err);
+			}).catch((err) => { // The account is not in admin-list
+				console.log(err);
 				return false;
 			});
 

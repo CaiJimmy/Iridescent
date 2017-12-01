@@ -1,9 +1,14 @@
 <template>
     <div>
-        <md-progress-bar v-if="loading.metadata" class="md-accent" md-mode="indeterminate" :md-diameter="30" :md-stroke="3"></md-progress-bar>
+        <md-progress-bar v-if="loading.metadata"
+            class="md-accent"
+            md-mode="indeterminate"
+            :md-diameter="30"
+            :md-stroke="3"></md-progress-bar>
 
         <div v-if="!loading.metadata">
-            <div v-if="notFound" class="notFound container">
+            <div v-if="notFound"
+                class="notFound container">
                 <md-card>
                     <md-card-header>
                         <div class="md-title">Topic Not Found</div>
@@ -14,14 +19,21 @@
                     </md-card-content>
 
                     <md-card-actions>
-                        <md-button class="md-raised md-primary" v-on:click="$router.push('/')">Back to home</md-button>
+                        <md-button class="md-raised md-primary"
+                            v-on:click="$router.push('/')">Back to home</md-button>
                     </md-card-actions>
                 </md-card>
             </div>
             <div v-else>
-                <md-tabs md-sync-route class="md-primary" md-alignment="centered">
-                    <md-tab id="tab-home" md-label="Inicio" :to="'/t/' + $route.params.id + '/'"></md-tab>
-                    <md-tab id="tab-posts" md-label="Enviar" :to="'/t/' + $route.params.id + '/send'"></md-tab>
+                <md-tabs md-sync-route
+                    class="md-primary"
+                    md-alignment="centered">
+                    <md-tab id="tab-home"
+                        md-label="Inicio"
+                        :to="'/t/' + $route.params.id + '/'"></md-tab>
+                    <md-tab id="tab-posts"
+                        md-label="Enviar"
+                        :to="'/t/' + $route.params.id + '/send'"></md-tab>
                 </md-tabs>
 
                 <router-view class="mainContent"></router-view>

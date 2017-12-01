@@ -1,17 +1,24 @@
 <template>
     <md-list class="md-elevation-2">
-        <div v-for="(level, levelID) in levels" :key="levelID">
+        <div v-for="(level, levelID) in levels"
+            :key="levelID">
             <md-subheader>{{ level.name }}</md-subheader>
-            <md-list-item class="md-inset" v-for="(topic, index) in getTopicsByLevel(levelID)" :key="topic.id">
+            <md-list-item class="md-inset"
+                v-for="(topic, index) in getTopicsByLevel(levelID)"
+                :key="topic.id">
                 <div class="md-list-item-text">
                     <span>{{ topic.name }}</span>
                 </div>
 
-                <md-button class="md-icon-button" v-on:click="removeTopic(topic.id)" v-if="savedTopics.includes(topic.id)">
+                <md-button class="md-icon-button"
+                    v-on:click="removeTopic(topic.id)"
+                    v-if="savedTopics.includes(topic.id)">
                     <md-icon>close</md-icon>
                 </md-button>
 
-                <md-button class="md-icon-button" v-on:click="saveTopic(topic.id)" v-else>
+                <md-button class="md-icon-button"
+                    v-on:click="saveTopic(topic.id)"
+                    v-else>
                     <md-icon>add</md-icon>
                 </md-button>
 
