@@ -85,7 +85,7 @@ export default {
 			if (imageFile) {
 				this.uploading = true;
 
-				this.uploadFile(imageFile, `${this.topicRef.key}/${imageFile.name}`).then((snapshot) => {
+				this.uploadFile(imageFile, `${this.topicRef.id}/${imageFile.name}`).then((snapshot) => {
 					let imageURL = snapshot.downloadURL;
 
 					this.topicRef.set({
