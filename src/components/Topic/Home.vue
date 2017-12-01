@@ -28,60 +28,61 @@
                 </div>
 
                 <div v-else>
-                    <div v-if="questions.length"
-                        v-on:copy="copyBlock">
+                    <div v-if="questions.length">
                         <div class="questionContainer"
                             v-for="(item, index) in questions"
                             :key="item.id">
-                            <md-content class="md-elevation-1"  v-if="editing.includes(item.id)">
-                                <question-form
-                                    type="edit"
+                            <md-content class="md-elevation-1"
+                                v-if="editing.includes(item.id)">
+                                <question-form type="edit"
                                     :questionData="item"
                                     :questionID="item.id"
                                     :callback="exitEditing"
                                     :snackbar="snackbar" />
                             </md-content>
-                            <md-card class="questionCard"
+                            <div v-on:copy="copyBlock"
                                 v-else>
-                                <md-card-header v-if="users.hasOwnProperty(item.author) && !users[item.author].loading">
-                                    <md-avatar>
-                                        <img :src="users[item.author].photoURL"
-                                            :alt="users[item.author].displayName">
-                                    </md-avatar>
-                                    <div class="md-title">{{ users[item.author].displayName }}</div>
-                                    <div class="md-subhead">
-                                        <span>
-                                            <timeago :auto-update="60"
-                                                :since="item.date"></timeago>
-                                        </span>
-                                    </div>
-                                </md-card-header>
-                                <md-progress-bar v-else
-                                    class="md-primary"
-                                    md-mode="indeterminate"
-                                    :md-diameter="30"
-                                    :md-stroke="3"></md-progress-bar>
-                                <md-card-content>
-                                    {{ item.title }}
-                                    <md-list>
-                                        <md-list-item v-for="(value, letter, index) in item.answers"
-                                            v-bind:key="index">
-                                            <div class="md-list-item-text">
-                                                {{letter.toUpperCase()}}. {{value}}
-                                            </div>
-                                            <md-button v-if="item.correctAnswer == letter"
-                                                class="md-icon-button md-list-action">
-                                                <md-icon class="md-primary">star</md-icon>
-                                            </md-button>
-                                            <md-divider v-if="letter !== 'd'"></md-divider>
-                                        </md-list-item>
-                                    </md-list>
-                                </md-card-content>
-                                <md-card-actions>
-                                    <md-button v-if="item.author == $store.state.user.uid || $store.state.user.isAdmin"
-                                        v-on:click="editQuestion(index)">Editar</md-button>
-                                </md-card-actions>
-                            </md-card>
+                                <md-card class="questionCard">
+                                    <md-card-header v-if="users.hasOwnProperty(item.author) && !users[item.author].loading">
+                                        <md-avatar>
+                                            <img :src="users[item.author].photoURL"
+                                                :alt="users[item.author].displayName">
+                                        </md-avatar>
+                                        <div class="md-title">{{ users[item.author].displayName }}</div>
+                                        <div class="md-subhead">
+                                            <span>
+                                                <timeago :auto-update="60"
+                                                    :since="item.date"></timeago>
+                                            </span>
+                                        </div>
+                                    </md-card-header>
+                                    <md-progress-bar v-else
+                                        class="md-primary"
+                                        md-mode="indeterminate"
+                                        :md-diameter="30"
+                                        :md-stroke="3"></md-progress-bar>
+                                    <md-card-content>
+                                        {{ item.title }}
+                                        <md-list>
+                                            <md-list-item v-for="(value, letter, index) in item.answers"
+                                                v-bind:key="index">
+                                                <div class="md-list-item-text">
+                                                    {{letter.toUpperCase()}}. {{value}}
+                                                </div>
+                                                <md-button v-if="item.correctAnswer == letter"
+                                                    class="md-icon-button md-list-action">
+                                                    <md-icon class="md-primary">star</md-icon>
+                                                </md-button>
+                                                <md-divider v-if="letter !== 'd'"></md-divider>
+                                            </md-list-item>
+                                        </md-list>
+                                    </md-card-content>
+                                    <md-card-actions>
+                                        <md-button v-if="item.author == $store.state.user.uid || isAdmin"
+                                            v-on:click="editQuestion(index)">Editar</md-button>
+                                    </md-card-actions>
+                                </md-card>
+                            </div>
                         </div>
                         <mugen-scroll :handler="loadMore"
                             :should-handle="!loadMoreDisabled">
@@ -164,6 +165,9 @@ export default {
         },
         loadMoreDisabled: function () {
             return this.$parent.paging.loading | this.$parent.paging.end;
+        },
+        isAdmin () {
+            return this.$store.state.isAdmin;
         }
     },
     methods: {
@@ -188,7 +192,7 @@ export default {
         },
         copyBlock: function (e) {
             console.log('Copy event triggered');
-            if (!isAdmin) {
+            if (!this.isAdmin) {
                 e.clipboardData.setData('text/plain', 'Pa k kieres copiar eso jaja salu2');
                 e.preventDefault();
             };
