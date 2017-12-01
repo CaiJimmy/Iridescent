@@ -117,8 +117,8 @@ export default {
 @import "~vue-material/dist/theme/engine"; // Import the theme engine
 
 @include md-register-theme("default", (
-  primary: #1de9b6, 
-  accent: #00bfa5 
+  primary: md-get-palette-color(teal, A700), 
+  accent: md-get-palette-color(pink, 500) 
 ));
 
 @import "~vue-material/dist/theme/all"; // Apply the theme
