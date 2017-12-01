@@ -11,6 +11,7 @@ export default new Vuex.Store({
 		users: {},
 		topics: {},
 		levels: {},
+		isAdmin: false,
 
 		loading: {
 			topics: true,
@@ -23,6 +24,9 @@ export default new Vuex.Store({
 		},
 		setUserData(state, userData) {
 			state.user = userData;
+		},
+		isAdmin(state, isAdmin){
+			state.isAdmin = isAdmin;
 		},
 		updateObject(state, payload) {
 			Vue.set(state[payload.object], payload.key, payload.data)

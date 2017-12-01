@@ -73,10 +73,7 @@ export default {
 
 				}).then(() => {
 					this.roleCheck().then((isAdmin) => {
-						let user = this.$store.state.user;
-						user.isAdmin = isAdmin;
-
-						this.$store.commit('setUserData', user);
+						this.$store.commit('isAdmin', isAdmin);
 					});
 				})
 
