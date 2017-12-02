@@ -134,6 +134,11 @@ export default {
                         this.$bind('userQuestions', this.ref.userQuestions).then(() => {
                             this.loading.userQuestions = false;
                         });
+
+                        if (this.topic.color) {
+                            this.$store.commit('setPrimaryColor', this.topic.color);
+                        }
+                        
                     })
                 }
                 else {

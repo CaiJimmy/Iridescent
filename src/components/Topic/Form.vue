@@ -39,7 +39,8 @@
                         <span class="md-error">{{errors.first(letter)}}</span>
                     </md-field>
                     <md-radio v-model="question.correctAnswer"
-                        :value="letter"></md-radio>
+                        :value="letter"
+                        class="md-primary"></md-radio>
                 </div>
 
             </md-card-content>

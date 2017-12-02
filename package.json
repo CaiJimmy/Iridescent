@@ -13,6 +13,7 @@
 		"firebase": "^4.6.2",
 		"moment": "^2.19.2",
 		"node-sass": "^4.6.1",
+		"node-vibrant": "^3.0.0",
 		"sass-loader": "^6.0.6",
 		"vee-validate": "^2.0.0-rc.21",
 		"vue": "^2.5.9",

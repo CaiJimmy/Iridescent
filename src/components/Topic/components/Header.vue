@@ -29,6 +29,7 @@
 import * as firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/storage";
+import * as Vibrant from 'node-vibrant'
 
 export default {
 	props: ['topic', 'topicRef'],
@@ -80,16 +81,21 @@ export default {
 					console.error("Upload failed:", error);
 				});
 		},
-
 		changeHeaderImage (imageFile) {
 			if (imageFile) {
 				this.uploading = true;
 
-				this.uploadFile(imageFile, `${this.topicRef.id}/${imageFile.name}`).then((snapshot) => {
+				this.uploadFile(imageFile, `${this.topicRef.id}/${imageFile.name}`).then(async (snapshot) => {
 					let imageURL = snapshot.downloadURL;
 
+					let color = await Vibrant.from(URL.createObjectURL(imageFile)).getPalette()
+						.then((palette) => {
+							return palette.Vibrant['_rgb']
+						});
+
 					this.topicRef.set({
-						image: imageURL
+						image: imageURL,
+						color: color
 					}, {
 							merge: true
 						}).then(() => {

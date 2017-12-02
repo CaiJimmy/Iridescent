@@ -88,6 +88,8 @@ router.afterEach(function (to, from, next) {
 			},
 		});
 	};
+
+	store.commit('setPrimaryColor', false);  /// Reset to default color after route change;
 })
 
 export default router

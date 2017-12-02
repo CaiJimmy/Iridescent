@@ -26,7 +26,7 @@ export default new Vuex.Store({
 		setUserData(state, userData) {
 			state.user = userData;
 		},
-		isAdmin(state, isAdmin){
+		isAdmin(state, isAdmin) {
 			state.isAdmin = isAdmin;
 			state.loading.role = false;
 		},
@@ -35,6 +35,23 @@ export default new Vuex.Store({
 		},
 		ready(state, where) {
 			Vue.set(state.loading, where, false);
+		},
+		setPrimaryColor(state, color) {
+			if (!color) {
+				document.documentElement.style.removeProperty('--md-theme-default-primary');
+				document.documentElement.style.removeProperty('--md-theme-default-primary-on-background');
+			} else {
+				let primaryColor = `rgb(${color.join(', ')})`;
+
+				let colorArray = color.slice(0),
+					opacity = 0.3;
+				colorArray.push(opacity);
+				let progressBarColor = `rgba(${colorArray.join(', ')})`;
+				
+				document.documentElement.style.setProperty('--md-theme-default-primary', primaryColor);
+				document.documentElement.style.setProperty('--md-theme-default-primary-on-background', primaryColor);
+				document.documentElement.style.setProperty('--md-theme-default-primary-on-', progressBarColor);
+			}
 		}
 	},
 	actions: {
