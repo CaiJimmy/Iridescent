@@ -100,6 +100,8 @@ export default {
 							merge: true
 						}).then(() => {
 							this.uploading = false;
+
+							this.$store.commit('setPrimaryColor', color);
 						})
 				})
 			}
