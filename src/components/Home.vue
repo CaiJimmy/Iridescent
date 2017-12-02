@@ -19,6 +19,10 @@
 				<div class="savedTopics--grid"
 				    v-for="topicID in savedTopics"
 				    :key="topicID">
+					<md-button class="md-icon-button removeTopic"
+					    v-on:click="removeTopic(topicID)">
+						<md-icon>close</md-icon>
+					</md-button>
 					<router-link :to="'/t/' + topicID">
 						<div class="savedTopic--image"
 						    :style="{ background: `url(${topics[topicID].image})`}"></div>
@@ -112,6 +116,7 @@ export default {
 		flex-grow: 1;
 		flex-basis: 1000000px;
 	}
+
 	.savedTopics--grid {
 		flex-grow: 1;
 		flex-basis: auto;
@@ -259,6 +264,22 @@ export default {
 				opacity: 1;
 				-webkit-transform: scale(1);
 				transform: scale(1);
+			}
+		}
+
+		.removeTopic {
+			visibility: hidden;
+			opacity: 0;
+			transition: all 0.5s ease;
+			position: absolute;
+			right: 0;
+			top: 0;
+		}
+
+		&:hover {
+			.removeTopic {
+				visibility: visible;
+				opacity: 1;
 			}
 		}
 	}
