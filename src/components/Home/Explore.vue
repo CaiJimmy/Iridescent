@@ -1,10 +1,10 @@
 <template>
     <md-list class="md-elevation-2">
-        <div v-for="(level, levelID) in levels"
-            :key="levelID">
+        <div v-for="(level, index) in arrayLevels"
+            :key="level.id">
             <md-subheader>{{ level.name }}</md-subheader>
             <md-list-item class="md-inset"
-                v-for="(topic, index) in getTopicsByLevel(levelID)"
+                v-for="(topic, index) in getTopicsByLevel(level.id)"
                 :key="topic.id">
                 <div class="md-list-item-text">
                     <span>{{ topic.name }}</span>
@@ -21,9 +21,8 @@
                     v-else>
                     <md-icon>add</md-icon>
                 </md-button>
-
             </md-list-item>
-            <md-divider></md-divider>
+            <md-divider v-if="index !== arrayLevels.length - 1"></md-divider>
         </div>
     </md-list>
 </template>
@@ -45,6 +44,15 @@ export default {
             else {
                 return [];
             }
+        },
+        arrayLevels(){
+            let array = [];
+            for(let value in this.levels){
+                let item = this.levels[value];
+                item.id = value;
+                array.push(item);
+            };
+            return array;
         }
     }
 }
