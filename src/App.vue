@@ -14,7 +14,7 @@
 		</md-toolbar>
 
 		<md-drawer :md-active.sync="menuVisible"
-		    v-if="loggedIn && !$route.meta.hideNav && !$store.state.loading.user">
+		    v-if="loggedIn && !$route.meta.hideNav">
 			<md-list>
 				<md-list-item v-on:click="$router.push('/')">
 					<md-icon>home</md-icon>
@@ -22,7 +22,7 @@
 				</md-list-item>
 
 			</md-list>
-			<md-list v-if="savedTopics.length">
+			<md-list v-if="user.savedTopics.length">
 				<md-subheader>Temas Guardados</md-subheader>
 
 				<md-list-item v-for="topicID in user.savedTopics"
@@ -51,7 +51,7 @@
 			</md-list>
 		</md-drawer>
 
-		<router-view v-if="!$store.state.loading.user || !$store.state.loading.role" />
+		<router-view />
 
 		<md-snackbar :md-active.sync="snackbar.display">{{ snackbar.message }}</md-snackbar>
 	</div>
@@ -80,11 +80,6 @@ export default {
 			firebaseReady: false,
 			loggedIn: false,
 			menuVisible: false
-		}
-	},
-	computed: {
-		savedTopics(){
-			return this.$store.state.user.savedTopics ||  []
 		}
 	},
 	created () {
