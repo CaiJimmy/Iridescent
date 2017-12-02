@@ -52,6 +52,10 @@
 						</md-avatar>
 						<span class="md-list-item-text">{{ user.displayName }}</span>
 					</md-list-item>
+					<md-list-item>
+						<md-icon>verified_user</md-icon>
+						<span class="md-list-item-text">Role: {{ userRole }}</span>
+					</md-list-item>
 					<md-list-item v-on:click="logOut()">
 						<md-icon>exit_to_app</md-icon>
 						<span class="md-list-item-text">Cerrar sesión</span>
@@ -122,11 +126,19 @@ export default {
 		});
 	},
 	computed: {
-		isAdmin: function(){
+		isAdmin: function () {
 			return this.$store.state.isAdmin;
 		},
-		savedTopics: function(){
+		savedTopics: function () {
 			return this.$store.state.user.savedTopics || [];
+		},
+		userRole: function () {
+			if (this.isAdmin) {
+				return 'Admin'
+			}
+			else {
+				return 'Alumno'
+			}
 		}
 	},
 	watch: {
