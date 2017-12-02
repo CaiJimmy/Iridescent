@@ -56,10 +56,10 @@
 					<md-list-item v-for="topicID in user.savedTopics"
 					    v-on:click="$router.push('/t/' + topicID)"
 					    :key="topicID">
-						<md-avatar>
-							<img :src="topics[topicID].image"
-							    :alt="topics[topicID].name">
-						</md-avatar>
+						<md-avatar class="md-avatar-icon"
+						    :style="{ background: `rgb(${topics[topicID].color.join(', ')})`}">
+							{{ topics[topicID].name.slice(0, 1) }}
+							</md-avatar>
 						<span class="md-list-item-text">{{ topics[topicID].name }}</span>
 					</md-list-item>
 				</md-list>

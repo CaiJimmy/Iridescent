@@ -40,6 +40,7 @@ export default new Vuex.Store({
 			if (!color) {
 				document.documentElement.style.removeProperty('--md-theme-default-primary');
 				document.documentElement.style.removeProperty('--md-theme-default-primary-on-background');
+				document.documentElement.style.removeProperty('--md-theme-default-primary-on-');
 			} else {
 				let primaryColor = `rgb(${color.join(', ')})`;
 
