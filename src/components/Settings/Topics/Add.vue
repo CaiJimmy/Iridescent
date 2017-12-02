@@ -81,11 +81,11 @@ export default {
 					this.form.level = this.selectedLevel;
 					firebase.firestore().collection("topics").add(this.form).then(() => {
 						this.sending = false;
+						this.form = {
+							name: null
+						};
 						this.callback();
 					});
-					this.form = {
-						name: null
-					};
 				}
 			});
 		}

@@ -55,11 +55,11 @@ export default {
 
                     firebase.firestore().collection("levels").add(this.form).then(() => {
                         this.sending = false;
+                        this.form = {
+                            name: null
+                        };
                         this.callback();
                     });
-                    this.form = {
-                        name: null
-                    };
                 }
             });
         }
