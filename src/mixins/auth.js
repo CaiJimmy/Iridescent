@@ -33,10 +33,10 @@ export default {
 			let user = firebase.auth().currentUser;
 
 			return firestore.collection('admins').get().then(() => {
-				this.isAdmin = true;
+				console.log('Admin account verified');
 				return true;
 			}).catch((err) => { // The account is not in admin-list
-				console.log(err);
+				console.log('Not a admin account');
 				return false;
 			});
 

@@ -25,7 +25,7 @@
 					</md-list-item>
 
 				</md-list>
-				<md-list v-if="user.savedTopics.length">
+				<md-list v-if="savedTopics.length">
 					<md-subheader>Temas Guardados</md-subheader>
 
 					<md-list-item v-for="topicID in user.savedTopics"
@@ -121,12 +121,20 @@ export default {
 			console.log('Firebase Auth Initialized');
 		});
 	},
+	computed: {
+		isAdmin: function(){
+			return this.$store.state.isAdmin;
+		},
+		savedTopics: function(){
+			return this.$store.state.user.savedTopics || [];
+		}
+	},
 	watch: {
 		"$route.fullPath": function () {
 			this.menuVisible = false;
 		},
 		"$store.state.loading.role": function () {
-			if (this.$route.meta.isAdmin && !this.$store.state.isAdmin && !this.$store.state.loading.role) {
+			if (this.$route.meta.isAdmin && !this.isAdmin && !this.$store.state.loading.role) {
 				this.$router.push('/403');
 			}
 		}
