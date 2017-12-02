@@ -42,6 +42,13 @@ Vue.use(VueAnalytics, {
 	router
 })
 
+import Raven from 'raven-js';
+import RavenVue from 'raven-js/plugins/vue';
+
+Raven
+	.config('https://4df6cbc1bf6649558d711777044cf971@sentry.io/253780')
+	.addPlugin(RavenVue, Vue)
+	.install();
 
 var config = {
 	apiKey: "AIzaSyB-E8FlF70tYS8Rq4fQURI2HcfeisSrSls",
