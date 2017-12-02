@@ -12,9 +12,6 @@
 			    v-if="!savedTopics.length">
 				<md-progress-spinner md-mode="indeterminate"
 				    v-if="loading"></md-progress-spinner>
-				<md-button class="md-primary md-raised"
-				    v-else
-				    v-on:click="showDialog.topics = true">Explorar</md-button>
 			</md-empty-state>
 
 			<div class="savedTopics--wrapper"
@@ -37,16 +34,15 @@
 					</router-link>
 				</div>
 			</div>
+			<md-button class="md-fab md-primary exploreButton"
+			    v-on:click="showDialog.topics = true">
+				<md-icon>add</md-icon>
+			</md-button>
 		</div>
 		<md-dialog :md-active.sync="showDialog.topics"
 		    :md-fullscreen="false">
 			<Explore />
 		</md-dialog>
-
-		<md-button class="md-fab md-primary exploreButton"
-		    v-on:click="showDialog.topics = true">
-			<md-icon>add</md-icon>
-		</md-button>
 
 	</div>
 </template>
