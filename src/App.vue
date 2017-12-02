@@ -206,4 +206,8 @@ export default {
   max-width: calc(100vw - 125px);
   position: fixed;
 }
+
+.md-fab{
+	z-index: 2;
+}
 </style>
