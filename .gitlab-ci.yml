@@ -2,6 +2,7 @@ pages:
   image: node:alpine
   stage: deploy
   cache:
+    key: "2017-12-02"
     paths:
       - node_modules/
   script:
