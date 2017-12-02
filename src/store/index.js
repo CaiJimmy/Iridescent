@@ -15,7 +15,8 @@ export default new Vuex.Store({
 
 		loading: {
 			topics: true,
-			levels: true
+			levels: true,
+			role: true
 		}
 	},
 	mutations: {
@@ -27,6 +28,7 @@ export default new Vuex.Store({
 		},
 		isAdmin(state, isAdmin){
 			state.isAdmin = isAdmin;
+			state.loading.role = false;
 		},
 		updateObject(state, payload) {
 			Vue.set(state[payload.object], payload.key, payload.data)

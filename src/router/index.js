@@ -69,7 +69,7 @@ router.beforeEach(function (to, from, next) {
 			}
 		})
 	} else {
-		if (to.meta.isAdmin && !store.state.isAdmin) {
+		if (to.meta.isAdmin && !store.state.isAdmin && !store.state.loading.role) {
 			next({
 				path: '/403'
 			})

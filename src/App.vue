@@ -36,7 +36,7 @@
 				</md-list-item>
 			</md-list>
 			<md-list class="bottomList">
-				<md-list-item v-on:click="$router.push('/settings/topics')">
+				<md-list-item v-on:click="$router.push('/settings/topics')" v-if="isAdmin">
 					<md-icon>settings</md-icon>
 					<span class="md-list-item-text">Temas</span>
 				</md-list-item>
@@ -47,6 +47,10 @@
 						    :alt="user.displayName">
 					</md-avatar>
 					<span class="md-list-item-text">{{ user.displayName }}</span>
+				</md-list-item>
+				<md-list-item v-on:click="logOut()">
+					<md-icon>exit_to_app</md-icon>
+					<span class="md-list-item-text">Cerrar sesión</span>
 				</md-list-item>
 			</md-list>
 		</md-drawer>
@@ -113,8 +117,13 @@ export default {
 		});
 	},
 	watch: {
-		"$route.fullPath": function(){
+		"$route.fullPath": function () {
 			this.menuVisible = false;
+		},
+		"$store.state.loading.role": function () {
+			if (this.$route.meta.isAdmin && !this.$store.state.isAdmin && !this.$store.state.loading.role) {
+				this.$router.push('/403');
+			}
 		}
 	},
 	methods: {
