@@ -59,7 +59,7 @@
 						<md-avatar class="md-avatar-icon"
 						    :style="{ background: `rgb(${topics[topicID].color.join(', ')})`}">
 							{{ topics[topicID].name.slice(0, 1) }}
-							</md-avatar>
+						</md-avatar>
 						<span class="md-list-item-text">{{ topics[topicID].name }}</span>
 					</md-list-item>
 				</md-list>
@@ -190,24 +190,24 @@ export default {
 
 @import "~vue-material/dist/theme/all"; // Apply the theme
 .container {
-  max-width: 850px;
-  padding: 0 15px;
-  margin: 0 auto;
-  &.extend {
-    max-width: 1200px;
-  }
-  &.compact {
-    max-width: 650px;
-  }
+	max-width: 850px;
+	padding: 0 15px;
+	margin: 0 auto;
+	&.extend {
+		max-width: 1200px;
+	}
+	&.compact {
+		max-width: 650px;
+	}
 }
 
 .md-drawer {
-  width: 230px;
-  max-width: calc(100vw - 125px);
-  position: fixed;
+	width: 230px;
+	max-width: calc(100vw - 125px);
+	position: fixed;
 }
 
-.md-fab{
+.md-fab {
 	z-index: 2;
 }
 </style>

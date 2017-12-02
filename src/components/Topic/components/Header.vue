@@ -30,6 +30,7 @@ import * as firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/storage";
 import * as Vibrant from 'node-vibrant'
+import resizeImage from '@/mixins/resizeImage.js';
 
 export default {
 	props: ['topic', 'topicRef'],
@@ -81,11 +82,17 @@ export default {
 					console.error("Upload failed:", error);
 				});
 		},
-		changeHeaderImage (imageFile) {
+		async changeHeaderImage (imageFile) {
 			if (imageFile) {
+				window.test = imageFile;
+
 				this.uploading = true;
 
-				this.uploadFile(imageFile, `${this.topicRef.id}/${imageFile.name}`).then(async (snapshot) => {
+				let resizedImage = await resizeImage(imageFile, 1500);
+
+				console.log(resizedImage);
+
+				this.uploadFile(resizedImage, `${this.topicRef.id}/${imageFile.name}`).then(async (snapshot) => {
 					let imageURL = snapshot.downloadURL;
 
 					let color = await Vibrant.from(URL.createObjectURL(imageFile)).getPalette()
