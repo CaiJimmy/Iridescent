@@ -17,15 +17,40 @@
 			</md-toolbar>
 
 			<md-drawer :md-active.sync="menuVisible"
-			    v-if="loggedIn && !$route.meta.hideNav">
+			    v-if="loggedIn && !$route.meta.hideNav && !$store.state.loading.user && !$store.state.loading.topics">
 				<md-list>
 					<md-list-item v-on:click="$router.push('/')">
 						<md-icon>home</md-icon>
 						<span class="md-list-item-text">Inicio</span>
 					</md-list-item>
 
+					<md-list-item v-on:click="$router.push('/settings/topics')"
+					    v-if="isAdmin">
+						<md-icon>settings</md-icon>
+						<span class="md-list-item-text">Temas</span>
+					</md-list-item>
+
+					<md-list-item md-expand>
+						<md-avatar>
+							<img :src="user.photoURL"
+							    :alt="user.displayName">
+						</md-avatar>
+						<span class="md-list-item-text">{{ user.displayName }}</span>
+
+						<md-list slot="md-expand">
+							<md-list-item>
+								<md-icon>verified_user</md-icon>
+								<span class="md-list-item-text">Role: {{ userRole }}</span>
+							</md-list-item>
+							<md-list-item v-on:click="logOut()">
+								<md-icon>exit_to_app</md-icon>
+								<span class="md-list-item-text">Cerrar sesión</span>
+							</md-list-item>
+						</md-list>
+					</md-list-item>
 				</md-list>
-				<md-list v-if="savedTopics.length">
+				<md-list v-if="savedTopics.length"
+				    class="savedTopics--drawer">
 					<md-subheader>Temas Guardados</md-subheader>
 
 					<md-list-item v-for="topicID in user.savedTopics"
@@ -38,29 +63,7 @@
 						<span class="md-list-item-text">{{ topics[topicID].name }}</span>
 					</md-list-item>
 				</md-list>
-				<md-list class="bottomList">
-					<md-list-item v-on:click="$router.push('/settings/topics')"
-					    v-if="isAdmin">
-						<md-icon>settings</md-icon>
-						<span class="md-list-item-text">Temas</span>
-					</md-list-item>
 
-					<md-list-item>
-						<md-avatar>
-							<img :src="user.photoURL"
-							    :alt="user.displayName">
-						</md-avatar>
-						<span class="md-list-item-text">{{ user.displayName }}</span>
-					</md-list-item>
-					<md-list-item>
-						<md-icon>verified_user</md-icon>
-						<span class="md-list-item-text">Role: {{ userRole }}</span>
-					</md-list-item>
-					<md-list-item v-on:click="logOut()">
-						<md-icon>exit_to_app</md-icon>
-						<span class="md-list-item-text">Cerrar sesión</span>
-					</md-list-item>
-				</md-list>
 			</md-drawer>
 
 			<router-view />
@@ -202,12 +205,5 @@ export default {
   width: 230px;
   max-width: calc(100vw - 125px);
   position: fixed;
-}
-
-.bottomList {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
 }
 </style>

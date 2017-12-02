@@ -27,7 +27,8 @@
             <div v-else>
                 <TopicHeader :topic="topic"
                     :topicRef="ref.topic" />
-                <router-view class="mainContent"></router-view>
+                <router-view class="mainContent"
+                    :key="$route.name + ($route.params.id || '')"></router-view>
             </div>
         </div>
         <md-snackbar :md-active.sync="snackbar.display">{{ snackbar.message }}</md-snackbar>
@@ -102,31 +103,45 @@ export default {
     watch: {
         paginatedQuestions: function () {
             this.fetchUserDatas();
+        },
+        '$route.params.id': function (id) {  /// When topic ID changes, re-render page
+            this.loading = {
+                metadata: true,
+                questions: true,
+                userQuestions: true
+            };
+
+            this.paging.current = 1;
+            this.paging.end = false;
+            this.init();
         }
     },
     created: function () {
-        this.ref.topic = firebase.firestore().collection('topics').doc(this.$route.params.id);
-        this.ref.topic.get().then((data) => {
-            if (data.exists) {
-                this.$bind('topic', this.ref.topic).then(() => {
-                    this.loading.metadata = false;
-                    this.ref.questions = firebase.firestore().collection('questions').where('topic', '==', this.ref.topic).orderBy("date", 'desc');
-                    this.$bind('questions', this.ref.questions).then(() => {
-                        this.loading.questions = false;
-                    })
-                    this.ref.userQuestions = this.ref.questions.where('author', '==', this.user.uid);
-                    this.$bind('userQuestions', this.ref.userQuestions).then(() => {
-                        this.loading.userQuestions = false;
-                    });
-                })
-            }
-            else {
-                this.loading.metadata = false;
-                this.notFound = true;
-            }
-        });
+        this.init()
     },
     methods: {
+        init () {
+            this.ref.topic = firebase.firestore().collection('topics').doc(this.$route.params.id);
+            this.ref.topic.get().then((data) => {
+                if (data.exists) {
+                    this.$bind('topic', this.ref.topic).then(() => {
+                        this.loading.metadata = false;
+                        this.ref.questions = firebase.firestore().collection('questions').where('topic', '==', this.ref.topic).orderBy("date", 'desc');
+                        this.$bind('questions', this.ref.questions).then(() => {
+                            this.loading.questions = false;
+                        })
+                        this.ref.userQuestions = this.ref.questions.where('author', '==', this.user.uid);
+                        this.$bind('userQuestions', this.ref.userQuestions).then(() => {
+                            this.loading.userQuestions = false;
+                        });
+                    })
+                }
+                else {
+                    this.loading.metadata = false;
+                    this.notFound = true;
+                }
+            });
+        },
         loadMore () {
             if (this.paging.end) {
                 return;
@@ -247,7 +262,7 @@ export default {
   transform: translate3d(-50%, -50%, 0);
   max-width: 400px;
   width: 100%;
-  
+
   .md-card {
     padding: 15px;
   }
