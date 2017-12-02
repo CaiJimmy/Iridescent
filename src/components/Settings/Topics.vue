@@ -4,7 +4,8 @@
 		    md-mode="indeterminate"
 		    v-if="loading.levels"></md-progress-bar>
 
-		<div class="container" v-else>
+		<div class="container"
+		    v-else>
 			<md-empty-state v-if="!levels.length"
 			    md-icon="add"
 			    md-label="Crear nivel"
@@ -62,12 +63,14 @@
 				</md-button>
 			</div>
 		</div>
-		<md-dialog :md-active.sync="showDialog.addTopic">
+		<md-dialog :md-active.sync="showDialog.addTopic"
+		    :md-fullscreen="false">
 			<AddTopic v-bind:selectedLevel="selectedLevel"
 			    v-bind:callback="closeAddTopicDialog" />
 		</md-dialog>
 
-		<md-dialog :md-active.sync="showDialog.addLevel">
+		<md-dialog :md-active.sync="showDialog.addLevel"
+		    :md-fullscreen="false">
 			<AddLevel v-bind:callback="closeAddLevelDialog" />
 		</md-dialog>
 
