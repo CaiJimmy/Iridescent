@@ -237,8 +237,7 @@ export default {
 }
 
 .mainContent {
-  margin: 0 auto;
-  padding: 2em 0;
+  margin: 2em auto;
 }
 
 .notFound {
