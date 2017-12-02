@@ -113,6 +113,8 @@ export default {
 
             this.paging.current = 1;
             this.paging.end = false;
+
+            this.notFound = false;
             this.init();
         }
     },
