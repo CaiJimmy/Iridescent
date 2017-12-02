@@ -1,3 +1,7 @@
+import * as firebase from "firebase/app";
+import "firebase/firestore";
+import "firebase/auth";
+
 export default {
 	methods: {
 		removeTopic(topicID) {
