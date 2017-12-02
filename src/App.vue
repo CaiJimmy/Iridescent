@@ -1,63 +1,68 @@
 <template>
-	<div id="app"
-	    v-if="firebaseReady">
-		<md-toolbar class="md-primary"
-		    md-elevation="0"
-		    v-if="loggedIn && !$route.meta.hideNav">
+	<div id="app">
+		<md-progress-bar class="md-primary"
+		    md-mode="indeterminate"
+		    v-if="!firebaseReady"></md-progress-bar>
+		<div v-else>
+			<md-toolbar class="md-primary"
+			    md-elevation="0"
+			    v-if="loggedIn && !$route.meta.hideNav">
 
-			<md-button class="md-icon-button"
-			    @click="toggleMenu"
-			    v-if="!menuVisible">
-				<md-icon>menu</md-icon>
-			</md-button>
-			<span class="md-title">{{ $meta().refresh().titleChunk }}</span>
-		</md-toolbar>
+				<md-button class="md-icon-button"
+				    @click="toggleMenu"
+				    v-if="!menuVisible">
+					<md-icon>menu</md-icon>
+				</md-button>
+				<span class="md-title">{{ $meta().refresh().titleChunk }}</span>
+			</md-toolbar>
 
-		<md-drawer :md-active.sync="menuVisible"
-		    v-if="loggedIn && !$route.meta.hideNav">
-			<md-list>
-				<md-list-item v-on:click="$router.push('/')">
-					<md-icon>home</md-icon>
-					<span class="md-list-item-text">Inicio</span>
-				</md-list-item>
+			<md-drawer :md-active.sync="menuVisible"
+			    v-if="loggedIn && !$route.meta.hideNav">
+				<md-list>
+					<md-list-item v-on:click="$router.push('/')">
+						<md-icon>home</md-icon>
+						<span class="md-list-item-text">Inicio</span>
+					</md-list-item>
 
-			</md-list>
-			<md-list v-if="user.savedTopics.length">
-				<md-subheader>Temas Guardados</md-subheader>
+				</md-list>
+				<md-list v-if="user.savedTopics.length">
+					<md-subheader>Temas Guardados</md-subheader>
 
-				<md-list-item v-for="topicID in user.savedTopics"
-				    v-on:click="$router.push('/t/' + topicID)"
-				    :key="topicID">
-					<md-avatar>
-						<img :src="topics[topicID].image"
-						    :alt="topics[topicID].name">
-					</md-avatar>
-					<span class="md-list-item-text">{{ topics[topicID].name }}</span>
-				</md-list-item>
-			</md-list>
-			<md-list class="bottomList">
-				<md-list-item v-on:click="$router.push('/settings/topics')" v-if="isAdmin">
-					<md-icon>settings</md-icon>
-					<span class="md-list-item-text">Temas</span>
-				</md-list-item>
+					<md-list-item v-for="topicID in user.savedTopics"
+					    v-on:click="$router.push('/t/' + topicID)"
+					    :key="topicID">
+						<md-avatar>
+							<img :src="topics[topicID].image"
+							    :alt="topics[topicID].name">
+						</md-avatar>
+						<span class="md-list-item-text">{{ topics[topicID].name }}</span>
+					</md-list-item>
+				</md-list>
+				<md-list class="bottomList">
+					<md-list-item v-on:click="$router.push('/settings/topics')"
+					    v-if="isAdmin">
+						<md-icon>settings</md-icon>
+						<span class="md-list-item-text">Temas</span>
+					</md-list-item>
 
-				<md-list-item>
-					<md-avatar>
-						<img :src="user.photoURL"
-						    :alt="user.displayName">
-					</md-avatar>
-					<span class="md-list-item-text">{{ user.displayName }}</span>
-				</md-list-item>
-				<md-list-item v-on:click="logOut()">
-					<md-icon>exit_to_app</md-icon>
-					<span class="md-list-item-text">Cerrar sesión</span>
-				</md-list-item>
-			</md-list>
-		</md-drawer>
+					<md-list-item>
+						<md-avatar>
+							<img :src="user.photoURL"
+							    :alt="user.displayName">
+						</md-avatar>
+						<span class="md-list-item-text">{{ user.displayName }}</span>
+					</md-list-item>
+					<md-list-item v-on:click="logOut()">
+						<md-icon>exit_to_app</md-icon>
+						<span class="md-list-item-text">Cerrar sesión</span>
+					</md-list-item>
+				</md-list>
+			</md-drawer>
 
-		<router-view />
+			<router-view />
 
-		<md-snackbar :md-active.sync="snackbar.display">{{ snackbar.message }}</md-snackbar>
+			<md-snackbar :md-active.sync="snackbar.display">{{ snackbar.message }}</md-snackbar>
+		</div>
 	</div>
 </template>
 
