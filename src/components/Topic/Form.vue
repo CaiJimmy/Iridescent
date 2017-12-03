@@ -19,6 +19,7 @@
                     <md-icon>title</md-icon>
                     <label>Pregunta</label>
                     <md-input v-model="question.title"
+                        :disabled="loading.form"
                         data-vv-name="title"
                         v-validate
                         data-vv-rules="required"></md-input>
