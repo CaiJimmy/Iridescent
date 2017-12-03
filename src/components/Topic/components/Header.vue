@@ -172,9 +172,11 @@ export default {
 	.topicPage--header--meta {
 		text-align: center;
 		z-index: 2;
+		line-height: 1;
 		h1 {
 			color: #fff;
 			font-size: 2.5em;
+			font-weight: lighter;
 		}
 		h2 {
 			color: #999;
