@@ -9,7 +9,7 @@ export default {
 				index = savedTopics.indexOf(topicID);
 			if (index > -1) {
 				savedTopics.splice(index, 1);
-				firebase.firestore().collection("users").doc(firebase.auth().currentUser.uid).update(this.user);
+				return firebase.firestore().collection("users").doc(firebase.auth().currentUser.uid).update(this.user);
 			}
 		},
 		saveTopic(topicID) {

@@ -84,12 +84,29 @@ export default {
 	},
 	methods: {
 		deleteInvalidTopics: function () {
-			this.savedTopics.forEach((topicID) => {
+			let deletedTopics = [];
+			this.savedTopics.forEach((topicID, i) => {
 				if (!this.$store.state.topics.hasOwnProperty(topicID)) {
-					this.removeTopic(topicID);
-				}
+					deletedTopics.push(topicID);
+				};
 			});
-			this.checkingTopics = false
+
+			let deletedTopicsLength = deletedTopics.length;
+
+			if (!deletedTopicsLength) {
+				this.checkingTopics = false;
+				console.log(`Invalid topic checking finished, ${deletedTopics.length} topics were deleted`);
+				return;
+			};
+
+			deletedTopics.forEach((topicID, i) => {
+				this.removeTopic(topicID).then(() => {
+					if (i == deletedTopicsLength - 1) {
+						this.checkingTopics = false;
+						console.log(`Invalid topic checking finished, ${deletedTopics.length} topics were deleted`);
+					}
+				});
+			})
 		}
 	}
 }
