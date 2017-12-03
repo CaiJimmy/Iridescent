@@ -107,6 +107,9 @@ export default {
         userQuestions: function () {
             this.renderQuestionProgressBar();
         },
+        "topic.questionCount": function () {
+            this.renderQuestionProgressBar();
+        },
         paginatedQuestions: function () {
             this.fetchUserDatas();
         },

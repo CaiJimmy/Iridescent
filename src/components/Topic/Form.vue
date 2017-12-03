@@ -183,7 +183,7 @@ export default {
                         this.snackbar.display = true;
 
                         if (this.callback) {
-                            this.callback();
+                            this.callback('question');
                         }
                     });
                 }

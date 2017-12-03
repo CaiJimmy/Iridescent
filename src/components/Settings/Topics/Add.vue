@@ -5,7 +5,8 @@
 			    v-if="sending" />
 
 			<md-card-header>
-				<div class="md-title">Añadir Tema</div>
+				<div class="md-title" v-if="type = 'edit'">Editar Tema</div>
+				<div class="md-title" v-else>Añadir Tema</div>
 			</md-card-header>
 
 			<md-card-content>
@@ -46,6 +47,12 @@
 				<md-button type="submit"
 				    class="md-primary"
 				    :disabled="sending"
+				    v-on:click="editTopic()"
+				    v-if="type='edit'">Editar</md-button>
+				<md-button type="submit"
+				    v-else
+				    class="md-primary"
+				    :disabled="sending"
 				    v-on:click="addTopic()">Añadir</md-button>
 			</md-card-actions>
 		</md-card>
@@ -68,8 +75,28 @@ export default {
 			sending: false
 		};
 	},
-	props: ['selectedLevel', 'callback'],
+	props: ['selectedLevel', 'callback', 'type', 'topicData', 'topicRef'],
+	created () {
+		if (this.type == 'edit') {
+			this.form = this.topicData;
+		}
+	},
 	methods: {
+		editTopic () {
+			this.$validator.validateAll().then((result) => {
+				if (result) {
+					this.sending = true;
+					this.topicRef.set(this.form, { merge: true }).then(() => {
+						this.sending = false;
+						this.form = {
+							name: null
+						};
+						this.callback('editTopic');
+					});
+
+				}
+			});
+		},
 		getRandomPic: async function () {
 			return fetch("https://source.unsplash.com/1000x500/?technology").then(async (response) => {   /// Fetch a random image from Unsplash, and add it to form
 				let color = await Vibrant.from(response.url).getPalette()

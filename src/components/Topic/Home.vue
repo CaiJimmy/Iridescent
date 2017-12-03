@@ -105,15 +105,24 @@
         <md-snackbar :md-active.sync="snackbar.display">{{ snackbar.message }}</md-snackbar>
 
         <md-dialog :md-fullscreen="false"
-            :md-active.sync="showQuestionForm">
+            :md-active.sync="dialog.question">
             <question-form :topicRef="$parent.ref.topic"
                 :callback="closeDialog"
                 :snackbar="snackbar"
                 type="send" />
         </md-dialog>
 
+        <md-dialog :md-fullscreen="false"
+            :md-active.sync="dialog.editTopic">
+            <edit-topic :topicRef="$parent.ref.topic"
+                :topicData="$parent.topic"
+                :callback="closeDialog"
+                :snackbar="snackbar"
+                type="edit" />
+        </md-dialog>
+
         <md-button class="md-fab md-primary addQuestion"
-            v-on:click="showQuestionForm = true;">
+            v-on:click="dialog.question = true;">
             <md-icon>add</md-icon>
         </md-button>
     </div>
@@ -124,7 +133,7 @@ import "firebase/firestore";
 import moment from 'moment';
 import General from '@/mixins/general.js'
 import MugenScroll from 'vue-mugen-scroll';
-
+import EditTopic from '@/components/Settings/Topics/Add.vue';
 import QuestionForm from './Form.vue';
 
 export default {
@@ -132,7 +141,10 @@ export default {
 
     mixins: [General],
     data: () => ({
-        showQuestionForm: false,
+        dialog: {
+            question: false,
+            editTopic: false
+        },
 
         editing: [],
 
@@ -143,7 +155,8 @@ export default {
     }),
     components: {
         MugenScroll,
-        QuestionForm
+        QuestionForm,
+        EditTopic
     },
     computed: {
         question_bar: function () {
@@ -176,8 +189,8 @@ export default {
             this.editing.push(this.questions[questionIndex].id);
         },
 
-        closeDialog () {
-            this.showQuestionForm = false;
+        closeDialog (where) {
+            this.dialog[where] = false;
         },
         loadMore: function () {
             this.$parent.loadMore();

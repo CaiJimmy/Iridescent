@@ -192,7 +192,7 @@ export default {
 			justify-content: center;
 			align-items: center;
 			flex-direction: column;
-
+			padding: 20px;
 			line-height: 1.5;
 			h1 {
 				font-size: 2em;
