@@ -38,6 +38,7 @@
 <script>
 import * as firebase from "firebase/app";
 import "firebase/firestore";
+import "firebase/auth";
 import General from '@/mixins/general.js'
 import TopicHeader from './components/Header.vue';
 
@@ -141,30 +142,47 @@ export default {
         },
         init () {
             this.ref.topic = firebase.firestore().collection('topics').doc(this.$route.params.id);
-            this.ref.topic.get().then((data) => {
-                if (data.exists) {
-                    this.$bind('topic', this.ref.topic).then(() => {
-                        this.loading.metadata = false;
-                        this.ref.questions = firebase.firestore().collection('questions').where('topic', '==', this.ref.topic).orderBy("date", 'desc');
-                        this.$bind('questions', this.ref.questions).then(() => {
-                            this.loading.questions = false;
+            this.ref.questions = firebase.firestore().collection('questions').where('topic', '==', this.ref.topic).orderBy("date", 'desc');
+
+            if (this.$store.state.loading.topics) {  /// Topic data not ready yet, so we fetch it.
+                this.ref.topic.get().then((data) => {
+                    if (data.exists) {
+                        this.$bind('topic', this.ref.topic).then(() => {
+                            this.loading.metadata = false;
+                            this.bindQuestions();
                         })
-                        this.ref.userQuestions = this.ref.questions.where('author', '==', this.user.uid);
-                        this.$bind('userQuestions', this.ref.userQuestions).then(() => {
-                            this.loading.userQuestions = false;
-                        });
-
-                        if (this.topic.color) {
-                            this.$store.commit('setPrimaryColor', this.topic.color);
-                        }
-
-                    })
+                    }
+                    else {
+                        this.loading.metadata = false;
+                        this.notFound = true;
+                    }
+                });
+            }
+            else {   /// Topic data downloaded and present on Vuex
+                if (this.$store.state.topics.hasOwnProperty(this.$route.params.id)) {
+                    this.loading.metadata = false;
+                    this.topic = this.$store.state.topics[this.$route.params.id];
+                    this.bindQuestions();
                 }
                 else {
                     this.loading.metadata = false;
                     this.notFound = true;
                 }
+            };
+
+        },
+        bindQuestions () {
+            this.$bind('questions', this.ref.questions).then(() => {
+                this.loading.questions = false;
+            })
+            this.ref.userQuestions = this.ref.questions.where('author', '==', firebase.auth().currentUser.uid);
+            this.$bind('userQuestions', this.ref.userQuestions).then(() => {
+                this.loading.userQuestions = false;
             });
+
+            if (this.topic.color) {
+                this.$store.commit('setPrimaryColor', this.topic.color);
+            }
         },
         loadMore () {
             if (this.paging.end) {
