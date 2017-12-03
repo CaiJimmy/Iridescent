@@ -56,11 +56,11 @@
 					<md-list-item v-for="topicID in user.savedTopics"
 					    v-on:click="$router.push('/t/' + topicID)"
 					    :key="topicID">
-						<md-avatar class="md-avatar-icon"
+						<md-avatar v-if="topics[topicID]" class="md-avatar-icon"
 						    :style="{ background: `rgb(${topics[topicID].color.join(', ')})`}">
 							{{ topics[topicID].name.slice(0, 1) }}
 						</md-avatar>
-						<span class="md-list-item-text">{{ topics[topicID].name }}</span>
+						<span v-if="topics[topicID]" class="md-list-item-text">{{ topics[topicID].name }}</span>
 					</md-list-item>
 				</md-list>
 
@@ -79,7 +79,7 @@ import 'firebase/firestore';
 import 'firebase/auth';
 
 import Auth from '@/mixins/auth.js';
-import General from '@/mixins/general.js'
+import General from '@/mixins/general.js';
 export default {
 	name: "app",
 	metaInfo: {
@@ -105,7 +105,7 @@ export default {
 
 					if (validAccount) {
 						this.redirect();
-						this.$store.dispatch('initApp') /// Start down
+						this.$store.dispatch('initApp'); /// Start down
 					}
 					else {
 						this.snackbar.message = 'No es una cuenta válida';
