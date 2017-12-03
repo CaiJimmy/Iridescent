@@ -147,12 +147,7 @@ export default {
     },
     computed: {
         question_bar: function () {
-            if (this.$parent.topic.questionCount) {
-                let current = this.userQuestions.length,
-                    total = this.$parent.topic.questionCount;
-
-                return current / total * 100
-            }
+            return this.$parent.question_bar;
         },
         questions: function () {
             return (this.$parent.paginatedQuestions)

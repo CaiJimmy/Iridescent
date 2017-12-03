@@ -60,6 +60,7 @@ export default {
         notFound: false,
 
         questions: [],
+        userQuestions: [],
 
         paging: {
             current: 1,/// Current Page
@@ -85,7 +86,9 @@ export default {
         snackbar: {
             display: false,
             message: null
-        }
+        },
+
+        question_bar: 0
     }),
     computed: {
         headerImage: function () {
@@ -101,6 +104,9 @@ export default {
         }
     },
     watch: {
+        userQuestions: function () {
+            this.renderQuestionProgressBar();
+        },
         paginatedQuestions: function () {
             this.fetchUserDatas();
         },
@@ -122,6 +128,14 @@ export default {
         this.init()
     },
     methods: {
+        renderQuestionProgressBar () {
+            if (this.topic.questionCount) {
+                let current = this.userQuestions.length,
+                    total = this.topic.questionCount;
+
+                this.question_bar = current / total * 100
+            }
+        },
         init () {
             this.ref.topic = firebase.firestore().collection('topics').doc(this.$route.params.id);
             this.ref.topic.get().then((data) => {
@@ -140,7 +154,7 @@ export default {
                         if (this.topic.color) {
                             this.$store.commit('setPrimaryColor', this.topic.color);
                         }
-                        
+
                     })
                 }
                 else {
@@ -211,67 +225,67 @@ export default {
 
 <style lang="scss" scoped>
 .topicHeader {
-  height: 50vh;
-  display: flex;
-  display: -webkit-flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  position: relative;
+	height: 50vh;
+	display: flex;
+	display: -webkit-flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	position: relative;
 
-  &:before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 1;
-  }
-  .topicHeader--image {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
-  }
-  .topicHeader--meta {
-    z-index: 2;
-    position: relative;
-    padding: 0 25px;
+	&:before {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(0, 0, 0, 0.5);
+		z-index: 1;
+	}
+	.topicHeader--image {
+		position: absolute;
+		top: 0;
+		left: 0;
+		height: 100%;
+		width: 100%;
+		background-size: cover;
+		background-repeat: no-repeat;
+		background-position: center center;
+	}
+	.topicHeader--meta {
+		z-index: 2;
+		position: relative;
+		padding: 0 25px;
 
-    h1 {
-      color: #fff;
-      font-size: 3em;
-    }
+		h1 {
+			color: #fff;
+			font-size: 3em;
+		}
 
-    h2 {
-      color: #e1e1e1;
-      font-size: 1.5em;
-      line-height: 1.5;
-      font-weight: lighter;
-    }
-  }
+		h2 {
+			color: #e1e1e1;
+			font-size: 1.5em;
+			line-height: 1.5;
+			font-weight: lighter;
+		}
+	}
 }
 
 .mainContent {
-  margin: 2em auto;
+	margin: 2em auto;
 }
 
 .notFound {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate3d(-50%, -50%, 0);
-  max-width: 400px;
-  width: 100%;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate3d(-50%, -50%, 0);
+	max-width: 400px;
+	width: 100%;
 
-  .md-card {
-    padding: 15px;
-  }
+	.md-card {
+		padding: 15px;
+	}
 }
 </style>
