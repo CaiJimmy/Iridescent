@@ -204,9 +204,9 @@ export default {
 }
 
 .md-drawer {
-	width: 230px;
-	max-width: calc(100vw - 125px);
-	position: fixed;
+	width: 230px!important;
+	max-width: calc(100vw - 125px)!important;
+	position: fixed!important;
 }
 
 .md-fab {
