@@ -2,7 +2,8 @@
     <div class="container extend">
         <div id="mainGrid"
             class="md-layout md-gutter md-layout-column-xsmall md-alignment">
-            <div class="md-layout-column md-layout-item md-size-25 md-small-size-100">
+
+            <div class="md-layout-column md-layout-item md-size-25 md-small-size-100 questions--sidebar">
                 <div class="loader-wrapper"
                     v-if="loading.userQuestions">
                     <md-progress-spinner md-mode="indeterminate"
@@ -112,15 +113,6 @@
                 type="send" />
         </md-dialog>
 
-        <md-dialog :md-fullscreen="false"
-            :md-active.sync="dialog.editTopic">
-            <edit-topic :topicRef="$parent.ref.topic"
-                :topicData="$parent.topic"
-                :callback="closeDialog"
-                :snackbar="snackbar"
-                type="edit" />
-        </md-dialog>
-
         <md-button class="md-fab md-primary addQuestion"
             v-on:click="dialog.question = true;">
             <md-icon>add</md-icon>
@@ -133,7 +125,6 @@ import "firebase/firestore";
 import moment from 'moment';
 import General from '@/mixins/general.js'
 import MugenScroll from 'vue-mugen-scroll';
-import EditTopic from '@/components/Settings/Topics/Add.vue';
 import QuestionForm from './Form.vue';
 
 export default {
@@ -143,7 +134,6 @@ export default {
     data: () => ({
         dialog: {
             question: false,
-            editTopic: false
         },
 
         editing: [],
@@ -156,7 +146,6 @@ export default {
     components: {
         MugenScroll,
         QuestionForm,
-        EditTopic
     },
     computed: {
         question_bar: function () {
@@ -211,32 +200,39 @@ export default {
 
 <style lang="scss" scoped>
 form {
-  overflow-y: auto;
+	overflow-y: auto;
 }
 
 .questionContainer {
-  margin-bottom: 16px;
+	margin-bottom: 16px;
 }
 
 .md-dialog {
-  width: 500px;
-  max-height: 90%;
+	width: 500px;
+	max-height: 90%;
 }
 
 .loader-wrapper {
-  text-align: center;
+	text-align: center;
 }
 
 #mainGrid {
-  & > .md-layout-item {
-    margin-bottom: 16px;
-  }
+	& > .md-layout-item {
+		margin-bottom: 16px;
+	}
 }
 
 .addQuestion {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 2;
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+	z-index: 2;
+}
+@media only screen and (min-width: 944px) {
+	.questions--sidebar {
+		position: sticky;
+		top: 80px;
+        align-self: flex-start;
+	}
 }
 </style>

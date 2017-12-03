@@ -1,11 +1,11 @@
 <template>
 	<div id="app">
-		<md-progress-bar class="md-primary"
+		<md-progress-bar class="md-accent"
 		    md-mode="indeterminate"
 		    v-if="!firebaseReady || $store.state.loading.user"></md-progress-bar>
 		<div v-else>
-			<md-toolbar class="md-primary"
-			    md-elevation="0"
+			<md-toolbar class="md-primary navBar"
+			    md-elevation="1"
 			    v-if="loggedIn && !$route.meta.hideNav">
 
 				<md-button class="md-icon-button"
@@ -56,11 +56,13 @@
 					<md-list-item v-for="topicID in user.savedTopics"
 					    v-on:click="$router.push('/t/' + topicID)"
 					    :key="topicID">
-						<md-avatar v-if="topics[topicID]" class="md-avatar-icon"
+						<md-avatar v-if="topics[topicID]"
+						    class="md-avatar-icon"
 						    :style="{ background: `rgb(${topics[topicID].color.join(', ')})`}">
 							{{ topics[topicID].name.slice(0, 1) }}
 						</md-avatar>
-						<span v-if="topics[topicID]" class="md-list-item-text">{{ topics[topicID].name }}</span>
+						<span v-if="topics[topicID]"
+						    class="md-list-item-text">{{ topics[topicID].name }}</span>
 					</md-list-item>
 				</md-list>
 
@@ -209,5 +211,16 @@ export default {
 
 .md-fab {
 	z-index: 2;
+}
+
+#app {
+	height: 100%;
+}
+
+@media only screen and (min-width: 500px) {
+	.navBar {
+		position: sticky;
+		top: 0;
+	}
 }
 </style>

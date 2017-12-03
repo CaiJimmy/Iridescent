@@ -41,6 +41,7 @@ export default new Vuex.Store({
 				document.documentElement.style.removeProperty('--md-theme-default-primary');
 				document.documentElement.style.removeProperty('--md-theme-default-primary-on-background');
 				document.documentElement.style.removeProperty('--md-theme-default-primary-on-');
+				document.documentElement.style.removeProperty('--md-theme-default-text-primary-on-primary');
 			} else {
 				let primaryColor = `rgb(${color.join(', ')})`;
 
@@ -52,6 +53,7 @@ export default new Vuex.Store({
 				document.documentElement.style.setProperty('--md-theme-default-primary', primaryColor);
 				document.documentElement.style.setProperty('--md-theme-default-primary-on-background', primaryColor);
 				document.documentElement.style.setProperty('--md-theme-default-primary-on-', progressBarColor);
+				document.documentElement.style.setProperty('--md-theme-default-text-primary-on-primary', "#fff");
 			}
 		}
 	},
