@@ -156,7 +156,6 @@ export default {
 		left: 0;
 		height: 100%;
 		width: 100%;
-		z-index: -1;
 		background-repeat: no-repeat;
 		background-size: cover;
 		background-position: center center;
@@ -165,7 +164,6 @@ export default {
 	&:after {
 		content: "";
 		background: rgba(0, 0, 0, 0.5);
-		z-index: 0;
 		display: block;
 	}
 
