@@ -1,34 +1,42 @@
 <template>
-    <div class="topicCards--grid">
-        <md-menu md-direction="top-start"
-            class="removeTopic">
-            <md-button md-menu-trigger
-                class="md-icon-button">
-                <md-icon>more_vert</md-icon>
-            </md-button>
-            <md-menu-content>
-                <md-menu-item v-on:click="removeTopic(topicID)">Quitar</md-menu-item>
-            </md-menu-content>
-        </md-menu>
+	<div class="topicCards--grid">
+		<md-button v-if="action == 'save'"
+		    class="saveTopic md-icon-button"
+		    v-on:click="saveTopic(topicID)">
+			<md-icon>add</md-icon>
+		</md-button>
 
-        <router-link :to="'/t/' + topicID">
-            <div class="topicCard--image"
-                :style="{ background: `url(${topic.image})`}"></div>
-            <div class="topicCard--filter"
-                :style="{background: `rgb(${topic.color.join(',')})`}"></div>
-            <div class="topicCard--meta">
-                <h1>{{ topic.name }}</h1>
-                <h2>{{ levels[topic.level].name }}</h2>
-            </div>
-        </router-link>
-    </div>
+		<md-menu v-else
+		    md-direction="top-start"
+		    class="removeTopic">
+
+			<md-button md-menu-trigger
+			    class="md-icon-button">
+				<md-icon>more_vert</md-icon>
+			</md-button>
+			<md-menu-content>
+				<md-menu-item v-on:click="removeTopic(topicID)">Quitar</md-menu-item>
+			</md-menu-content>
+		</md-menu>
+
+		<router-link :to="'/t/' + topicID">
+			<div class="topicCard--image"
+			    :style="{ background: `url(${topic.image})`}"></div>
+			<div class="topicCard--filter"
+			    :style="{background: `rgb(${topic.color.join(',')})`}"></div>
+			<div class="topicCard--meta">
+				<h1>{{ topic.name }}</h1>
+				<h2 v-if="levels">{{ levels[topic.level].name }}</h2>
+			</div>
+		</router-link>
+	</div>
 </template>
 <script>
 import Methods from './Methods.js'
 
 export default {
-    props: ['topic', 'topicID', 'levels'],
-    mixins: [Methods],
+	props: ['topic', 'topicID', 'levels', 'action'],
+	mixins: [Methods],
 }
 </script>
 
@@ -122,6 +130,12 @@ export default {
 			.removeTopic {
 				opacity: 1;
 			}
+		}
+
+		.saveTopic {
+			position: absolute;
+			top: 0;
+			right: 0;
 		}
 	}
 }

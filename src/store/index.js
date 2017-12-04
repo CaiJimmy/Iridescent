@@ -100,7 +100,6 @@ export default new Vuex.Store({
 			});
 
 			firebase.firestore().collection('questions').orderBy("date", 'desc').onSnapshot((snapshot) => {
-				console.log(snapshot);
 				snapshot.forEach((doc) => {
 					commit('updateObject', {
 						'object': 'updates',

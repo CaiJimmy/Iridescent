@@ -32,15 +32,10 @@
 				</div>
 			</div>
 			<md-button class="md-fab md-primary exploreButton"
-			    v-on:click="showDialog.topics = true">
-				<md-icon>add</md-icon>
+			    v-on:click="$router.push('/explore')">
+				<md-icon>search</md-icon>
 			</md-button>
 		</div>
-		<md-dialog :md-active.sync="showDialog.topics"
-		    :md-fullscreen="false">
-			<Explore />
-		</md-dialog>
-
 	</div>
 </template>
 
@@ -49,7 +44,6 @@ import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 
-import Explore from './Home/Explore.vue';
 import Updates from './Home/Updates.vue'
 import TopicCard from './Home/TopicCard.vue'
 
@@ -57,16 +51,12 @@ import General from '@/mixins/general.js'
 export default {
 	name: 'Home',
 	components: {
-		Explore,
 		Updates,
 		TopicCard
 	},
 	mixins: [General],
 	data () {
 		return {
-			showDialog: {
-				topics: false
-			},
 			checkingTopics: true
 		}
 	},

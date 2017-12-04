@@ -28,6 +28,7 @@ var router = new Router({
 			component: require('@/components/Home.vue').default,
 			auth: true
 		},
+
 		{
 			path: '/settings/topics/',
 			component: require('@/components/Settings/Topics.vue').default,
@@ -56,7 +57,12 @@ var router = new Router({
 		{
 			path: '/login',
 			component: require('@/components/Login.vue').default
-		}
+		},
+		{
+			path: '/explore/',
+			component: require('@/components/Home/Explore_Page.vue').default,
+			auth: true
+		},
 	]
 })
 
@@ -89,7 +95,7 @@ router.afterEach(function (to, from, next) {
 		});
 	};
 
-	store.commit('setPrimaryColor', false);  /// Reset to default color after route change;
+	store.commit('setPrimaryColor', false); /// Reset to default color after route change;
 })
 
 export default router
