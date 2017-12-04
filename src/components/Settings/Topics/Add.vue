@@ -78,7 +78,7 @@ export default {
 	props: ['selectedLevel', 'callback', 'type', 'topicData', 'topicRef'],
 	created () {
 		if (this.type == 'edit') {
-			this.form = this.topicData;
+			this.form = JSON.parse(JSON.stringify(this.topicData));  /// Don't mutate directly raw data
 		}
 	},
 	methods: {
