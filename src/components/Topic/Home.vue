@@ -20,7 +20,7 @@
                 </md-card>
             </div>
 
-            <div class="md-layout-column md-layout-item md-size-75 md-small-size-100 md-gutter ">
+            <div class="md-layout-column md-layout-item md-size-75 md-small-size-100 md-gutter">
                 <div class="loader-wrapper"
                     v-if="loading.questions">
                     <md-progress-spinner md-mode="indeterminate"

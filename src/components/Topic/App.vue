@@ -41,6 +41,7 @@ import "firebase/firestore";
 import "firebase/auth";
 import General from '@/mixins/general.js'
 import TopicHeader from './components/Header.vue';
+import fetchUserDatas from '@/mixins/fetchUserDatas.js';
 
 export default {
     name: 'TopicPage',
@@ -115,7 +116,7 @@ export default {
             this.renderQuestionProgressBar();
         },
         paginatedQuestions: function () {
-            this.fetchUserDatas();
+            fetchUserDatas(this.paginatedQuestions);
         },
         '$route.params.id': function (id) {  /// When topic ID changes, re-render page
             this.loading = {
@@ -221,26 +222,7 @@ export default {
                     this.snackbar.display = true;
                 };
             })
-        },
-        fetchUserDatas: function () {
-            this.paginatedQuestions.forEach((question) => {
-                if (!this.users.hasOwnProperty(question.author)) {
-
-                    let tempData = {  /// Prevent fetch multiple time same user's data
-                        uid: question.author,
-                        loading: true
-                    };
-                    this.$store.commit('addUser', tempData);
-
-                    firebase.firestore().collection('users').doc(question.author).get().then(snapshot => {
-                        let userData = snapshot.data();
-                        userData.uid = question.author;
-                        userData.loading = false;
-                        this.$store.commit('addUser', userData);
-                    })
-                }
-            })
-        },
+        }
     }
 }
 </script>

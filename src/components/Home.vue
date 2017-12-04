@@ -4,35 +4,51 @@
 		    md-mode="indeterminate"
 		    v-if="loading"></md-progress-bar>
 
-		<div class="hompage"
+		<div class="homepage container extend"
 		    v-else>
-			<md-empty-state md-icon="add"
-			    md-label="Guardar Tema"
-			    md-description="Guardar temas a tu cuenta para accederlo más rápido"
-			    v-if="!savedTopics.length">
-				<md-progress-spinner md-mode="indeterminate"
-				    v-if="loading"></md-progress-spinner>
-			</md-empty-state>
+			<div id="mainGrid"
+			    class="md-layout md-gutter md-layout-column-xsmall md-alignment">
+				<div class="md-layout-column md-layout-item md-size-70 md-small-size-100">
+					<md-empty-state md-icon="add"
+					    md-label="Guardar Tema"
+					    md-description="Guardar temas a tu cuenta para accederlo más rápido"
+					    v-if="!savedTopics.length">
+						<md-progress-spinner md-mode="indeterminate"
+						    v-if="loading"></md-progress-spinner>
+					</md-empty-state>
 
-			<div class="savedTopics--wrapper"
-			    v-else>
-				<div class="savedTopics--grid"
-				    v-for="topicID in savedTopics"
-				    :key="topicID">
-					<md-button class="md-icon-button removeTopic"
-					    v-on:click="removeTopic(topicID)">
-						<md-icon>close</md-icon>
-					</md-button>
-					<router-link :to="'/t/' + topicID">
-						<div class="savedTopic--image"
-						    :style="{ background: `url(${topics[topicID].image})`}"></div>
-						<div class="savedTopic--filter"
-						    :style="{background: `rgb(${topics[topicID].color.join(',')})`}"></div>
-						<div class="savedTopic--meta">
-							<h1>{{ topics[topicID].name }}</h1>
-							<h2>{{ levels[topics[topicID].level].name }}</h2>
+					<div class="savedTopics--wrapper"
+					    v-else>
+						<div class="savedTopics--grid"
+						    v-for="topicID in savedTopics"
+						    :key="topicID">
+							<md-menu md-direction="top-start"
+							    class="removeTopic">
+								<md-button md-menu-trigger
+								    class="md-icon-button">
+									<md-icon>more_vert</md-icon>
+								</md-button>
+								<md-menu-content>
+									<md-menu-item v-on:click="removeTopic(topicID)">Quitar</md-menu-item>
+								</md-menu-content>
+							</md-menu>
+
+							<router-link :to="'/t/' + topicID">
+								<div class="savedTopic--image"
+								    :style="{ background: `url(${topics[topicID].image})`}"></div>
+								<div class="savedTopic--filter"
+								    :style="{background: `rgb(${topics[topicID].color.join(',')})`}"></div>
+								<div class="savedTopic--meta">
+									<h1>{{ topics[topicID].name }}</h1>
+									<h2>{{ levels[topics[topicID].level].name }}</h2>
+								</div>
+							</router-link>
 						</div>
-					</router-link>
+					</div>
+				</div>
+
+				<div class="md-small-hide md-layout-column md-layout-item md-size-30 md-small-size-100 md-gutter">
+					<Updates class="md-elevation-1" />
 				</div>
 			</div>
 			<md-button class="md-fab md-primary exploreButton"
@@ -53,14 +69,16 @@ import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 
-import Explore from './Home/Explore.vue'
+import Explore from './Home/Explore.vue';
+import Updates from './Home/Updates.vue'
 import Methods from './Home/Methods.js'
 
 import General from '@/mixins/general.js'
 export default {
 	name: 'Home',
 	components: {
-		Explore
+		Explore,
+		Updates
 	},
 	mixins: [General, Methods],
 	data () {
@@ -111,6 +129,12 @@ export default {
 	}
 }
 </script>
+<style>
+body {
+	background: #f4f7f6 !important;
+}
+</style>
+
 <style lang="scss" scoped>
 .homepage {
 	margin: 2em auto;
@@ -127,47 +151,29 @@ export default {
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: flex-start;
-
-	&:after {
-		content: "";
-		flex-grow: 1;
-		flex-basis: 1000000px;
-	}
-
+	flex-direction: column;
 	.savedTopics--grid {
-		flex-grow: 1;
 		flex-basis: auto;
-		width: 25%;
-		max-width: 25%;
 		position: relative;
 		height: auto;
-
-		&:before {
-			/// Make it square
-			content: "";
-			float: left;
-			padding-top: 100%;
-		}
-
-		@media only screen and (max-width: 500px) {
-			flex: 0 1 100%;
-			max-width: 100%;
-		}
-
-		@media only screen and (min-width: 500px) and (max-width: 1024px) {
-			flex: 0 1 50%;
-			max-width: 50%;
-		}
+		box-shadow: 8px 14px 38px rgba(39, 44, 49, 0.06),
+			1px 3px 8px rgba(39, 44, 49, 0.03);
+		margin-bottom: 2em;
+		border-radius: 4px;
+		overflow: hidden;
+		padding: 20px 10px;
+		transition: all 0.5s ease;
 
 		&:hover {
-			.savedTopic--image {
-				opacity: 0.4;
-			}
+			box-shadow: 0 0 1px rgba(39, 44, 49, 0.1),
+				0 3px 16px rgba(39, 44, 49, 0.07);
+			transition: all 0.3s ease;
+			transform: translate3D(0, -1px, 0);
 		}
-
 		a:hover {
 			text-decoration: none;
 		}
+
 		.savedTopic--image {
 			height: 100%;
 			width: 100%;
@@ -184,60 +190,28 @@ export default {
 		.savedTopic--meta {
 			position: relative;
 			z-index: 2;
-			text-align: center;
 			color: #fff;
 			text-decoration: none !important;
 			display: flex;
 			height: 100%;
 			justify-content: center;
-			align-items: center;
 			flex-direction: column;
-			padding: 20px;
+			padding: 20px 25px;
 			line-height: 1.5;
+
 			h1 {
-				font-size: 2em;
+				font-size: 20px;
 				margin: 0;
 				font-weight: lighter;
-				transition: transform 0.35s;
-				transform: translate3d(0, 25px, 0);
 			}
 
 			h2 {
-				padding: 20px 2.5em;
 				margin-bottom: 0;
-				opacity: 0;
-
 				font-weight: lighter;
-				transition: opacity 0.35s, transform 0.35s;
-				transform: translate3d(0, 50px, 0);
-			}
-			&:before {
-				position: absolute;
-				top: 30px;
-				right: 30px;
-				bottom: 30px;
-				left: 30px;
-				border: 2px solid #fff;
-				box-shadow: 0 0 0 30px rgba(255, 255, 255, 0.2);
-				content: "";
-				opacity: 0;
-				-webkit-transition: opacity 0.35s, -webkit-transform 0.35s;
-				transition: opacity 0.35s, transform 0.35s;
-				-webkit-transform: scale3d(1.4, 1.4, 1);
-				transform: scale3d(1.4, 1.4, 1);
+				font-size: 15px;
 			}
 		}
 
-		&:hover {
-			.savedTopic--meta {
-				h1,
-				h2 {
-					opacity: 1;
-					-webkit-transform: translate3d(0, 0, 0);
-					transform: translate3d(0, 0, 0);
-				}
-			}
-		}
 		.savedTopic--filter {
 			position: absolute;
 			top: 0;
@@ -247,45 +221,9 @@ export default {
 			z-index: 1;
 			opacity: 0.6;
 			background: #000;
-			&::before,
-			&::after {
-				position: absolute;
-				top: 30px;
-				right: 30px;
-				bottom: 30px;
-				left: 30px;
-				content: "";
-				opacity: 0;
-				-webkit-transition: opacity 0.35s, -webkit-transform 0.35s;
-				transition: opacity 0.35s, transform 0.35s;
-			}
-
-			&::before {
-				border-top: 1px solid #fff;
-				border-bottom: 1px solid #fff;
-				-webkit-transform: scale(0, 1);
-				transform: scale(0, 1);
-			}
-
-			&::after {
-				border-right: 1px solid #fff;
-				border-left: 1px solid #fff;
-				-webkit-transform: scale(1, 0);
-				transform: scale(1, 0);
-			}
-		}
-
-		&:hover {
-			.savedTopic--filter::before,
-			.savedTopic--filter::after {
-				opacity: 1;
-				-webkit-transform: scale(1);
-				transform: scale(1);
-			}
 		}
 
 		.removeTopic {
-			visibility: hidden;
 			opacity: 0;
 			transition: all 0.5s ease;
 			position: absolute;
@@ -295,7 +233,6 @@ export default {
 
 		&:hover {
 			.removeTopic {
-				visibility: visible;
 				opacity: 1;
 			}
 		}
