@@ -245,7 +245,7 @@ export default {
 	height: 40px;
 
 	& + .md-title {
-		vertical-align: middle;
+		vertical-align: middle!important;
 	}
 }
 
