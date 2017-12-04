@@ -81,7 +81,7 @@
 <script>
 import * as firebase from "firebase/app";
 import "firebase/firestore";
-import QuestionCard from '@/components/Topic/components/QuestionCard.vue';
+import QuestionCard from './QuestionCard.vue';
 import MugenScroll from 'vue-mugen-scroll';
 
 export default {
