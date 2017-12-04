@@ -187,7 +187,9 @@ export default {
                         this.filter.options[levelID].topics.push(topicData);
                     }
                     else {
-                        this.filter.options[levelID].topics.push(topicData);
+                        if(!this.filter.options[levelID].topics.includes(topicData)){
+                            this.filter.options[levelID].topics.push(topicData);
+                        }
                     }
                 });
 
