@@ -112,15 +112,13 @@ export default {
     },
     created () {
         this.$bind('questions', firebase.firestore().collection('questions').where('author', '==', this.user.uid).orderBy("date", 'desc')).then(() => {
-            this.loading = false;
-
             this.buildFilter().then(() => {
-
                 let topicID = this.$route.query.topic;
 
                 if (topicID) {
                     this.filter.selected = topicID;
-                }
+                };
+                this.loading = false;
             });
         });
     },
@@ -187,7 +185,7 @@ export default {
                         this.filter.options[levelID].topics.push(topicData);
                     }
                     else {
-                        if(!this.filter.options[levelID].topics.includes(topicData)){
+                        if (!this.filter.options[levelID].topics.includes(topicData)) {
                             this.filter.options[levelID].topics.push(topicData);
                         }
                     }
