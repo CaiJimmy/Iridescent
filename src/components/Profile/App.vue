@@ -72,11 +72,17 @@ export default {
 
 	.container {
 		display: flex;
+        @media only screen and (max-width: 944px) {
+            flex-direction: column;
+            text-align: center;
+        };
 	}
 	img {
 		border-radius: 100%;
 		height: 100px;
 		width: 100px;
+        flex-basis: 100px;
+        
 	}
 	.userProfile--meta {
 		display: flex;
