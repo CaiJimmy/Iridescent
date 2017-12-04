@@ -14,9 +14,11 @@
 					<md-icon>menu</md-icon>
 				</md-button>
 
-				<span v-if="$route.path == '/'"
-				    class="md-title"><img class="siteLogo"
-					    src="/static/android-chrome-192x192.png" /> Elysian</span>
+				<div v-if="$route.path == '/'">
+					<img class="siteLogo"
+					    src="/static/android-chrome-192x192.png" />
+					<span class="md-title">Elysian</span>
+				</div>
 				<span v-else
 				    class="md-title">{{ $meta().refresh().titleChunk }}</span>
 			</md-toolbar>
@@ -233,5 +235,10 @@ export default {
 .siteLogo {
 	width: 40px;
 	height: 40px;
+
+	& + md-title {
+		margin-left: 0;
+		vertical-align: middle;
+	}
 }
 </style>
