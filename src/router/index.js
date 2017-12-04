@@ -59,9 +59,16 @@ var router = new Router({
 			path: '/profile/:userID',
 			component: require('@/components/Profile/App.vue').default,
 			props: true,
+			meta: {
+				
+			},
 			children: [{
 				path: '/',
-				component: require('@/components/Profile/Questions.vue').default
+				component: require('@/components/Profile/Questions.vue').default,
+				meta: {
+					"hideToolbarTitle": true,
+					"toolbarElevation": 0
+				}
 			}]
 		}
 	]

@@ -5,7 +5,7 @@
 		    v-if="!firebaseReady || $store.state.loading.user"></md-progress-bar>
 		<div v-else>
 			<md-toolbar class="md-primary navBar"
-			    md-elevation="1"
+			    :md-elevation="toolbarElevation"
 			    v-if="loggedIn && !$route.meta.hideNav">
 
 				<md-button class="md-icon-button"
@@ -19,7 +19,7 @@
 					    src="/static/android-chrome-192x192.png" />
 					<span class="md-title">Elysian</span>
 				</div>
-				<span v-else
+				<span v-else-if="!$route.meta.hideToolbarTitle"
 				    class="md-title">{{ $meta().refresh().titleChunk }}</span>
 			</md-toolbar>
 
@@ -138,6 +138,14 @@ export default {
 		});
 	},
 	computed: {
+		toolbarElevation(){
+			if(this.$route.meta.hasOwnProperty('toolbarElevation')){   /// Have to do this because 0 == false
+				return this.$route.meta.toolbarElevation;
+			}
+			else{
+				return 1;
+			};
+		},
 		isAdmin: function () {
 			return this.$store.state.isAdmin;
 		},
