@@ -55,10 +55,6 @@ export default {
         }
     },
     data: () => ({
-        topic: {
-            name: 'Tema'
-        },
-
         notFound: false,
 
         questions: [],
@@ -93,22 +89,33 @@ export default {
         question_bar: 0
     }),
     computed: {
-        headerImage: function () {
-            if (this.topic.image) {
-                return this.topic.image;
-            }
-            else {
-                return 'https://source.unsplash.com/1200x500/?technology';
-            }
-        },
         paginatedQuestions: function () {
             return this.questions.slice(0, this.paging.question_per_page * this.paging.current);
+        },
+        topic: {
+            get: function () {
+                if (this.$store.state.loading.topics) {  /// If not ready yet, then wait till it's ready, but return .name to avoid error
+                    return {
+                        name: 'Tema'
+                    }
+                }
+                else {
+                    return this.$store.state.topics[this.$route.params.id]
+                }
+            },
+            set: function (newValue) {
+                this.$store.commit('updateObject', {   /// If Vuex has not got this topics's data, download it and set it manually. 
+                    'object': 'topics',
+                    'key': newValue.id,
+                    'data': newValue
+                });
+            }
         }
     },
     watch: {
-        questions: function(){
+        questions: function () {
             this.paging.end = false;
-        }, 
+        },
         userQuestions: function () {
             this.renderQuestionProgressBar();
         },
@@ -151,12 +158,12 @@ export default {
             if (this.$store.state.loading.topics) {  /// Topic data not ready yet, so we fetch it.
                 this.ref.topic.get().then((data) => {
                     if (data.exists) {
-                        this.$bind('topic', this.ref.topic).then(() => {
+                        this.$bind('topic', this.ref.topic).then(() => {  /// It will add this topic's data to Vuex
                             this.loading.metadata = false;
                             this.bindQuestions();
                         })
                     }
-                    else {
+                    else {  /// Return 404 if topic ID does not exist
                         this.loading.metadata = false;
                         this.notFound = true;
                     }
@@ -165,7 +172,6 @@ export default {
             else {   /// Topic data downloaded and present on Vuex
                 if (this.$store.state.topics.hasOwnProperty(this.$route.params.id)) {
                     this.loading.metadata = false;
-                    this.topic = this.$store.state.topics[this.$route.params.id];
                     this.bindQuestions();
                 }
                 else {
