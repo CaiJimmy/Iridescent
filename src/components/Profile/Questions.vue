@@ -4,9 +4,12 @@
             v-if="filter.selected"
             md-elevation="1">
             <h3 class="md-title"
-                style="flex: 1">Preguntas bajo el tema de {{ $store.state.topics[filter.selected].name }}</h3>
+                style="flex: 1">Preguntas bajo el tema de
+                <strong>{{ $store.state.topics[filter.selected].name }}</strong>
+            </h3>
             <md-button class="md-primary"
-                @click="filter.selected = null">Mostrar todas</md-button>
+                @click="$router.push('/t/' + filter.selected)">Ir al tema</md-button>
+            <md-button @click="filter.selected = null">Mostrar todas</md-button>
         </md-toolbar>
         <div class="md-layout md-gutter md-layout-column-xsmall md-alignment ">
             <div class="md-layout-column md-layout-item md-size-25 md-small-size-100 sidebar">
