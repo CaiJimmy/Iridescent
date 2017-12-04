@@ -245,54 +245,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.topicHeader {
-	height: 50vh;
-	display: flex;
-	display: -webkit-flex;
-	justify-content: center;
-	align-items: center;
-	text-align: center;
-	position: relative;
-
-	&:before {
-		content: "";
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		background: rgba(0, 0, 0, 0.5);
-		z-index: 1;
-	}
-	.topicHeader--image {
-		position: absolute;
-		top: 0;
-		left: 0;
-		height: 100%;
-		width: 100%;
-		background-size: cover;
-		background-repeat: no-repeat;
-		background-position: center center;
-	}
-	.topicHeader--meta {
-		z-index: 2;
-		position: relative;
-		padding: 0 25px;
-
-		h1 {
-			color: #fff;
-			font-size: 3em;
-		}
-
-		h2 {
-			color: #e1e1e1;
-			font-size: 1.5em;
-			line-height: 1.5;
-			font-weight: lighter;
-		}
-	}
-}
-
 .mainContent {
 	margin: 2em auto;
 }
