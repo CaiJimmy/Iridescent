@@ -61,10 +61,7 @@ var router = new Router({
 			props: true,
 			children: [{
 				path: '/',
-				component: require('@/components/Profile/Questions.vue').default,
-				meta: {
-					isAdmin: true
-				}
+				component: require('@/components/Profile/Questions.vue').default
 			}]
 		}
 	]
