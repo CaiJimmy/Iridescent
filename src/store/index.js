@@ -12,11 +12,13 @@ export default new Vuex.Store({
 		topics: {},
 		levels: {},
 		isAdmin: false,
+		updates: {},
 
 		loading: {
 			topics: true,
 			levels: true,
-			role: true
+			role: true,
+			updates: true
 		}
 	},
 	mutations: {
@@ -97,6 +99,17 @@ export default new Vuex.Store({
 				commit('ready', 'user');
 			});
 
+			firebase.firestore().collection('questions').orderBy("date", 'desc').onSnapshot((snapshot) => {
+				console.log(snapshot);
+				snapshot.forEach((doc) => {
+					commit('updateObject', {
+						'object': 'updates',
+						'key': doc.id,
+						'data': doc.data()
+					});
+				});
+				commit('ready', 'updates');
+			});
 		}
 	}
 })

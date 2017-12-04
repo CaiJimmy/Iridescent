@@ -1,5 +1,5 @@
 <template>
-    <md-list class="md-elevation-2">
+    <md-list class="md-elevation-1">
         <div v-for="(level, index) in arrayLevels"
             :key="level.id">
             <md-subheader>{{ level.name }}</md-subheader>

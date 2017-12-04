@@ -26,29 +26,31 @@ import 'firebase/firestore';
 import fetchUserDatas from '@/mixins/fetchUserDatas.js';
 
 export default {
-    data () {
-        return {
-            updates: []
-        }
-    },
     computed: {
         users () {
             return this.$store.state.users;
         },
         topics () {
             return this.$store.state.topics
+        },
+        updates () {
+            let updatesObject = this.$store.state.updates;
+            let updatesArray = [];
+            for (let value in updatesObject) {
+                let item = updatesObject[value];
+                item.id = value;
+                updatesArray.push(item);
+            };
+            return updatesArray;
+        },
+        loading () {
+            return this.$store.state.loading;
         }
     },
     watch: {
         updates: function () {
             fetchUserDatas(this.updates);
         },
-    },
-    created () {
-        this.$bind('updates', firebase.firestore().collection('questions').orderBy("date", 'desc').limit(5));
-    },
-    methods: {
     }
-
 }
 </script>
