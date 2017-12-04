@@ -6,7 +6,7 @@
             :md-diameter="30"
             :md-stroke="3"></md-progress-bar>
         <div v-else>
-            <header class="userProfile--header">
+            <header class="userProfile--header md-elevation-1">
                 <div class="container">
                     <figure>
                         <img :src="user.photoURL"
