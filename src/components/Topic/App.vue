@@ -105,6 +105,9 @@ export default {
         }
     },
     watch: {
+        questions: function(){
+            this.paging.end = false;
+        }, 
         userQuestions: function () {
             this.renderQuestionProgressBar();
         },
@@ -191,8 +194,6 @@ export default {
 
             if (this.paging.question_per_page * this.paging.current >= this.questions.length) {
                 this.paging.end = true;
-                this.snackbar.message = 'Todas las preguntas han sido cargadas'
-                this.snackbar.display = true;
                 return;
             };
 

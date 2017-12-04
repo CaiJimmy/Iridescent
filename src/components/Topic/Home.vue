@@ -93,6 +93,7 @@
                                     :md-stroke="3"
                                     md-mode="indeterminate"></md-progress-spinner>
                             </div>
+                            <span class="endOfPage" v-if="$parent.paging.end">Todas las preguntas han sido cargadas</span>
                         </mugen-scroll>
                     </div>
                     <md-empty-state v-else
@@ -177,7 +178,6 @@ export default {
         editQuestion (questionIndex) {
             this.editing.push(this.questions[questionIndex].id);
         },
-
         closeDialog (where) {
             this.dialog[where] = false;
         },
@@ -234,5 +234,11 @@ form {
 		top: 80px;
         align-self: flex-start;
 	}
+}
+
+.endOfPage{
+    text-align: center;
+    display: block;
+    color: #999;
 }
 </style>
