@@ -51,7 +51,7 @@ export default {
     },
     metaInfo () {
         return {
-            title: this.topic.name
+            title: this.topic.name || 'Tema'
         }
     },
     data: () => ({
@@ -94,14 +94,12 @@ export default {
         },
         topic: {
             get: function () {
-                if (this.$store.state.loading.topics) {  /// If not ready yet, then wait till it's ready, but return .name to avoid error
-                    return {
-                        name: 'Tema'
-                    }
-                }
-                else {
+                if (!this.$store.state.loading.topics && this.$store.state.topics.hasOwnProperty(this.$route.params.id)) {  /// If not ready yet, then wait till it's ready, but return .name to avoid error
                     return this.$store.state.topics[this.$route.params.id]
                 }
+                else{
+                    return {};
+                };
             },
             set: function (newValue) {
                 this.$store.commit('updateObject', {   /// If Vuex has not got this topics's data, download it and set it manually. 
@@ -126,17 +124,19 @@ export default {
             fetchUserDatas(this.paginatedQuestions);
         },
         '$route.params.id': function (id) {  /// When topic ID changes, re-render page
-            this.loading = {
-                metadata: true,
-                questions: true,
-                userQuestions: true
-            };
+            if (this.$route.params.hasOwnProperty('id')) {
+                this.loading = {
+                    metadata: true,
+                    questions: true,
+                    userQuestions: true
+                };
 
-            this.paging.current = 1;
-            this.paging.end = false;
+                this.paging.current = 1;
+                this.paging.end = false;
 
-            this.notFound = false;
-            this.init();
+                this.notFound = false;
+                this.init();
+            }
         }
     },
     created: function () {
