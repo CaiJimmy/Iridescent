@@ -33,57 +33,7 @@
                         <div class="questionContainer"
                             v-for="(item, index) in questions"
                             :key="item.id">
-                            <md-content class="md-elevation-1"
-                                v-if="editing.includes(item.id)">
-                                <question-form type="edit"
-                                    :questionData="item"
-                                    :questionID="item.id"
-                                    :callback="exitEditing"
-                                    :snackbar="snackbar" />
-                            </md-content>
-                            <div v-on:copy="copyBlock"
-                                v-else>
-                                <md-card class="questionCard">
-                                    <md-card-header v-if="users.hasOwnProperty(item.author) && !users[item.author].loading">
-                                        <md-avatar>
-                                            <img :src="users[item.author].photoURL"
-                                                :alt="users[item.author].displayName">
-                                        </md-avatar>
-                                        <div class="md-title">{{ users[item.author].displayName }}</div>
-                                        <div class="md-subhead">
-                                            <span>
-                                                <timeago :auto-update="60"
-                                                    :since="item.date"></timeago>
-                                            </span>
-                                        </div>
-                                    </md-card-header>
-                                    <md-progress-bar v-else
-                                        class="md-primary"
-                                        md-mode="indeterminate"
-                                        :md-diameter="30"
-                                        :md-stroke="3"></md-progress-bar>
-                                    <md-card-content>
-                                        {{ item.title }}
-                                        <md-list>
-                                            <md-list-item v-for="(value, letter, index) in item.answers"
-                                                v-bind:key="index">
-                                                <div class="md-list-item-text">
-                                                    {{letter.toUpperCase()}}. {{value}}
-                                                </div>
-                                                <md-button v-if="item.correctAnswer == letter"
-                                                    class="md-icon-button md-list-action">
-                                                    <md-icon class="md-primary">star</md-icon>
-                                                </md-button>
-                                                <md-divider v-if="letter !== 'd'"></md-divider>
-                                            </md-list-item>
-                                        </md-list>
-                                    </md-card-content>
-                                    <md-card-actions>
-                                        <md-button v-if="item.author == $store.state.user.uid || isAdmin"
-                                            v-on:click="editQuestion(index)">Editar</md-button>
-                                    </md-card-actions>
-                                </md-card>
-                            </div>
+                            <question-card :question="item" :snackbar="snackbar" />
                         </div>
                         <mugen-scroll :handler="loadMore"
                             :should-handle="!loadMoreDisabled">
@@ -123,10 +73,10 @@
 <script>
 import * as firebase from "firebase/app";
 import "firebase/firestore";
-import moment from 'moment';
 import General from '@/mixins/general.js'
 import MugenScroll from 'vue-mugen-scroll';
 import QuestionForm from './Form.vue';
+import QuestionCard from './components/QuestionCard.vue';
 
 export default {
     name: 'TopicPage',
@@ -136,9 +86,6 @@ export default {
         dialog: {
             question: false,
         },
-
-        editing: [],
-
         snackbar: {
             display: false,
             message: null
@@ -147,6 +94,7 @@ export default {
     components: {
         MugenScroll,
         QuestionForm,
+        QuestionCard
     },
     computed: {
         question_bar: function () {
@@ -169,30 +117,11 @@ export default {
         }
     },
     methods: {
-        exitEditing (questionID) {
-            let index = this.editing.indexOf(questionID);
-            if (index > -1) {
-                this.editing.splice(index, 1);
-            }
-        },
-        editQuestion (questionIndex) {
-            this.editing.push(this.questions[questionIndex].id);
-        },
         closeDialog (where) {
             this.dialog[where] = false;
         },
         loadMore: function () {
             this.$parent.loadMore();
-        },
-        toDate: function (date) {
-            return moment(date).format("MM/DD/YYYY HH:mm")
-        },
-        copyBlock: function (e) {
-            console.log('Copy event triggered');
-            if (!this.isAdmin) {
-                e.clipboardData.setData('text/plain', 'Pa k kieres copiar eso jaja salu2');
-                e.preventDefault();
-            };
         }
     }
 }

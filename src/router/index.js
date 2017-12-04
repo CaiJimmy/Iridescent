@@ -42,17 +42,9 @@ var router = new Router({
 			component: require('@/components/Topic/App.vue').default,
 			auth: true,
 			children: [{
-					path: '',
-					component: require('@/components/Topic/Home.vue').default
-				},
-				{
-					path: 'edit',
-					component: require('@/components/Topic/Edit.vue').default,
-					meta: {
-						isAdmin: true
-					}
-				}
-			]
+				path: '',
+				component: require('@/components/Topic/Home.vue').default
+			}]
 		},
 		{
 			path: '/login',
@@ -63,6 +55,18 @@ var router = new Router({
 			component: require('@/components/Home/Explore_Page.vue').default,
 			auth: true
 		},
+		{
+			path: '/profile/:userID',
+			component: require('@/components/Profile/App.vue').default,
+			props: true,
+			children: [{
+				path: '/',
+				component: require('@/components/Profile/Questions.vue').default,
+				meta: {
+					isAdmin: true
+				}
+			}]
+		}
 	]
 })
 
