@@ -13,7 +13,12 @@
 				    v-if="!menuVisible">
 					<md-icon>menu</md-icon>
 				</md-button>
-				<span class="md-title">{{ $meta().refresh().titleChunk }}</span>
+
+				<span v-if="$route.path == '/'"
+				    class="md-title"><img class="siteLogo"
+					    src="/static/android-chrome-192x192.png" /> Elysian</span>
+				<span v-else
+				    class="md-title">{{ $meta().refresh().titleChunk }}</span>
 			</md-toolbar>
 
 			<md-drawer :md-active.sync="menuVisible"
@@ -204,9 +209,9 @@ export default {
 }
 
 .md-drawer {
-	width: 230px!important;
-	max-width: calc(100vw - 125px)!important;
-	position: fixed!important;
+	width: 230px !important;
+	max-width: calc(100vw - 125px) !important;
+	position: fixed !important;
 }
 
 .md-fab {
@@ -219,9 +224,14 @@ export default {
 
 @media only screen and (min-width: 500px) {
 	.navBar {
-		position: sticky!important;
-		top: 0!important;
-		z-index: 5!important;
+		position: sticky !important;
+		top: 0 !important;
+		z-index: 3 !important;
 	}
+}
+
+.siteLogo {
+	width: 40px;
+	height: 40px;
 }
 </style>
