@@ -232,22 +232,3 @@ export default {
     }
 }
 </script>
-
-<style lang="scss" scoped>
-.mainContent {
-	margin: 2em auto;
-}
-
-.notFound {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate3d(-50%, -50%, 0);
-	max-width: 400px;
-	width: 100%;
-
-	.md-card {
-		padding: 15px;
-	}
-}
-</style>

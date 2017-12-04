@@ -111,16 +111,7 @@ export default {
         }
     },
     created () {
-        this.$bind('questions', firebase.firestore().collection('questions').where('author', '==', this.user.uid).orderBy("date", 'desc')).then(() => {
-            this.buildFilter().then(() => {
-                let topicID = this.$route.query.topic;
-
-                if (topicID) {
-                    this.filter.selected = topicID;
-                };
-                this.loading = false;
-            });
-        });
+        this.bindQuestions();
     },
     watch: {
         "filter.selected": function () {
@@ -166,6 +157,18 @@ export default {
         },
     },
     methods: {
+        bindQuestions () {
+            this.$bind('questions', firebase.firestore().collection('questions').where('author', '==', this.user.uid).orderBy("date", 'desc')).then(() => {
+                this.buildFilter().then(() => {
+                    let topicID = this.$route.query.topic;
+
+                    if (topicID) {
+                        this.filter.selected = topicID;
+                    };
+                    this.loading = false;
+                });
+            });
+        },
         buildFilter () {
             return new Promise((resolve, reject) => {
                 this.questions.forEach((question) => {
