@@ -138,11 +138,11 @@ export default {
 		});
 	},
 	computed: {
-		toolbarElevation(){
-			if(this.$route.meta.hasOwnProperty('toolbarElevation')){   /// Have to do this because 0 == false
+		toolbarElevation () {
+			if (this.$route.meta.hasOwnProperty('toolbarElevation')) {   /// Have to do this because 0 == false
 				return this.$route.meta.toolbarElevation;
 			}
-			else{
+			else {
 				return 1;
 			};
 		},

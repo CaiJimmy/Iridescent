@@ -17,25 +17,19 @@
                         :md-stroke="3"></md-progress-spinner>
                 </div>
                 <md-card v-if="questions.length">
-                    <md-card-header>
-                        <div class="md-subhead">Filtrar por temas</div>
-                    </md-card-header>
-                    <md-card-content>
-                        <md-field>
-                            <label for="topic">Tema</label>
-                            <md-select v-model="filter.selected"
-                                name="topic"
-                                id="topic">
-                                <md-optgroup v-for="level in filter.options"
-                                    :label="level.name"
-                                    :key="level.id">
-                                    <md-option v-for="topic in level.topics"
-                                        :value="topic.id"
-                                        :key="topic.id">{{ topic.name }}</md-option>
-                                </md-optgroup>
-                            </md-select>
-                        </md-field>
-                    </md-card-content>
+                    <md-list>
+                        <md-subheader class="md-primary">Filtrar por temas</md-subheader>
+                        <div v-for="level in filter.options"
+                            :key="level.id">
+                            <md-subheader>{{ level.name }}</md-subheader>
+                            <md-list-item v-for="topic in level.topics"
+                                :key="topic.id">
+                                <md-radio v-model="filter.selected"
+                                    :value="topic.id" />
+                                <span class="md-list-item-text topicName">{{ topic.name }}</span>
+                            </md-list-item>
+                        </div>
+                    </md-list>
                 </md-card>
             </div>
 
@@ -231,5 +225,9 @@ export default {
 	text-align: center;
 	display: block;
 	color: #999;
+}
+
+.topicName {
+	white-space: normal;
 }
 </style>
