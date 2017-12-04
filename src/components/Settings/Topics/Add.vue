@@ -5,8 +5,10 @@
 			    v-if="sending" />
 
 			<md-card-header>
-				<div class="md-title" v-if="type = 'edit'">Editar Tema</div>
-				<div class="md-title" v-else>Añadir Tema</div>
+				<div class="md-title"
+				    v-if="type == 'edit'">Editar Tema</div>
+				<div class="md-title"
+				    v-else>Añadir Tema</div>
 			</md-card-header>
 
 			<md-card-content>
@@ -48,7 +50,7 @@
 				    class="md-primary"
 				    :disabled="sending"
 				    v-on:click="editTopic()"
-				    v-if="type='edit'">Editar</md-button>
+				    v-if="type == 'edit'">Editar</md-button>
 				<md-button type="submit"
 				    v-else
 				    class="md-primary"
