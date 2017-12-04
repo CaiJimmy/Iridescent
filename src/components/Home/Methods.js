@@ -1,24 +1,28 @@
 import * as firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
+import store from '@/store';
 
 export default {
 	methods: {
 		removeTopic(topicID) {
-			let savedTopics = this.user.savedTopics,
-				index = savedTopics.indexOf(topicID);
+			let savedTopics = store.state.user.savedTopics,
+				user = store.state.user;
+			let index = savedTopics.indexOf(topicID);
 			if (index > -1) {
 				savedTopics.splice(index, 1);
-				return firebase.firestore().collection("users").doc(firebase.auth().currentUser.uid).update(this.user);
+				return firebase.firestore().collection("users").doc(firebase.auth().currentUser.uid).update(user);
 			}
 		},
 		saveTopic(topicID) {
-			if (!this.user.savedTopics) {
-				this.user.savedTopics = [];
+			let savedTopics = store.state.user.savedTopics,
+				user = store.state.user;
+			if (!savedTopics) {
+				savedTopics = [];
 			};
-			if (!this.user.savedTopics.includes(topicID)) {
-				this.user.savedTopics.push(topicID);
-				firebase.firestore().collection("users").doc(firebase.auth().currentUser.uid).update(this.user);
+			if (!savedTopics.includes(topicID)) {
+				savedTopics.push(topicID);
+				firebase.firestore().collection("users").doc(firebase.auth().currentUser.uid).update(user);
 			};
 		}
 	}
