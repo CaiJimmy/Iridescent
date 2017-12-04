@@ -16,7 +16,7 @@
                         :alt="users[question.author].displayName">
                 </md-avatar>
                 <div class="md-title">
-                    <router-link :to="'/profile/' + user.uid">
+                    <router-link :to="{ path: '/profile/' + user.uid, query: { topic: question.topic.id }}">
                         {{ users[question.author].displayName }}
                     </router-link>
                 </div>

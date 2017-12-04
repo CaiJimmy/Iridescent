@@ -101,9 +101,7 @@ export default {
                 loading: false,
             },
             filter: {
-                topic: null,
-                topics: [],
-                levels: [],
+                selected: null,
                 options: {}
             },
             snackbar: {
@@ -115,13 +113,43 @@ export default {
     created () {
         this.$bind('questions', firebase.firestore().collection('questions').where('author', '==', this.user.uid).orderBy("date", 'desc')).then(() => {
             this.loading = false;
-            this.buildFilter();
+
+            this.buildFilter().then(() => {
+
+                let topicID = this.$route.query.topic;
+
+                if (topicID) {
+                    this.filter.selected = topicID;
+                }
+            });
         });
     },
     watch: {
         "filter.selected": function () {
             this.paging.end = false;
-            this.paging.current = 1
+            this.paging.current = 1;
+
+            if (this.filter.selected) {
+                this.$router.replace({
+                    query: {
+                        topic: this.filter.selected
+                    }
+                })
+            }
+            else {
+                this.$router.replace({   /// Remove query string if there's no selected topic
+                    query: {}
+                })
+            }
+        },
+        "$route.query.topic": function () {
+            if (this.$store.state.topics.hasOwnProperty(this.$route.query.topic)) {
+                this.filter.selected = this.$route.query.topic;
+            } else {
+                this.$router.replace({   /// Remove query string if there's no such topic
+                    query: {}
+                })
+            }
         }
     },
     computed: {
@@ -141,27 +169,30 @@ export default {
     },
     methods: {
         buildFilter () {
-            this.questions.forEach((question) => {
-                let topicID = question.topic.id,
-                    topicData = this.$store.state.topics[topicID];
+            return new Promise((resolve, reject) => {
+                this.questions.forEach((question) => {
+                    let topicID = question.topic.id,
+                        topicData = this.$store.state.topics[topicID];
 
-                if (!topicData) {
-                    return;
-                };
+                    if (!topicData) {
+                        return;
+                    };
 
-                let levelID = topicData.level;
+                    let levelID = topicData.level;
 
-                if (!this.filter.options[levelID]) {
-                    this.filter.options[levelID] = this.$store.state.levels[levelID];
-                    this.filter.options[levelID].id = levelID;
-                    this.filter.options[levelID].topics = [];
-                    this.filter.options[levelID].topics.push(topicData);
-                }
-                else {
-                    this.filter.options[levelID].topics.push(topicData);
-                }
+                    if (!this.filter.options[levelID]) {
+                        this.filter.options[levelID] = this.$store.state.levels[levelID];
+                        this.filter.options[levelID].id = levelID;
+                        this.filter.options[levelID].topics = [];
+                        this.filter.options[levelID].topics.push(topicData);
+                    }
+                    else {
+                        this.filter.options[levelID].topics.push(topicData);
+                    }
+                });
+
+                resolve();
             });
-
         },
         loadMore () {
             if (this.paging.end) {
@@ -190,8 +221,8 @@ export default {
 .mainContent {
 	margin: 2em auto;
 }
-.filterMessage{
-    margin-bottom: 2em;
+.filterMessage {
+	margin-bottom: 2em;
 }
 .endOfPage {
 	text-align: center;
