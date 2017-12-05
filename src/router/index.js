@@ -31,7 +31,7 @@ var router = new Router({
 
 		{
 			path: '/settings/topics/',
-			component: require('@/components/Settings/Topics.vue').default,
+			component: () => import('@/components/Settings/Topics.vue'),
 			auth: true,
 			meta: {
 				isAdmin: true
