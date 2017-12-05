@@ -36,14 +36,13 @@ import 'firebase/firestore';
 import 'firebase/auth';
 
 import Auth from '@/mixins/auth.js';
-import General from '@/mixins/general.js';
 export default {
 	name: "app",
 	metaInfo: {
 		title: 'Inicio',
 		titleTemplate: '%s | Elysian'
 	},
-	mixins: [Auth, General],
+	mixins: [Auth],
 	data () {
 		return {
 			snackbar: {

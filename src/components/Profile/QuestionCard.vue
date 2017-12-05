@@ -58,7 +58,6 @@
 <script>
 import QuestionForm from '@/components/Topic/Form.vue';
 import moment from 'moment';
-import General from '@/mixins/general.js';
 
 export default {
     data () {
@@ -67,7 +66,6 @@ export default {
         }
     },
     props: ['question', 'snackbar'],
-    mixins: [General],
     components: {
         QuestionForm
     },

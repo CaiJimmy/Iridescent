@@ -73,15 +73,12 @@
 <script>
 import * as firebase from "firebase/app";
 import "firebase/firestore";
-import General from '@/mixins/general.js'
 import MugenScroll from 'vue-mugen-scroll';
 import QuestionForm from './Form.vue';
 import QuestionCard from './components/QuestionCard.vue';
 
 export default {
     name: 'TopicPage',
-
-    mixins: [General],
     data: () => ({
         dialog: {
             question: false,

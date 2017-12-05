@@ -39,13 +39,11 @@
 import * as firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
-import General from '@/mixins/general.js'
 import TopicHeader from './components/Header.vue';
 import fetchUserDatas from '@/mixins/fetchUserDatas.js';
 
 export default {
     name: 'TopicPage',
-    mixins: [General],
     components: {
         TopicHeader
     },
