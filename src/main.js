@@ -25,7 +25,8 @@ import {
 	MdProgress,
 	MdSnackbar,
 	MdSubheader,
-	MdToolbar
+	MdToolbar,
+	MdTooltip
 } from 'vue-material/dist/components';
 import 'vue-material/dist/vue-material.min.css';
 
@@ -46,6 +47,7 @@ Vue.use(MdLayout)
 Vue.use(MdEmptyState)
 Vue.use(MdDialog)
 Vue.use(MdSubheader)
+Vue.use(MdTooltip)
 
 Vue.config.productionTip = false;
 
