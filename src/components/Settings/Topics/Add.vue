@@ -28,8 +28,8 @@
 						<md-input name="description"
 						    v-model="form.description"
 						    :disabled="sending"
-						    md-counter="50"
-						    v-validate="'max: 50'" />
+						    md-counter="100"
+						    v-validate="'max: 100'" />
 						<span class="md-error">{{errors.first('description')}}</span>
 					</md-field>
 
