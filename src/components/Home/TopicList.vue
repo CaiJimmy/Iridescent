@@ -9,13 +9,10 @@
                     <h3 class="levelName">{{ level.name }}</h3>
                 </div>
                 <div class="topicCards--wrapper md-layout-column md-layout-item md-size-85 md-small-size-100 md-gutter">
-                    <div class="md-layout-item md-size-50 md-small-size-100 md-gutter"
-                        v-for="(topic, index) in getTopicsByLevel(level.id)"
-                        :key="topic.id">
-                        <TopicCard :topic="topic"
-                            :topicID="topic.id"
-                            :action="'save'" />
-                    </div>
+                    <TopicCard v-for="(topic, index) in getTopicsByLevel(level.id)"
+                        :key="topic.id"
+                        :topic="topic"
+                        :topicID="topic.id" />
                 </div>
             </div>
         </div>
@@ -67,10 +64,15 @@ export default {
 }
 
 .topicCards--wrapper {
-	flex-direction: row;
-
+    display: flex;
+    flex-direction: row;
 	.topicCards--grid {
 		margin: 10px;
+        flex: 1 1 calc(50% - 40px);
+
+        @media (max-width: 960px){
+            flex: 1 1 100%;
+        }
 	}
 }
 </style>
