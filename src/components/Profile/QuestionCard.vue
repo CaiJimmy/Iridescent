@@ -57,7 +57,6 @@
 </template>
 <script>
 import QuestionForm from '@/components/Topic/Form.vue';
-import moment from 'moment';
 
 export default {
     data () {
@@ -69,11 +68,11 @@ export default {
     components: {
         QuestionForm
     },
-    computed:{
-        users(){
+    computed: {
+        users () {
             return this.$store.state.users
         },
-        topics(){
+        topics () {
             return this.$store.state.topics
         }
     },
@@ -83,9 +82,6 @@ export default {
         },
         editQuestion () {
             this.editing = true;
-        },
-        toDate: function (date) {
-            return moment(date).format("MM/DD/YYYY HH:mm")
         },
         copyBlock: function (e) {
             console.log('Copy event triggered');
