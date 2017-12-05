@@ -103,7 +103,7 @@ export default {
 			return fetch("https://source.unsplash.com/1000x500/?technology").then(async (response) => {   /// Fetch a random image from Unsplash, and add it to form
 				let color = await Vibrant.from(response.url).getPalette()
 					.then((palette) => {
-						return palette.Vibrant.getRgb() || [0, 191, 165];  /// Return tea green as color in case Vibrant fails
+						return palette.Muted.getRgb() || [0, 191, 165];  /// Return tea green as color in case Vibrant fails
 					});
 
 				return {

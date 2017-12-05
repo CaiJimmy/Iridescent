@@ -121,7 +121,7 @@ export default {
 
 					let color = await Vibrant.from(URL.createObjectURL(imageFile)).getPalette()
 						.then((palette) => {
-							return palette.Vibrant['_rgb']
+							return palette.Muted.getRgb() || [0, 191, 165];  /// Return tea green as color in case Vibrant fails
 						});
 
 					this.topicRef.set({
