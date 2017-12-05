@@ -25,12 +25,5 @@ export default {
 		topics: function () {
 			return store.state.topics;
 		}
-	},
-	methods: {
-		getTopicsByLevel(levelId) {
-            let topics = Object.keys(this.topics).map((k) => this.topics[k])  /// Transform state.topics (object) to an array, to use filter() method
-
-			return topics.filter(topic => topic.level == levelId);
-		}
 	}
 }
