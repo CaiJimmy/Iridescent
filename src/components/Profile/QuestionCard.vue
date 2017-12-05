@@ -74,6 +74,9 @@ export default {
         },
         topics () {
             return this.$store.state.topics
+        },
+        isAdmin: function () {
+            return this.$store.state.isAdmin;
         }
     },
     methods: {

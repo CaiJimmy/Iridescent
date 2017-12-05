@@ -71,6 +71,9 @@ export default {
     computed: {
         users () {
             return this.$store.state.users
+        },
+        isAdmin: function () {
+            return this.$store.state.isAdmin;
         }
     },
     methods: {
