@@ -62,7 +62,8 @@
             <MoveQuestion :currentTopicID="question.topic"
                 :questionID="question.id"
                 :questionData="question"
-                :authorData="users[question.author]" />
+                :authorData="users[question.author]"
+                :snackbar="snackbar" />
         </md-dialog>
 
         <md-dialog :md-active.sync="showProfile"
