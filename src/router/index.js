@@ -51,11 +51,6 @@ var router = new Router({
 			component: require('@/components/Login.vue').default
 		},
 		{
-			path: '/explore/',
-			component: require('@/components/Home/Explore_Page.vue').default,
-			auth: true
-		},
-		{
 			path: '/profile/:userID',
 			component: require('@/components/Profile/App.vue').default,
 			props: true,

@@ -9,9 +9,9 @@
 			    v-if="loggedIn && !$route.meta.hideNav">
 
 				<md-button class="md-icon-button"
-				    @click="toggleMenu"
-				    v-if="!menuVisible">
-					<md-icon>menu</md-icon>
+				    @click="goBack"
+				    v-if="$route.path !== '/'">
+					<md-icon>arrow_back</md-icon>
 				</md-button>
 
 				<div v-if="$route.path == '/'">
@@ -22,58 +22,6 @@
 				<span v-else-if="!$route.meta.hideToolbarTitle"
 				    class="md-title">{{ $meta().refresh().titleChunk }}</span>
 			</md-toolbar>
-
-			<md-drawer :md-active.sync="menuVisible"
-			    v-if="loggedIn && !$route.meta.hideNav && !$store.state.loading.user && !$store.state.loading.topics">
-				<md-list>
-					<md-list-item v-on:click="$router.push('/')">
-						<md-icon>home</md-icon>
-						<span class="md-list-item-text">Inicio</span>
-					</md-list-item>
-
-					<md-list-item v-on:click="$router.push('/settings/topics')"
-					    v-if="isAdmin">
-						<md-icon>settings</md-icon>
-						<span class="md-list-item-text">Temas</span>
-					</md-list-item>
-
-					<md-list-item md-expand>
-						<md-avatar>
-							<img :src="user.photoURL"
-							    :alt="user.displayName">
-						</md-avatar>
-						<span class="md-list-item-text">{{ user.displayName }}</span>
-
-						<md-list slot="md-expand">
-							<md-list-item>
-								<md-icon>verified_user</md-icon>
-								<span class="md-list-item-text">Role: {{ userRole }}</span>
-							</md-list-item>
-							<md-list-item v-on:click="logOut()">
-								<md-icon>exit_to_app</md-icon>
-								<span class="md-list-item-text">Cerrar sesión</span>
-							</md-list-item>
-						</md-list>
-					</md-list-item>
-				</md-list>
-				<md-list v-if="savedTopics.length"
-				    class="savedTopics--drawer">
-					<md-subheader>Temas Guardados</md-subheader>
-
-					<md-list-item v-for="topicID in user.savedTopics"
-					    v-on:click="$router.push('/t/' + topicID)"
-					    :key="topicID">
-						<md-avatar v-if="topics[topicID]"
-						    class="md-avatar-icon"
-						    :style="{ background: `rgb(${topics[topicID].color.join(', ')})`}">
-							{{ topics[topicID].name.slice(0, 1) }}
-						</md-avatar>
-						<span v-if="topics[topicID]"
-						    class="md-list-item-text">{{ topics[topicID].name }}</span>
-					</md-list-item>
-				</md-list>
-
-			</md-drawer>
 
 			<router-view />
 
@@ -148,17 +96,6 @@ export default {
 		},
 		isAdmin: function () {
 			return this.$store.state.isAdmin;
-		},
-		savedTopics: function () {
-			return this.$store.state.user.savedTopics || [];
-		},
-		userRole: function () {
-			if (this.isAdmin) {
-				return 'Admin'
-			}
-			else {
-				return 'Alumno'
-			}
 		}
 	},
 	watch: {
@@ -172,20 +109,10 @@ export default {
 		}
 	},
 	methods: {
-		toggleMenu () {
-			this.menuVisible = !this.menuVisible
-		},
-		logOut: function () {
-			firebase.auth().signOut().then(() => {
-				if (!this.$route.query.go || this.$route.path !== '/login') {
-					this.$router.replace({
-						path: '/login',
-						query: {
-							go: this.$route.fullPath,
-						},
-					});
-				}
-			});
+		goBack () {
+			window.history.length > 1
+				? this.$router.go(-1)
+				: this.$router.push('/')
 		},
 		redirect: function () {
 			if (this.$route.query.go) {
@@ -245,7 +172,7 @@ export default {
 	height: 40px;
 
 	& + .md-title {
-		vertical-align: middle!important;
+		vertical-align: middle !important;
 	}
 }
 

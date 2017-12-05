@@ -1,24 +1,5 @@
 <template>
 	<div class="topicCards--grid">
-		<md-button v-if="action == 'save'"
-		    class="saveTopic md-icon-button"
-		    v-on:click="saveTopic(topicID)">
-			<md-icon>add</md-icon>
-		</md-button>
-
-		<md-menu v-else
-		    md-direction="top-start"
-		    class="removeTopic">
-
-			<md-button md-menu-trigger
-			    class="md-icon-button">
-				<md-icon>more_vert</md-icon>
-			</md-button>
-			<md-menu-content>
-				<md-menu-item v-on:click="removeTopic(topicID)">Quitar</md-menu-item>
-			</md-menu-content>
-		</md-menu>
-
 		<router-link :to="'/t/' + topicID">
 			<div class="topicCard--image"
 			    :style="{ background: `url(${topic.image})`}"></div>
@@ -32,11 +13,9 @@
 	</div>
 </template>
 <script>
-import Methods from './Methods.js'
 
 export default {
-	props: ['topic', 'topicID', 'levels', 'action'],
-	mixins: [Methods],
+	props: ['topic', 'topicID', 'levels', 'action']
 }
 </script>
 
