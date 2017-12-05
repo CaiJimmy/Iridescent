@@ -90,25 +90,21 @@ export default {
         paginatedQuestions: function () {
             return this.questions.slice(0, this.paging.question_per_page * this.paging.current);
         },
-        topic: {
-            get: function () {
-                if (!this.$store.state.loading.topics && this.$store.state.topics.hasOwnProperty(this.$route.params.id)) {  /// If not ready yet, then wait till it's ready, but return .name to avoid error
-                    return this.$store.state.topics[this.$route.params.id]
-                }
-                else{
-                    return {};
-                };
-            },
-            set: function (newValue) {
-                this.$store.commit('updateObject', {   /// If Vuex has not got this topics's data, download it and set it manually. 
-                    'object': 'topics',
-                    'key': newValue.id,
-                    'data': newValue
-                });
+        topic () {
+            if (!this.$store.state.loading.topics && this.$store.state.topics.hasOwnProperty(this.$route.params.id)) {  /// If not ready yet, then wait till it's ready, but return .name to avoid error
+                return this.$store.state.topics[this.$route.params.id]
             }
+            else {
+                return {};
+            };
         }
     },
     watch: {
+        "$store.state.loading.topics": function () {
+            if (!this.$store.state.loading.topics) {
+                this.bindTopic()
+            }
+        },
         questions: function () {
             this.paging.end = false;
         },
@@ -138,7 +134,12 @@ export default {
         }
     },
     created: function () {
-        this.init()
+        this.ref.topic = firebase.firestore().collection('topics').doc(this.$route.params.id);
+        this.ref.questions = firebase.firestore().collection('questions').where('topic', '==', this.ref.topic.id).orderBy("date", 'desc');
+
+        if (!this.$store.state.loading.topics) {
+            this.bindTopic()
+        }
     },
     methods: {
         renderQuestionProgressBar () {
@@ -149,35 +150,15 @@ export default {
                 this.question_bar = current / total * 100
             }
         },
-        init () {
-            this.ref.topic = firebase.firestore().collection('topics').doc(this.$route.params.id);
-            this.ref.questions = firebase.firestore().collection('questions').where('topic', '==', this.ref.topic.id).orderBy("date", 'desc');
-
-            if (this.$store.state.loading.topics) {  /// Topic data not ready yet, so we fetch it.
-                this.ref.topic.get().then((data) => {
-                    if (data.exists) {
-                        this.$bind('topic', this.ref.topic).then(() => {  /// It will add this topic's data to Vuex
-                            this.loading.metadata = false;
-                            this.bindQuestions();
-                        })
-                    }
-                    else {  /// Return 404 if topic ID does not exist
-                        this.loading.metadata = false;
-                        this.notFound = true;
-                    }
-                });
+        bindTopic () {
+            if (this.$store.state.topics.hasOwnProperty(this.$route.params.id)) {
+                this.loading.metadata = false;
+                this.bindQuestions();
             }
-            else {   /// Topic data downloaded and present on Vuex
-                if (this.$store.state.topics.hasOwnProperty(this.$route.params.id)) {
-                    this.loading.metadata = false;
-                    this.bindQuestions();
-                }
-                else {
-                    this.loading.metadata = false;
-                    this.notFound = true;
-                }
-            };
-
+            else {
+                this.loading.metadata = false;
+                this.notFound = true;
+            }
         },
         bindQuestions () {
             this.$bind('questions', this.ref.questions).then(() => {
