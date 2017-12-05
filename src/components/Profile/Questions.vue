@@ -142,7 +142,7 @@ export default {
         paginatedQuestions: function () {
             if (this.filter.selected) {
                 return this.questions.filter((question) => {
-                    return question.topic.id == this.filter.selected
+                    return question.topic == this.filter.selected
                 }).slice(0, this.paging.question_per_page * this.paging.current);
             }
             else {
@@ -169,7 +169,7 @@ export default {
         buildFilter () {
             return new Promise((resolve, reject) => {
                 this.questions.forEach((question) => {
-                    let topicID = question.topic.id,
+                    let topicID = question.topic,
                         topicData = this.$store.state.topics[topicID];
 
                     if (!topicData) {
@@ -178,7 +178,7 @@ export default {
 
                     let levelID = topicData.level;
 
-                    if (!this.filter.options[levelID]) {
+                    if (!this.filter.options[levelID]) { 
                         this.filter.options[levelID] = this.$store.state.levels[levelID];
                         this.filter.options[levelID].id = levelID;
                         this.filter.options[levelID].topics = [];

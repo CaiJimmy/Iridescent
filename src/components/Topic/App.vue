@@ -153,7 +153,7 @@ export default {
         },
         init () {
             this.ref.topic = firebase.firestore().collection('topics').doc(this.$route.params.id);
-            this.ref.questions = firebase.firestore().collection('questions').where('topic', '==', this.ref.topic).orderBy("date", 'desc');
+            this.ref.questions = firebase.firestore().collection('questions').where('topic', '==', this.ref.topic.id).orderBy("date", 'desc');
 
             if (this.$store.state.loading.topics) {  /// Topic data not ready yet, so we fetch it.
                 this.ref.topic.get().then((data) => {

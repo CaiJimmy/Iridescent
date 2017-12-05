@@ -12,12 +12,12 @@
         <md-card class="questionCard">
             <md-card-header v-if="users.hasOwnProperty(question.author) && !users[question.author].loading">
                 <md-avatar>
-                    <img :src="topics[question.topic.id].image"
-                        :alt="topics[question.topic.id].name">
+                    <img :src="topics[question.topic].image"
+                        :alt="topics[question.topic].name">
                 </md-avatar>
                 <div class="md-title">
-                    <router-link :to="{ path: '/profile/' + question.author, query: { topic: question.topic.id }}">
-                        {{ topics[question.topic.id].name }}
+                    <router-link :to="{ path: '/profile/' + question.author, query: { topic: question.topic }}">
+                        {{ topics[question.topic].name }}
                     </router-link>
                 </div>
                 <div class="md-subhead">

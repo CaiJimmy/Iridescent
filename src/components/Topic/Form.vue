@@ -155,7 +155,7 @@ export default {
             this.loading.form = true;
             this.$validator.validateAll().then((result) => {
                 if (result) {
-                    this.question.topic = this.topicRef;
+                    this.question.topic = this.topicRef.id;
                     this.question.author = firebase.auth().currentUser.uid;
 
                     var ref = firebase.firestore().collection('questions/');
