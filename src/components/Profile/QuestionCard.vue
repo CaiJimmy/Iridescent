@@ -69,6 +69,14 @@ export default {
     components: {
         QuestionForm
     },
+    computed:{
+        users(){
+            return this.$store.state.users
+        },
+        topics(){
+            return this.$store.state.topics
+        }
+    },
     methods: {
         exitEditing () {
             this.editing = false
