@@ -67,7 +67,6 @@
         </md-dialog>
 
         <md-dialog :md-active.sync="showProfile"
-            :md-fullscreen="false"
             class="embedProfile">
             <md-toolbar class="embedProfile--toolbar">
                 <h3 class="md-title"
