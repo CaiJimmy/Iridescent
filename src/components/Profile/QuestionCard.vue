@@ -1,12 +1,12 @@
 <template>
-    <md-content class="md-elevation-1"
+    <div class="md-elevation-1"
         v-if="editing">
         <question-form type="edit"
             :questionData="question"
             :questionID="question.id"
             :callback="exitEditing"
             :snackbar="snackbar" />
-    </md-content>
+    </div>
     <div v-on:copy="copyBlock"
         v-else>
         <md-card class="questionCard">
