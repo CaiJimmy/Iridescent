@@ -13,6 +13,8 @@
             <h2>{{ user.email }} |
                 <strong>{{ userRole }}</strong>
             </h2>
+            <md-button class="md-primary"
+                v-on:click="$router.push({ path: '/profile/' + user.uid})">Perfil</md-button>
             <md-button class="md-accent"
                 v-on:click="signOut()">Cerrar sesión</md-button>
         </div>
