@@ -42,8 +42,16 @@
                     md-mode="indeterminate"
                     :md-diameter="30"
                     :md-stroke="3"></md-progress-bar>
-                <router-view v-else
-                    :user="user" />
+
+                <div v-else>
+                    <QuestionsList :user="user"
+                        :embed="embed"
+                        v-if="embed"
+                        :topicID="topicID" />
+                    <router-view v-else
+                        :embed="embed"
+                        :user="user" />
+                </div>
             </div>
         </div>
     </div>
@@ -51,12 +59,18 @@
 <script>
 import * as firebase from "firebase/app";
 import "firebase/firestore";
+import QuestionsList from './Questions.vue'
 
 export default {
-    props: ['userID'],
+    props: ['userID', 'embed', 'topicID'],
+    components: {
+        QuestionsList
+    },
     metaInfo () {
-        return {
-            title: this.user.displayName || 'Perfil'
+        if (!this.embed) {
+            return {
+                title: this.user.displayName || 'Perfil'
+            }
         }
     },
     data () {
@@ -157,5 +171,4 @@ export default {
 		padding: 15px;
 	}
 }
-
 </style>

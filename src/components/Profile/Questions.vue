@@ -8,7 +8,8 @@
                 <strong>{{ $store.state.topics[filter.selected].name }}</strong>
             </h3>
             <md-button class="md-primary"
-                @click="$router.push('/t/' + filter.selected)">Ir al tema</md-button>
+                @click="$router.push('/t/' + filter.selected)"
+                v-if="!embed">Ir al tema</md-button>
             <md-button @click="filter.selected = null">Mostrar todas</md-button>
         </md-toolbar>
         <div class="md-layout md-gutter md-layout-column-xsmall md-alignment ">
@@ -82,7 +83,7 @@ import QuestionCard from './QuestionCard.vue';
 import MugenScroll from 'vue-mugen-scroll';
 
 export default {
-    props: ['user'],
+    props: ['user', 'embed', 'topicID'],
     components: {
         QuestionCard,
         MugenScroll
@@ -115,17 +116,19 @@ export default {
             this.paging.end = false;
             this.paging.current = 1;
 
-            if (this.filter.selected) {
-                this.$router.replace({
-                    query: {
-                        topic: this.filter.selected
-                    }
-                })
-            }
-            else {
-                this.$router.replace({   /// Remove query string if there's no selected topic
-                    query: {}
-                })
+            if (!this.embed) {
+                if (this.filter.selected) {
+                    this.$router.replace({
+                        query: {
+                            topic: this.filter.selected
+                        }
+                    })
+                }
+                else {
+                    this.$router.replace({   /// Remove query string if there's no selected topic
+                        query: {}
+                    })
+                }
             }
         },
         "$route.query.topic": function () {
@@ -159,7 +162,7 @@ export default {
         bindQuestions () {
             this.$bind('questions', firebase.firestore().collection('questions').where('author', '==', this.user.uid).orderBy("date", 'desc')).then(() => {
                 this.buildFilter().then(() => {
-                    let topicID = this.$route.query.topic;
+                    let topicID = this.topicID || this.$route.query.topic;
 
                     if (topicID) {
                         this.filter.selected = topicID;
