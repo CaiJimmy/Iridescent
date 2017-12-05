@@ -149,6 +149,7 @@ export default {
 			color: #fff;
 			font-weight: lighter;
 			margin-bottom: 0;
+            line-height: 1;
 		}
 
 		h2 {
