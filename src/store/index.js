@@ -62,7 +62,7 @@ export default new Vuex.Store({
 			commit
 		}) {
 			/// TODO: Replace it with VuexFire
-			firebase.firestore().collection("topics").onSnapshot((snapshot) => { /// Listen and download /topics, and save it on state.topics
+			firebase.firestore().collection("topics").orderBy('name', 'asc').onSnapshot((snapshot) => { /// Listen and download /topics, and save it on state.topics
 				snapshot.forEach((doc) => {
 					let topic = doc.data();
 					topic.id = doc.id;
@@ -75,7 +75,7 @@ export default new Vuex.Store({
 				commit('ready', 'topics');
 			});
 
-			firebase.firestore().collection("levels").onSnapshot((snapshot) => {
+			firebase.firestore().collection("levels").orderBy('name', 'asc').onSnapshot((snapshot) => {
 				snapshot.forEach((doc) => {
 					let level = doc.data();
 					level.id = doc.id;
