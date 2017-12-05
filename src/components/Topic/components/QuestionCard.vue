@@ -93,3 +93,10 @@ export default {
     }
 }
 </script>
+<style lang="scss" scoped>
+.questionCard {
+	.md-list-item-text {
+		white-space: normal !important;
+	}
+}
+</style>
