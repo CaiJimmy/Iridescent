@@ -35,14 +35,13 @@ import * as firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
 
-import Auth from '@/mixins/auth.js';
+import { validAccountCheck, roleCheck } from '@/methods/auth.js';
 export default {
 	name: "app",
 	metaInfo: {
 		title: 'Inicio',
 		titleTemplate: '%s | Elysian'
 	},
-	mixins: [Auth],
 	data () {
 		return {
 			snackbar: {
@@ -57,7 +56,7 @@ export default {
 	created () {
 		firebase.auth().onAuthStateChanged((user) => {
 			if (user) {
-				this.validAccountCheck().then((validAccount) => {  /// Check if user has a valid email account
+				validAccountCheck().then((validAccount) => {  /// Check if user has a valid email account
 
 					if (validAccount) {
 						this.redirect();
@@ -70,7 +69,7 @@ export default {
 					};
 
 				}).then(() => {
-					this.roleCheck().then((isAdmin) => {
+					roleCheck().then((isAdmin) => {
 						this.$store.commit('isAdmin', isAdmin);
 					});
 				})

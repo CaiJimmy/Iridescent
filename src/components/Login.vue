@@ -19,10 +19,9 @@
 <script>
 import * as firebase from "firebase/app";
 import "firebase/auth";
-import Auth from '@/mixins/auth.js'
+
 export default {
 	name: "Login",
-	mixins: [Auth],
 	data: function () {
 		return {
 			loading: {
@@ -68,19 +67,19 @@ export default {
 </script>
 <style>
 .md-icon.md-empty-state-icon {
-  width: 160px !important;
-  min-width: 160px !important;
-  height: 160px !important;
-  font-size: 160px !important;
-  margin: 0 !important;
+	width: 160px !important;
+	min-width: 160px !important;
+	height: 160px !important;
+	font-size: 160px !important;
+	margin: 0 !important;
 }
 </style>
 <style scoped lang="scss">
 #loginScreen {
-  min-height: 100vh;
-  display: flex;
-  display: -webkit-flex;
-  justify-content: center;
-  align-items: center;
+	min-height: 100vh;
+	display: flex;
+	display: -webkit-flex;
+	justify-content: center;
+	align-items: center;
 }
 </style>

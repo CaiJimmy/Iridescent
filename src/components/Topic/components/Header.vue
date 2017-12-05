@@ -45,7 +45,7 @@ import * as firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/storage";
 import * as Vibrant from 'node-vibrant'
-import resizeImage from '@/mixins/resizeImage.js';
+import resizeImage from '@/methods/resizeImage.js';
 import EditTopic from '@/components/Settings/Topics/Add.vue';
 
 export default {

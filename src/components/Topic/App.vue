@@ -40,7 +40,7 @@ import * as firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
 import TopicHeader from './components/Header.vue';
-import fetchUserDatas from '@/mixins/fetchUserDatas.js';
+import fetchUserDatas from '@/methods/fetchUserDatas.js';
 
 export default {
     name: 'TopicPage',
