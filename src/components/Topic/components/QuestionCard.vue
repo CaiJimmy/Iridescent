@@ -50,11 +50,23 @@
                 </md-list>
             </md-card-content>
             <md-card-actions>
+                <md-button v-if="isAdmin"
+                    v-on:click="moveQuestion = true">Mover la pregunta</md-button>
                 <md-button v-if="question.author == $store.state.user.uid || isAdmin"
                     v-on:click="editQuestion()">Editar</md-button>
             </md-card-actions>
         </md-card>
+
+        <md-dialog :md-active.sync="moveQuestion">
+            <md-dialog-title>Mover Pregunta</md-dialog-title>
+            <MoveQuestion :currentTopicID="question.topic"
+                :questionID="question.id"
+                :questionData="question"
+                :authorData="users[question.author]" />
+        </md-dialog>
+
         <md-dialog :md-active.sync="showProfile"
+            :md-fullscreen="false"
             class="embedProfile">
             <md-toolbar class="embedProfile--toolbar">
                 <h3 class="md-title"
@@ -77,18 +89,21 @@
 <script>
 import QuestionForm from './../Form.vue';
 import ProfilePage from '@/components/Profile/App.vue';
+import MoveQuestion from './MoveQuestion.vue';
 
 export default {
     data () {
         return {
             editing: false,
-            showProfile: false
+            showProfile: false,
+            moveQuestion: false
         }
     },
     props: ['question', 'snackbar'],
     components: {
         QuestionForm,
-        ProfilePage
+        ProfilePage,
+        MoveQuestion
     },
     computed: {
         users () {

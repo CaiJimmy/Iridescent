@@ -49,24 +49,43 @@
                 </md-list>
             </md-card-content>
             <md-card-actions>
+                <md-button v-if="isAdmin"
+                    v-on:click="moveQuestion = true">Mover la pregunta</md-button>
                 <md-button v-if="question.author == $store.state.user.uid || isAdmin"
                     v-on:click="editQuestion()">Editar</md-button>
             </md-card-actions>
         </md-card>
+
+        <md-dialog :md-active.sync="moveQuestion"
+            :md-fullscreen="false">
+            <md-dialog-title>Mover Pregunta</md-dialog-title>
+            <div class="md-dialog-content">
+                <MoveQuestion :currentTopicID="question.topic"
+                    :questionID="question.id"
+                    :questionData="question"
+                    :authorData="users[question.author]"
+                    :snackbar="snackbar"
+                    :callback="moveQuestionCallback" />
+            </div>
+        </md-dialog>
+
     </div>
 </template>
 <script>
 import QuestionForm from '@/components/Topic/Form.vue';
+import MoveQuestion from '@/components/Topic/components/MoveQuestion.vue';
 
 export default {
     data () {
         return {
             editing: false,
+            moveQuestion: false
         }
     },
     props: ['question', 'snackbar'],
     components: {
-        QuestionForm
+        QuestionForm,
+        MoveQuestion
     },
     computed: {
         users () {
@@ -80,6 +99,9 @@ export default {
         }
     },
     methods: {
+        moveQuestionCallback () {
+            this.moveQuestion = false;
+        },
         exitEditing () {
             this.editing = false
         },
