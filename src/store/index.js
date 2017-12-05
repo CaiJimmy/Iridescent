@@ -98,17 +98,6 @@ export default new Vuex.Store({
 				commit('addUser', userData);
 				commit('ready', 'user');
 			});
-
-			firebase.firestore().collection('questions').orderBy("date", 'desc').onSnapshot((snapshot) => {
-				snapshot.forEach((doc) => {
-					commit('updateObject', {
-						'object': 'updates',
-						'key': doc.id,
-						'data': doc.data()
-					});
-				});
-				commit('ready', 'updates');
-			});
 		}
 	}
 })
