@@ -4,7 +4,7 @@
             v-if="filter.selected"
             md-elevation="1">
             <h3 class="md-title"
-                style="flex: 1">Preguntas bajo el tema de
+                style="flex: 1">{{ filteredQuestions.length }} preguntas bajo el tema de
                 <strong>{{ $store.state.topics[filter.selected].name }}</strong>
             </h3>
             <md-button class="md-primary"
@@ -19,7 +19,7 @@
                         :md-diameter="30"
                         :md-stroke="3"></md-progress-spinner>
                 </div>
-                <md-card v-if="questions.length">
+                <md-card v-else>
                     <md-list>
                         <md-subheader class="md-primary">Filtrar por temas</md-subheader>
                         <div v-for="level in filter.options"
@@ -140,13 +140,15 @@ export default {
     },
     computed: {
         paginatedQuestions: function () {
+            return this.filteredQuestions.slice(0, this.paging.question_per_page * this.paging.current);
+        },
+        filteredQuestions: function () {
             if (this.filter.selected) {
                 return this.questions.filter((question) => {
                     return question.topic == this.filter.selected
-                }).slice(0, this.paging.question_per_page * this.paging.current);
-            }
-            else {
-                return this.questions.slice(0, this.paging.question_per_page * this.paging.current);
+                })
+            } else {
+                return this.questions;
             }
         },
         loadMoreDisabled: function () {
@@ -178,7 +180,7 @@ export default {
 
                     let levelID = topicData.level;
 
-                    if (!this.filter.options[levelID]) { 
+                    if (!this.filter.options[levelID]) {
                         this.filter.options[levelID] = this.$store.state.levels[levelID];
                         this.filter.options[levelID].id = levelID;
                         this.filter.options[levelID].topics = [];
