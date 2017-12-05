@@ -12,13 +12,11 @@ export default new Vuex.Store({
 		topics: {},
 		levels: {},
 		isAdmin: false,
-		updates: {},
 
 		loading: {
 			topics: true,
 			levels: true,
-			role: true,
-			updates: true
+			role: true
 		}
 	},
 	mutations: {
