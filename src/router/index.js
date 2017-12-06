@@ -39,28 +39,36 @@ var router = new Router({
 			}
 		},
 		{
-			path: '/t/:id/',
+			path: '/t/:TopicID/',
 			component: require('@/components/Topic/App.vue').default,
 			auth: true,
-			children: [{
-				path: '',
-				component: require('@/components/Topic/Home.vue').default
-			}]
-		},
-		{
-			path: '/exam/:topicID/',
-			component: require('@/components/Exam/App.vue').default,
 			props: true,
 			children: [{
 					path: '',
-					component: require('@/components/Exam/Home.vue').default
-				}, {
-					path: 'progress',
-					component: require('@/components/Exam/InProgress.vue').default
+					component: require('@/components/Topic/Home.vue').default
 				},
 				{
-					path: 'results',
-					component: require('@/components/Exam/Results.vue').default
+					path: 'exam',
+					component: require('@/components/Exam/App.vue').default,
+					props: true,
+					children: [{
+							path: '',
+							component: require('@/components/Exam/Home.vue').default
+						}, {
+							path: 'progress',
+							component: require('@/components/Exam/InProgress.vue').default,
+							meta: {
+								'returnDisabled': true
+							},
+						},
+						{
+							path: 'results',
+							component: require('@/components/Exam/Results.vue').default,
+							meta: {
+								'returnDisabled': true
+							},
+						}
+					]
 				}
 			]
 		},

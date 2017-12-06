@@ -10,7 +10,7 @@
 
 				<md-button class="md-icon-button"
 				    @click="goBack"
-				    v-if="$route.path !== '/'">
+				    v-if="$route.path !== '/' && !$route.meta.returnDisabled">
 					<md-icon>arrow_back</md-icon>
 				</md-button>
 

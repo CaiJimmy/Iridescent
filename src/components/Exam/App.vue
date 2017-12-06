@@ -1,5 +1,6 @@
 <template>
-    <router-view :questions="questions"
+    <router-view
+        :questions="questions"
         :chosen="chosen"
         :shuffledQuestions="shuffledQuestions"
         :config="config"
@@ -23,21 +24,18 @@ export default {
                 numberOfQuestions: 10,
                 examTime: 20,
             },
-            chosen: {
-
-            }
+            chosen: {}
         }
     },
     created () {
-        this.ref.questions = firebase.firestore().collection('questions').where('topic', '==', this.topicID).orderBy("date", 'desc');
-        this.$bind('questions', this.ref.questions);
-        if (this.topic.color) {
-            this.$store.commit('setPrimaryColor', this.topic.color);
-        };
+
     },
     computed: {
         topic () {
             return this.$store.state.topics[this.topicID];
+        },
+        questions(){
+            return this.$parent.questions;
         }
     },
     methods: {

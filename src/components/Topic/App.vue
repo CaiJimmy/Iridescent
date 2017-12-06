@@ -32,13 +32,14 @@
                     md-sync-route>
                     <md-tab id="tab-home"
                         md-label="Preguntas"
-                        :to="'/t/' + $route.params.id + '/'"></md-tab>
+                        :to="'/t/' + TopicID + '/'"></md-tab>
                     <md-tab id="tab-pages"
                         md-label="Examinar"
-                        :to="'/exam/' + $route.params.id"></md-tab>
+                        :to="'/t/' + TopicID + '/exam'"></md-tab>
                 </md-tabs>
-                <router-view class="mainContent"
-                    :key="$route.name + ($route.params.id || '')"></router-view>
+                <router-view :TopicID="TopicID"
+                    class="mainContent"
+                    :key="$route.name + (TopicID|| '')"></router-view>
             </div>
         </div>
         <md-snackbar :md-active.sync="snackbar.display">{{ snackbar.message }}</md-snackbar>
@@ -54,6 +55,7 @@ import fetchUserDatas from '@/methods/fetchUserDatas.js';
 
 export default {
     name: 'TopicPage',
+    props: ['TopicID'],
     components: {
         TopicHeader
     },
@@ -101,8 +103,8 @@ export default {
             return this.questions.slice(0, this.paging.question_per_page * this.paging.current);
         },
         topic () {
-            if (!this.$store.state.loading.topics && this.$store.state.topics.hasOwnProperty(this.$route.params.id)) {  /// If not ready yet, then wait till it's ready, but return .name to avoid error
-                return this.$store.state.topics[this.$route.params.id]
+            if (!this.$store.state.loading.topics && this.$store.state.topics.hasOwnProperty(this.TopicID)) {  /// If not ready yet, then wait till it's ready, but return .name to avoid error
+                return this.$store.state.topics[this.TopicID]
             }
             else {
                 return {};
@@ -127,8 +129,8 @@ export default {
         paginatedQuestions: function () {
             fetchUserDatas(this.paginatedQuestions);
         },
-        '$route.params.id': function (id) {  /// When topic ID changes, re-render page
-            if (this.$route.params.hasOwnProperty('id')) {
+        TopicID: function (id) {  /// When topic ID changes, re-render page
+            if (this.TopicID) {
                 this.loading = {
                     metadata: true,
                     questions: true,
@@ -144,7 +146,7 @@ export default {
         }
     },
     created: function () {
-        this.ref.topic = firebase.firestore().collection('topics').doc(this.$route.params.id);
+        this.ref.topic = firebase.firestore().collection('topics').doc(this.TopicID);
         this.ref.questions = firebase.firestore().collection('questions').where('topic', '==', this.ref.topic.id).orderBy("date", 'desc');
 
         if (!this.$store.state.loading.topics) {
@@ -161,7 +163,7 @@ export default {
             }
         },
         bindTopic () {
-            if (this.$store.state.topics.hasOwnProperty(this.$route.params.id)) {
+            if (this.$store.state.topics.hasOwnProperty(this.TopicID)) {
                 this.loading.metadata = false;
                 this.bindQuestions();
             }
