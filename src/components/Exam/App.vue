@@ -1,6 +1,13 @@
 <template>
     <div class="container extend">
-        <router-view :questions="questions"
+        <md-empty-state v-if="!questions.length"
+            md-icon="question_answer"
+            md-label="No hay preguntas"
+            md-description="No hay preguntas bajo este tema para poder realizar examen">
+        </md-empty-state>
+
+        <router-view v-else
+            :questions="questions"
             :chosen="chosen"
             :shuffledQuestions="shuffledQuestions"
             :config="config"
@@ -26,9 +33,6 @@ export default {
             },
             chosen: {}
         }
-    },
-    created () {
-
     },
     computed: {
         topic () {
