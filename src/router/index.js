@@ -49,20 +49,24 @@ var router = new Router({
 				},
 				{
 					path: 'exam',
-					component: require('@/components/Exam/App.vue').default,
+					component: () =>
+						import ('@/components/Exam/App.vue'),
 					children: [{
 							path: '',
-							component: require('@/components/Exam/Home.vue').default
+							component: () =>
+								import ('@/components/Exam/Home.vue')
 						}, {
 							path: 'progress',
-							component: require('@/components/Exam/InProgress.vue').default,
+							component: () =>
+								import ('@/components/Exam/InProgress.vue'),
 							meta: {
 								'returnDisabled': true
 							},
 						},
 						{
 							path: 'results',
-							component: require('@/components/Exam/Results.vue').default,
+							component: () =>
+								import ('@/components/Exam/Results.vue'),
 							meta: {
 								'returnDisabled': true
 							},
