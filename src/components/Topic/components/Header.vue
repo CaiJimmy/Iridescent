@@ -7,8 +7,8 @@
 			<h2 v-if="topic.description">{{ topic.description }}</h2>
 			<md-button class="md-raised"
 			    v-on:click="dialog.editTopic = true"
-			    v-if="isAdmin">Editar</md-button>
-			<div v-if="isAdmin"
+			    v-if="isAdmin && topicRef">Editar</md-button>
+			<div v-if="isAdmin && topicRef"
 			    class="changeHeaderImage">
 				<md-progress-spinner v-if="uploading"
 				    :md-diameter="30"
@@ -31,8 +31,8 @@
 
 		<md-dialog :md-fullscreen="false"
 		    :md-active.sync="dialog.editTopic">
-			<edit-topic :topicRef="$parent.ref.topic"
-			    :topicData="$parent.topic"
+			<edit-topic :topicRef="topicRef"
+			    :topicData="topic"
 			    :callback="closeDialog"
 			    type="edit" />
 		</md-dialog>

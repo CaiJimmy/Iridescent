@@ -27,6 +27,16 @@
             <div v-else>
                 <TopicHeader :topic="topic"
                     :topicRef="ref.topic" />
+                <md-tabs class="md-primary"
+                    md-alignment="centered"
+                    md-sync-route>
+                    <md-tab id="tab-home"
+                        md-label="Preguntas"
+                        :to="'/t/' + $route.params.id + '/'"></md-tab>
+                    <md-tab id="tab-pages"
+                        md-label="Examinar"
+                        :to="'/exam/' + $route.params.id"></md-tab>
+                </md-tabs>
                 <router-view class="mainContent"
                     :key="$route.name + ($route.params.id || '')"></router-view>
             </div>

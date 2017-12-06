@@ -31,7 +31,8 @@ var router = new Router({
 
 		{
 			path: '/settings/topics/',
-			component: () => import('@/components/Settings/Topics.vue'),
+			component: () =>
+				import ('@/components/Settings/Topics.vue'),
 			auth: true,
 			meta: {
 				isAdmin: true
@@ -47,6 +48,23 @@ var router = new Router({
 			}]
 		},
 		{
+			path: '/exam/:topicID/',
+			component: require('@/components/Exam/App.vue').default,
+			props: true,
+			children: [{
+					path: '',
+					component: require('@/components/Exam/Home.vue').default
+				}, {
+					path: 'progress',
+					component: require('@/components/Exam/InProgress.vue').default
+				},
+				{
+					path: 'results',
+					component: require('@/components/Exam/Results.vue').default
+				}
+			]
+		},
+		{
 			path: '/login',
 			component: require('@/components/Login.vue').default
 		},
@@ -55,7 +73,7 @@ var router = new Router({
 			component: require('@/components/Profile/App.vue').default,
 			props: true,
 			meta: {
-				
+
 			},
 			children: [{
 				path: '/',

@@ -10,6 +10,7 @@
 		"build": "node build/build.js"
 	},
 	"dependencies": {
+		"@xkeshi/vue-countdown": "^0.5.0",
 		"firebase": "^4.6.2",
 		"node-sass": "^4.6.1",
 		"node-vibrant": "^3.0.0",
