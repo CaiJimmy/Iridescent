@@ -20,21 +20,23 @@
                         :md-diameter="30"
                         :md-stroke="3"></md-progress-spinner>
                 </div>
-                <md-card v-else>
-                    <md-list>
-                        <md-subheader class="md-primary">Filtrar por temas</md-subheader>
-                        <div v-for="level in filter.options"
-                            :key="level.id">
-                            <md-subheader>{{ level.name }}</md-subheader>
-                            <md-list-item v-for="topic in level.topics"
-                                :key="topic.id">
-                                <md-radio v-model="filter.selected"
-                                    :value="topic.id" />
-                                <span class="md-list-item-text topicName">{{ topic.name }}</span>
-                            </md-list-item>
-                        </div>
-                    </md-list>
-                </md-card>
+                <div v-else>
+                    <md-card v-if="questions.length">
+                        <md-list>
+                            <md-subheader class="md-primary">Filtrar por temas</md-subheader>
+                            <div v-for="level in filter.options"
+                                :key="level.id">
+                                <md-subheader>{{ level.name }}</md-subheader>
+                                <md-list-item v-for="topic in level.topics"
+                                    :key="topic.id">
+                                    <md-radio v-model="filter.selected"
+                                        :value="topic.id" />
+                                    <span class="md-list-item-text topicName">{{ topic.name }}</span>
+                                </md-list-item>
+                            </div>
+                        </md-list>
+                    </md-card>
+                </div>
             </div>
 
             <div class="md-layout-column md-layout-item md-size-75 md-small-size-100 md-gutter">
@@ -67,7 +69,7 @@
                     </div>
                     <md-empty-state v-else
                         md-icon="question_answer"
-                        md-label="Crear preguntas"
+                        md-label="Nothing..."
                         md-description="El usuario no ha publicado ninguna pregunta">
                     </md-empty-state>
                 </div>
@@ -112,15 +114,10 @@ export default {
         this.bindQuestions();
     },
     watch: {
-        questions: function(){
-            this.buildFilter().then(() => { /// Rebuild the filter when question list updates
-                let topicID = this.topicID || this.$route.query.topic;
-
-                if (topicID) {
-                    this.filter.selected = topicID;
-                };
-                this.loading = false;
-            }); 
+        questions: function () {
+            if (this.questions.length && !this.loading) {
+                this.buildFilter();/// Rebuild the filter when question list updates
+            }
         },
         "filter.selected": function () {
             this.paging.end = false;
@@ -170,7 +167,16 @@ export default {
     },
     methods: {
         bindQuestions () {
-            this.$bind('questions', firebase.firestore().collection('questions').where('author', '==', this.user.uid).orderBy("date", 'desc'))
+            this.$bind('questions', firebase.firestore().collection('questions').where('author', '==', this.user.uid).orderBy("date", 'desc')).then(() => {
+                this.buildFilter().then(() => { /// Rebuild the filter when question list updates
+                    let topicID = this.topicID || this.$route.query.topic;
+
+                    if (topicID) {
+                        this.filter.selected = topicID;
+                    };
+                    this.loading = false;
+                });
+            })
         },
         buildFilter () {
             return new Promise((resolve, reject) => {
