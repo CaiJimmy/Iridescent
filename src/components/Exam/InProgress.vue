@@ -54,6 +54,14 @@ export default {
         QuestionCard,
         VueCountdown
     },
+    created(){
+        if(!this.shuffledQuestions.length){
+            this.$router.replace('/t/' + this.topicID);
+        }
+        else{
+            window.scrollTo(0, 0);
+        }
+    },
     computed: {
         time () {
             return this.config.examTime * 60 * 1000;
@@ -61,7 +69,7 @@ export default {
     },
     methods: {
         submitExam () {
-            this.$router.replace('/exam/' + this.topicID + '/results');
+             this.$router.replace('/t/' + this.topicID + '/exam/results');
         },
         onCountdownProgress (data) {
             var total = this.time / 1000,

@@ -39,7 +39,7 @@ var router = new Router({
 			}
 		},
 		{
-			path: '/t/:TopicID/',
+			path: '/t/:topicID/',
 			component: require('@/components/Topic/App.vue').default,
 			auth: true,
 			props: true,
@@ -50,7 +50,6 @@ var router = new Router({
 				{
 					path: 'exam',
 					component: require('@/components/Exam/App.vue').default,
-					props: true,
 					children: [{
 							path: '',
 							component: require('@/components/Exam/Home.vue').default

@@ -1,17 +1,4 @@
 <template>
-    <div>
-        <TopicHeader :topic="topic" />
-        <md-tabs class="md-primary"
-            md-alignment="centered"
-            md-sync-route>
-            <md-tab id="tab-home"
-                md-label="Preguntas"
-                :to="'/t/' +  topic.id + '/'"></md-tab>
-            <md-tab id="tab-pages"
-                md-label="Examinar"
-                :to="'/exam/' + topic.id"></md-tab>
-        </md-tabs>
-        <div class="container mainContent">
             <md-card>
                 <md-card-header>
                     <div class="md-title">Examinar</div>
@@ -40,16 +27,9 @@
                     <md-button @click.native="validate()">Comenzar</md-button>
                 </md-card-actions>
             </md-card>
-        </div>
-    </div>
 </template>
 <script>
-import TopicHeader from '@/components/Topic/components/Header.vue';
-
 export default {
-    components: {
-        TopicHeader
-    },
     props: ['topic', 'questions', 'shuffledQuestions'],
     data () {
         return {

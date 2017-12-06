@@ -71,8 +71,13 @@ export default {
         }
     },
     created () {
-        this.checkAnswers();
-        window.scrollTo(0, 0);
+        if (!this.shuffledQuestions.length) {
+            this.$router.replace('/t/' + this.topicID);
+        }
+        else {
+            this.checkAnswers();
+            window.scrollTo(0, 0);
+        }
     },
     computed: {
         blankCount () {

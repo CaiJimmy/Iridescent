@@ -1,12 +1,13 @@
 <template>
-    <router-view
-        :questions="questions"
-        :chosen="chosen"
-        :shuffledQuestions="shuffledQuestions"
-        :config="config"
-        :onChosen="onChosen"
-        :topicID="topicID"
-        :topic="topic" />
+    <div class="container extend">
+        <router-view :questions="questions"
+            :chosen="chosen"
+            :shuffledQuestions="shuffledQuestions"
+            :config="config"
+            :onChosen="onChosen"
+            :topicID="topicID"
+            :topic="topic" />
+    </div>
 </template>
 <script>
 import * as firebase from "firebase/app";
@@ -15,7 +16,6 @@ export default {
     props: ['topicID'],
     data () {
         return {
-            questions: [],
             ref: {
                 questions: null
             },
@@ -34,7 +34,7 @@ export default {
         topic () {
             return this.$store.state.topics[this.topicID];
         },
-        questions(){
+        questions () {
             return this.$parent.questions;
         }
     },
@@ -50,7 +50,7 @@ export default {
             console.log(shuffledQuestions);
             this.shuffledQuestions = shuffledQuestions;
 
-            this.$router.replace('/exam/' + this.topicID + '/progress');
+            this.$router.replace('/t/' + this.topicID + '/exam/progress');
         },
         onChosen (questionID, letter) {
             this.chosen[questionID] = letter;
