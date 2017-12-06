@@ -44,9 +44,9 @@
 import * as firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/storage";
-import * as Vibrant from 'node-vibrant'
 import resizeImage from '@/methods/resizeImage.js';
 import EditTopic from '@/components/Settings/Topics/Add.vue';
+import getColorFromImage from '@/methods/getColorFromImage.js';
 
 export default {
 	props: ['topic', 'topicRef'],
@@ -119,10 +119,7 @@ export default {
 				this.uploadFile(resizedImage, `${this.topicRef.id}/${imageFile.name}`).then(async (snapshot) => {
 					let imageURL = snapshot.downloadURL;
 
-					let color = await Vibrant.from(URL.createObjectURL(imageFile)).getPalette()
-						.then((palette) => {
-							return palette.Muted.getRgb() || [0, 191, 165];  /// Return tea green as color in case Vibrant fails
-						});
+					let color = await getColorFromImage(URL.createObjectURL(imageFile));
 
 					this.topicRef.set({
 						image: imageURL,
