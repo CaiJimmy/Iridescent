@@ -1,7 +1,7 @@
 <template>
     <div class="container extend mainContent">
-        <div class="md-layout md-gutter mainGrid">
-            <div class="md-layout-item md-size-25">
+        <div class="md-layout md-gutter md-layout-column-xsmall md-alignment mainGrid">
+            <div class="md-layout-item md-size-25 md-small-size-100 md-gutter">
                 <md-card id="examDetails"
                     class="stickyCard">
                     <md-progress-bar class="md-accent"
@@ -22,7 +22,7 @@
                     </md-card-header>
                 </md-card>
             </div>
-            <div class="md-layout-item md-size-75">
+            <div class="md-layout-item md-size-75 md-small-size-100 md-gutter">
                 <QuestionCard v-for="(question,index) in shuffledQuestions"
                     :key="question.id"
                     :item="question"

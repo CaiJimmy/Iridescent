@@ -51,3 +51,12 @@ export default {
 }
 </script>
 
+<style lang="scss">
+.md-radio .md-radio-label{
+    height: auto!important;
+}
+
+.md-list-item-text{
+    white-space: normal!important;
+}
+</style>
