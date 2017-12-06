@@ -41,9 +41,6 @@ import QuestionCard from './QuestionCard.vue';
 import VueCountdown from '@xkeshi/vue-countdown'
 
 export default {
-    metaInfo: {
-        title: 'Examinar'
-    },
     props: ['shuffledQuestions', 'config', 'onChosen', 'topicID'],
     data () {
         return {

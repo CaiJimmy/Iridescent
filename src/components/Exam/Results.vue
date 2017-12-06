@@ -53,9 +53,6 @@
 import QuestionCard from './QuestionCard.vue';
 
 export default {
-    metaInfo: {
-        title: 'Resultado del examen'
-    },
     props: ['chosen', 'shuffledQuestions', 'topicID'],
     components: {
         QuestionCard
