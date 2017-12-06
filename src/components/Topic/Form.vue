@@ -108,7 +108,7 @@ export default {
     }),
     created () {
         if (this.type == 'edit') {
-            this.question = this.questionData;
+            this.question = JSON.parse(JSON.stringify(this.questionData));   /// Don't mutate the original data
         }
     },
     computed: {
