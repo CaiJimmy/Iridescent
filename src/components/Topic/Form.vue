@@ -62,16 +62,19 @@
                 </div>
             </md-card-actions>
         </md-card>
-
-        <md-dialog-confirm :md-active.sync="deleteConfirm.show"
-            v-if="deleteConfirm.selected"
-            md-title="Confirmación"
-            :md-content="'Estas seguro de que quieres eliminar la pregunta <strong>' + deleteConfirm.selected.title + '</strong>, publicado por <strong>' + $store.state.users[deleteConfirm.selected.author].displayName +'</strong>?'"
-            md-confirm-text="Sí"
-            md-cancel-text="Nope"
-            @md-cancel="deleteConfirm.show = false;"
-            @md-confirm="deleteQuestion(questionID)" />
-
+        <md-dialog :md-active.sync="deleteConfirm.show"
+            :md-fullscreen="false"
+            v-if="deleteConfirm.selected">
+            <md-dialog-title>Confirmación</md-dialog-title>
+            <div class="md-dialog-content"
+                v-html="deleteConfirmContent"></div>
+            <md-dialog-actions>
+                <md-button class="md-accent"
+                    @click="deleteQuestion(questionID)">Sí</md-button>
+                <md-button class="md-primary"
+                    @click="deleteConfirm.show = false">Nope</md-button>
+            </md-dialog-actions>
+        </md-dialog>
     </form>
 </template>
 <script>
@@ -109,6 +112,11 @@ export default {
         }
     },
     computed: {
+        "deleteConfirmContent" () {
+            let questionTitle = this.deleteConfirm.selected.title,
+                authorDisplayName = this.$store.state.users[this.deleteConfirm.selected.author].displayName
+            return 'Estas seguro de que quieres eliminar la pregunta <strong>' + questionTitle + '</strong>, publicado por <strong>' + authorDisplayName + '</strong>?'
+        },
         user () {
             if (this.type == 'edit') {
                 return this.$store.state.users[this.questionData.author];
