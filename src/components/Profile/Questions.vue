@@ -112,6 +112,16 @@ export default {
         this.bindQuestions();
     },
     watch: {
+        questions: function(){
+            this.buildFilter().then(() => { /// Rebuild the filter when question list updates
+                let topicID = this.topicID || this.$route.query.topic;
+
+                if (topicID) {
+                    this.filter.selected = topicID;
+                };
+                this.loading = false;
+            }); 
+        },
         "filter.selected": function () {
             this.paging.end = false;
             this.paging.current = 1;
@@ -160,16 +170,7 @@ export default {
     },
     methods: {
         bindQuestions () {
-            this.$bind('questions', firebase.firestore().collection('questions').where('author', '==', this.user.uid).orderBy("date", 'desc')).then(() => {
-                this.buildFilter().then(() => {
-                    let topicID = this.topicID || this.$route.query.topic;
-
-                    if (topicID) {
-                        this.filter.selected = topicID;
-                    };
-                    this.loading = false;
-                });
-            });
+            this.$bind('questions', firebase.firestore().collection('questions').where('author', '==', this.user.uid).orderBy("date", 'desc'))
         },
         buildFilter () {
             return new Promise((resolve, reject) => {
