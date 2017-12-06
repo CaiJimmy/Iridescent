@@ -17,6 +17,7 @@
                             v-if="correctAnswer">{{ letter.toUpperCase() }}. {{value}}</md-radio>
                         <md-radio :value="letter"
                             v-model="chosen"
+                            class="md-primary"
                             @change="onChoose"
                             v-else>{{ letter.toUpperCase() }}. {{value}}</md-radio>
                     </div>
@@ -52,11 +53,11 @@ export default {
 </script>
 
 <style lang="scss">
-.md-radio .md-radio-label{
-    height: auto!important;
+.md-radio .md-radio-label {
+	height: auto !important;
 }
 
-.md-list-item-text{
-    white-space: normal!important;
+.md-list-item-text {
+	white-space: normal !important;
 }
 </style>

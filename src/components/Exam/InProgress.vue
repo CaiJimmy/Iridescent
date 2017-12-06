@@ -4,7 +4,7 @@
             <div class="md-layout-item md-size-25 md-small-size-100 md-gutter">
                 <md-card id="examDetails"
                     class="stickyCard">
-                    <md-progress-bar class="md-accent"
+                    <md-progress-bar class="md-primary"
                         :md-value="examCountdownProgress"></md-progress-bar>
                     <md-card-header>
                         <div class="md-subhead">Quedan...</div>
