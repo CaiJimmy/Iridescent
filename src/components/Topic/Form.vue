@@ -50,7 +50,8 @@
                 <md-button class="md-primary"
                     @click.native="addQuestion()"
                     v-if="type == 'send'"
-                    :disabled="loading.form">Enviar</md-button>
+                    :disabled="loading.form"
+                    type="submit">Enviar</md-button>
                 <div v-if="type == 'edit'">
                     <md-button class="md-accent"
                         v-on:click="deleteQuestionConfirm()">Eliminar</md-button>
@@ -58,7 +59,8 @@
                         v-on:click="callback(questionID)">Cancelar</md-button>
                     <md-button class="md-primary"
                         @click.native="editQuestion()"
-                        :disabled="loading.form">Editar</md-button>
+                        :disabled="loading.form"
+                        type="submit">Editar</md-button>
                 </div>
             </md-card-actions>
         </md-card>
