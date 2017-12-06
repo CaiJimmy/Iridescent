@@ -17,7 +17,7 @@
 				<div v-if="$route.path == '/'">
 					<img class="siteLogo"
 					    src="/static/android-chrome-192x192.png" />
-					<span class="md-title">Elysian</span>
+					<span class="md-title">Iridescent</span>
 				</div>
 				<span v-else-if="!$route.meta.hideToolbarTitle"
 				    class="md-title">{{ $meta().refresh().titleChunk }}</span>
@@ -40,7 +40,7 @@ export default {
 	name: "app",
 	metaInfo: {
 		title: 'Inicio',
-		titleTemplate: '%s | Elysian'
+		titleTemplate: '%s | Iridescent'
 	},
 	data () {
 		return {

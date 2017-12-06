@@ -1,4 +1,4 @@
-# elysian
+# Iridescent
 
 > A Vue.js project
 
