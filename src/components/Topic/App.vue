@@ -71,12 +71,9 @@ export default {
         userQuestions: [],
 
         paging: {
-            current: 1,/// Current Page
             question_per_page: 20, /// Number of questions per page
-            clone: null,  /// Workaround: https://github.com/vuejs/vuefire/issues/83#issuecomment-338427854
             end: false,
-            loading: false,
-            oldCount: 0
+            loading: false
         },
 
         loading: {
@@ -88,7 +85,9 @@ export default {
         ref: {
             topic: null,
             questions: null,
-            userQuestions: null
+            userQuestions: null,
+            questionsFirst: null,
+            questionsNext: null
         },
 
         snackbar: {
@@ -99,9 +98,6 @@ export default {
         question_bar: 0
     }),
     computed: {
-        paginatedQuestions: function () {
-            return this.questions.slice(0, this.paging.question_per_page * this.paging.current);
-        },
         topic () {
             if (!this.$store.state.loading.topics && this.$store.state.topics.hasOwnProperty(this.topicID)) {  /// If not ready yet, then wait till it's ready, but return .name to avoid error
                 return this.$store.state.topics[this.topicID]
@@ -117,17 +113,11 @@ export default {
                 this.bindTopic()
             }
         },
-        questions: function () {
-            this.paging.end = false;
-        },
         userQuestions: function () {
             this.renderQuestionProgressBar();
         },
         "topic.questionCount": function () {
             this.renderQuestionProgressBar();
-        },
-        paginatedQuestions: function () {
-            fetchUserDatas(this.paginatedQuestions);
         },
         topicID: function (id) {  /// When topic ID changes, re-render page
             if (this.topicID) {
@@ -156,6 +146,65 @@ export default {
         }
     },
     methods: {
+        loadMore () {
+            if (this.paging.end) {
+                return;
+            };
+
+            this.paging.loading = true;
+            this.handleQuestions(this.ref.questionsNext).then((documentSnapshots) => {
+                this.paging.loading = false;
+
+                if (documentSnapshots.empty) {
+                    this.paging.end = true;
+                }
+            })
+        },
+        handleQuestions (ref) {
+            return new Promise((resolve, reject) => {
+                ref.onSnapshot((documentSnapshots) => {
+                    if (documentSnapshots.empty) {
+                        this.paging.end = true;
+                        resolve(documentSnapshots);
+                    };
+
+                    documentSnapshots.docChanges.forEach((change) => {
+                        let oldQuestionIndex = this.questions.findIndex((item) => {
+                            return item.id == change.doc.id;
+                        });
+                        let questionData = change.doc.data();
+                        questionData.id = change.doc.id;
+
+                        if (oldQuestionIndex == -1) {
+                            if (change.newIndex == 0 && change.oldIndex == -1) {   /// == New question added by user => prepend to array
+                                this.questions.unshift(questionData);
+                            }
+                            else {   /// Rest of questions are ordered by date, so there's no need to do so
+                                this.questions.push(questionData);
+                            }
+                            console.log("New question: ", change);
+                        }
+                        else {
+                            if (change.type === "removed") {
+                                this.questions.splice(oldQuestionIndex, 1);
+                            }
+                            else {
+                                this.questions[oldQuestionIndex] = questionData;
+                            }
+                        }
+                    });
+
+                    var lastVisible = documentSnapshots.docs[documentSnapshots.docs.length - 1];  /// Build query for next page
+
+                    this.ref.questionsNext = this.ref.questions
+                        .startAfter(lastVisible)
+                        .limit(this.paging.question_per_page);
+
+                    fetchUserDatas(documentSnapshots)
+                    resolve(documentSnapshots);
+                });
+            });
+        },
         renderQuestionProgressBar () {
             if (this.topic.questionCount) {
                 let current = this.userQuestions.length,
@@ -175,9 +224,12 @@ export default {
             }
         },
         bindQuestions () {
-            this.$bind('questions', this.ref.questions).then(() => {
+            this.ref.questionsFirst = this.ref.questions.limit(this.paging.question_per_page);
+
+            this.handleQuestions(this.ref.questionsFirst).then(() => {
                 this.loading.questions = false;
-            })
+            });
+
             this.ref.userQuestions = this.ref.questions.where('author', '==', firebase.auth().currentUser.uid);
             this.$bind('userQuestions', this.ref.userQuestions).then(() => {
                 this.loading.userQuestions = false;
@@ -186,41 +238,6 @@ export default {
             if (this.topic.color) {
                 this.$store.commit('setPrimaryColor', this.topic.color);
             }
-        },
-        loadMore () {
-            if (this.paging.end) {
-                return;
-            };
-
-            if (this.paging.question_per_page * this.paging.current >= this.questions.length) {
-                this.paging.end = true;
-                return;
-            };
-
-            this.paging.current += 1;
-        },
-        loadMore_old () {   /// Real paging, without fetching all questions
-            if (this.paging.loading) {
-                return;
-            };
-
-            /// TODO: https://github.com/vuejs/vuefire/issues/83
-            this.paging.clone = this.questions;
-
-            this.paging.oldCount = this.paging.clone.length;
-
-            this.paging.loading = true;
-            return this.$bind('questions', this.ref.questions.limit((this.paging.current + 1) * this.paging.question_per_page)).then(() => {
-                this.paging.clone = null
-                this.paging.current += 1;
-                this.paging.loading = false;
-            }).then(() => {
-                if (this.paging.oldCount == this.questions.length) {  /// If new data is same as old one, then there's no more data to be loaded
-                    this.paging.end = true;
-                    this.snackbar.message = 'Todas las preguntas han sido cargadas'
-                    this.snackbar.display = true;
-                };
-            })
         }
     }
 }

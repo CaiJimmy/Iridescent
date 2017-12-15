@@ -98,7 +98,7 @@ export default {
             return this.$parent.question_bar;
         },
         questions: function () {
-            return (this.$parent.paginatedQuestions)
+            return (this.$parent.questions)
         },
         userQuestions: function () {
             return this.$parent.userQuestions
