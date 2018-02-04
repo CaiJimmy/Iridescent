@@ -182,7 +182,6 @@ export default {
                             else {   /// Rest of questions are ordered by date, so there's no need to do so
                                 this.questions.push(questionData);
                             }
-                            console.log("New question: ", change);
                         }
                         else {
                             if (change.type === "removed") {
@@ -194,10 +193,14 @@ export default {
                         }
                     });
 
-                    var lastVisible = documentSnapshots.docs[documentSnapshots.docs.length - 1];  /// Build query for next page
-
+                    var lastVisible = documentSnapshots.docChanges[documentSnapshots.docChanges.length - 1];  /// Build query for next page
+                    
+                    if(!lastVisible){
+                        return;
+                    };
+                    
                     this.ref.questionsNext = this.ref.questions
-                        .startAfter(lastVisible)
+                        .startAfter(lastVisible.doc)
                         .limit(this.paging.question_per_page);
 
                     fetchUserDatas(documentSnapshots)
