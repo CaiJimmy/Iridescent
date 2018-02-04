@@ -193,14 +193,15 @@ export default {
                         }
                     });
 
-                    var lastVisible = documentSnapshots.docChanges[documentSnapshots.docChanges.length - 1];  /// Build query for next page
+                    console.log(documentSnapshots);
+                    let lastVisible = documentSnapshots.docs[documentSnapshots.size - 1];  /// Build query for next page
                     
                     if(!lastVisible){
                         return;
                     };
-                    
+
                     this.ref.questionsNext = this.ref.questions
-                        .startAfter(lastVisible.doc)
+                        .startAfter(lastVisible)
                         .limit(this.paging.question_per_page);
 
                     fetchUserDatas(documentSnapshots)
