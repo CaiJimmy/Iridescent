@@ -9,7 +9,7 @@
     </div>
     <div v-on:copy="copyBlock"
         v-else>
-        <md-card class="questionCard">
+        <md-card class="questionCard" :id="question.id">
             <md-card-header v-if="users.hasOwnProperty(question.author) && !users[question.author].loading">
                 <md-avatar>
                     <img :src="users[question.author].photoURL"
