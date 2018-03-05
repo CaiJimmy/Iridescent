@@ -13,6 +13,9 @@
 				    v-on:click="login()">Comenzar</md-button>
 			</md-empty-state>
 		</div>
+		<md-snackbar :md-duration="10000"
+		    :md-active.sync="snackbar.display"
+		    md-position="left">{{ snackbar.message }}</md-snackbar>
 	</div>
 </template>
 
@@ -26,6 +29,10 @@ export default {
 		return {
 			loading: {
 				login: false
+			},
+			snackbar: {
+				display: false,
+				message: null
 			}
 		};
 	},
@@ -49,15 +56,10 @@ export default {
 			}).catch(error => {
 				var errorCode = error.code;
 				var errorMessage = error.message;
-				var email = error.email;
-				var credential = error.credential;
-				if (errorCode === "auth/account-exists-with-different-credential") {
-					alert(
-						"You have already signed up with a different auth provider for that email."
-					);
-				} else {
-					console.error(error);
-				};
+				console.error(error);
+
+				this.snackbar.message = errorMessage; /// Display error message using snackbar
+				this.snackbar.display = true;
 
 				this.loading.login = false;
 			});
@@ -67,19 +69,19 @@ export default {
 </script>
 <style>
 .md-icon.md-empty-state-icon {
-	width: 160px !important;
-	min-width: 160px !important;
-	height: 160px !important;
-	font-size: 160px !important;
-	margin: 0 !important;
+  width: 160px !important;
+  min-width: 160px !important;
+  height: 160px !important;
+  font-size: 160px !important;
+  margin: 0 !important;
 }
 </style>
 <style scoped lang="scss">
 #loginScreen {
-	min-height: 100vh;
-	display: flex;
-	display: -webkit-flex;
-	justify-content: center;
-	align-items: center;
+  min-height: 100vh;
+  display: flex;
+  display: -webkit-flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
