@@ -1,11 +1,11 @@
 <template>
     <md-list>
-        <div v-for="(level, index) in arrayLevels"
+        <div v-for="level in arrayLevels"
             :key="level.id">
             <div v-if="getTopicsByLevel(level.id).length">
 
                 <md-subheader>{{ level.name }}</md-subheader>
-                <md-list-item v-for="(topic, index) in getTopicsByLevel(level.id)"
+                <md-list-item v-for="topic in getTopicsByLevel(level.id)"
                     :key="topic.id">
                     <md-radio v-model="selected"
                         :value="topic.id" />
