@@ -2,7 +2,7 @@
 	<div id="app">
 		<md-progress-bar class="md-accent"
 		    md-mode="indeterminate"
-		    v-if="!firebaseReady || $store.state.loading.user"></md-progress-bar>
+		    v-if="!firebaseReady"></md-progress-bar>
 		<div v-else>
 			<md-toolbar class="md-primary navBar"
 			    :md-elevation="toolbarElevation"
