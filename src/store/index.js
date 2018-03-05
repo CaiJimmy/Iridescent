@@ -91,6 +91,8 @@ export default new Vuex.Store({
 				commit('addUser', userData);
 				commit('ready', 'user');
 			});
+
+			commit('setPrimaryColor', false);
 		}
 	}
 })
