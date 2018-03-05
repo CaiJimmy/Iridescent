@@ -43,6 +43,14 @@
             </div>
         </div>
         <md-snackbar :md-active.sync="snackbar.display">{{ snackbar.message }}</md-snackbar>
+        <md-snackbar id="newQuestionAlert"
+            :md-active.sync="newQuestionAlert"
+            md-position="left"
+            :md-duration="Infinity">
+            <span>Hay nuevas preguntas</span>
+            <md-button class="md-primary"
+                @click="pushNewQuestions()">Mostrar</md-button>
+        </md-snackbar>
     </div>
 </template>
 
@@ -69,6 +77,9 @@ export default {
 
         questions: [],
         userQuestions: [],
+
+        newQuestions: [],
+        newQuestionAlert: false,
 
         paging: {
             question_per_page: 20, /// Number of questions per page
@@ -135,6 +146,11 @@ export default {
                     this.bindTopic()
                 }
             }
+        },
+        newQuestions: function () {
+            if (this.newQuestions.length) {
+                this.newQuestionAlert = true;
+            }
         }
     },
     created: function () {
@@ -143,9 +159,18 @@ export default {
 
         if (!this.$store.state.loading.topics) {
             this.bindTopic()
-        }
+        };
+
+        this.ref.newQuestions = this.ref.questions.where('date', '>', new Date());
+        this.$bind('newQuestions', this.ref.newQuestions);
     },
     methods: {
+        pushNewQuestions () {
+            this.questions = [...this.newQuestions, ...this.questions];   /// Prepend new questions to main question array
+            this.newQuestions = [];  /// Reset it
+            this.newQuestionAlert = false;  /// Hide notification
+            window.scrollTo(0, 0); /// Scroll to top
+        },
         loadMore () {
             if (this.paging.end) {
                 return;
@@ -162,41 +187,23 @@ export default {
         },
         handleQuestions (ref) {
             return new Promise((resolve, reject) => {
-                ref.onSnapshot((documentSnapshots) => {
+                ref.get().then((documentSnapshots) => {
                     if (documentSnapshots.empty) {
                         this.paging.end = true;
                         resolve(documentSnapshots);
                     };
 
-                    documentSnapshots.docChanges.forEach((change) => {
-                        let oldQuestionIndex = this.questions.findIndex((item) => {
-                            return item.id == change.doc.id;
-                        });
-                        let questionData = change.doc.data();
-                        questionData.id = change.doc.id;
+                    documentSnapshots.forEach((doc) => {
+                        let questionData = doc.data();
+                        questionData.id = doc.id;
 
-                        if (oldQuestionIndex == -1) {
-                            if (change.newIndex == 0 && change.oldIndex == -1) {   /// == New question added by user => prepend to array
-                                this.questions.unshift(questionData);
-                            }
-                            else {   /// Rest of questions are ordered by date, so there's no need to do so
-                                this.questions.push(questionData);
-                            }
-                        }
-                        else {
-                            if (change.type === "removed") {
-                                this.questions.splice(oldQuestionIndex, 1);
-                            }
-                            else {
-                                this.questions[oldQuestionIndex] = questionData;
-                            }
-                        }
+                        this.questions.push(questionData);
                     });
 
                     console.log(documentSnapshots);
                     let lastVisible = documentSnapshots.docs[documentSnapshots.size - 1];  /// Build query for next page
-                    
-                    if(!lastVisible){
+
+                    if (!lastVisible) {
                         return;
                     };
 

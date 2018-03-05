@@ -31,9 +31,11 @@
                 <div v-else>
                     <div v-if="questions.length">
                         <div class="questionContainer"
-                            v-for="(item, index) in questions"
+                            v-for="(item) in questions"
                             :key="item.id">
-                            <question-card :question="item" :snackbar="snackbar" />
+                            <question-card :question="item"
+                                :snackbar="snackbar"
+                                :onUpdate="onUpdate" />
                         </div>
                         <mugen-scroll :handler="loadMore"
                             :should-handle="!loadMoreDisabled">
@@ -43,7 +45,8 @@
                                     :md-stroke="3"
                                     md-mode="indeterminate"></md-progress-spinner>
                             </div>
-                            <span class="endOfPage" v-if="$parent.paging.end">Todas las preguntas han sido cargadas</span>
+                            <span class="endOfPage"
+                                v-if="$parent.paging.end">Todas las preguntas han sido cargadas</span>
                         </mugen-scroll>
                     </div>
                     <md-empty-state v-else
@@ -114,6 +117,31 @@ export default {
         }
     },
     methods: {
+        onUpdate (data) {
+            let type = data.type,
+                index = -1;
+
+            if (!type) {
+                return;
+            };
+
+            if (data.question) {
+                index = this.questions.findIndex((question) => question.id == data.question.id);
+            }
+            switch (type) {
+                case 'edit':
+                    if (data.edited && index > -1) {
+                        this.$parent.questions[index] = data.question;
+                    };
+                    break;
+
+                case 'delete':
+                    if (data.deleted && index > -1) {
+                        this.$parent.questions.splice(index, 1);
+                    };
+            }
+
+        },
         closeDialog (where) {
             this.dialog[where] = false;
         },
@@ -126,45 +154,45 @@ export default {
 
 <style lang="scss" scoped>
 form {
-	overflow-y: auto;
+  overflow-y: auto;
 }
 
 .questionContainer {
-	margin-bottom: 16px;
+  margin-bottom: 16px;
 }
 
 .md-dialog {
-	width: 500px;
-	max-height: 90%;
+  width: 500px;
+  max-height: 90%;
 }
 
 .loader-wrapper {
-	text-align: center;
+  text-align: center;
 }
 
 #mainGrid {
-	& > .md-layout-item {
-		margin-bottom: 16px;
-	}
+  & > .md-layout-item {
+    margin-bottom: 16px;
+  }
 }
 
 .addQuestion {
-	position: fixed;
-	bottom: 20px;
-	right: 20px;
-	z-index: 2;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 2;
 }
 @media only screen and (min-width: 944px) {
-	.questions--sidebar {
-		position: sticky;
-		top: 80px;
-        align-self: flex-start;
-	}
+  .questions--sidebar {
+    position: sticky;
+    top: 80px;
+    align-self: flex-start;
+  }
 }
 
-.endOfPage{
-    text-align: center;
-    display: block;
-    color: #999;
+.endOfPage {
+  text-align: center;
+  display: block;
+  color: #999;
 }
 </style>
