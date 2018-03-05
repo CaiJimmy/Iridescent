@@ -143,7 +143,7 @@ export default {
                 if (this.callback) {
                     this.callback({
                         type: 'delete',
-                        delete: true,
+                        deleted: true,
                         question: questionData
                     })
                 }
