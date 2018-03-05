@@ -130,13 +130,14 @@ export default {
             }
             switch (type) {
                 case 'edit':
-                    if (data.edited && index > -1) {
+                    if (index > -1) {
                         this.$parent.questions[index] = data.question;
                     };
                     break;
 
                 case 'delete':
-                    if (data.deleted && index > -1) {
+                case 'move':
+                    if (index > -1) {
                         this.$parent.questions.splice(index, 1);
                     };
             }

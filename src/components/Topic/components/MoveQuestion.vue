@@ -1,26 +1,36 @@
 <template>
-    <md-list>
-        <div v-for="level in arrayLevels"
-            :key="level.id">
-            <div v-if="getTopicsByLevel(level.id).length">
+    <div>
+        <md-dialog :md-active.sync="active">
+            <md-dialog-title>Mover Pregunta</md-dialog-title>
+            <md-dialog-content>
+                <md-list>
+                    <div v-for="level in arrayLevels"
+                        :key="level.id">
+                        <div v-if="getTopicsByLevel(level.id).length">
 
-                <md-subheader>{{ level.name }}</md-subheader>
-                <md-list-item v-for="topic in getTopicsByLevel(level.id)"
-                    :key="topic.id">
-                    <md-radio v-model="selected"
-                        :value="topic.id" />
-                    <span class="md-list-item-text">{{ topic.name }}</span>
-                </md-list-item>
-            </div>
-        </div>
+                            <md-subheader>{{ level.name }}</md-subheader>
+                            <md-list-item v-for="topic in getTopicsByLevel(level.id)"
+                                :key="topic.id">
+                                <md-radio v-model="selected"
+                                    :value="topic.id" />
+                                <span class="md-list-item-text">{{ topic.name }}</span>
+                            </md-list-item>
+                        </div>
+                    </div>
+                </md-list>
+            </md-dialog-content>
+            <md-dialog-actions>
+                <md-button class="md-primary"
+                    :disabled="selected == currentTopicID"
+                    v-on:click="confirmDialog = true">Mover</md-button>
+            </md-dialog-actions>
+        </md-dialog>
 
-        <md-button class="md-primary"
-            :disabled="selected == currentTopicID"
-            v-on:click="confirmDialog = true">Mover</md-button>
-
-        <md-dialog :md-active.sync="confirmDialog" :md-fullscreen="false">
+        <md-dialog :md-active.sync="confirmDialog"
+            :md-fullscreen="false">
             <md-dialog-title>Confirmación</md-dialog-title>
-            <div class="md-dialog-content" v-html="confirmText"></div>
+            <div class="md-dialog-content"
+                v-html="confirmText"></div>
             <md-dialog-actions>
                 <md-button class="md-accent"
                     @click="moveQuestion()">Procesar</md-button>
@@ -28,14 +38,14 @@
                     @click="confirmDialog = false">Cancelar</md-button>
             </md-dialog-actions>
         </md-dialog>
-    </md-list>
+    </div>
 </template>
 <script>
 import * as firebase from "firebase/app";
 import "firebase/firestore";
 
 export default {
-    props: ['questionID', 'currentTopicID', 'authorData', 'questionData', 'snackbar', 'callback'],
+    props: ['active', 'questionID', 'currentTopicID', 'authorData', 'questionData', 'snackbar', 'callback'],
     data () {
         return {
             selected: null,
@@ -74,14 +84,14 @@ export default {
             firebase.firestore().collection('questions').doc(this.questionID).set({
                 'topic': this.selected
             }, {
-                merge: true
-            }).then(()=>{
-                this.snackbar.message = 'Pregunda movida';
-                this.snackbar.display = true;
-                if(this.callback){
-                    this.callback();
-                }
-            });
+                    merge: true
+                }).then(() => {
+                    this.snackbar.message = 'Pregunda movida';
+                    this.snackbar.display = true;
+                    if (this.callback) {
+                        this.callback(this.questionData);
+                    }
+                });
         },
         getTopicsByLevel (levelId) {
             let topics = Object.keys(this.topics).map((k) => this.topics[k])  /// Transform state.topics (object) to an array, to use filter() method

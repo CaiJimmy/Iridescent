@@ -9,7 +9,8 @@
     </div>
     <div v-on:copy="copyBlock"
         v-else>
-        <md-card class="questionCard" :id="question.id">
+        <md-card class="questionCard"
+            :id="question.id">
             <md-card-header v-if="users.hasOwnProperty(question.author) && !users[question.author].loading">
                 <md-avatar>
                     <img :src="users[question.author].photoURL"
@@ -57,14 +58,13 @@
             </md-card-actions>
         </md-card>
 
-        <md-dialog :md-active.sync="moveQuestion">
-            <md-dialog-title>Mover Pregunta</md-dialog-title>
-            <MoveQuestion :currentTopicID="question.topic"
-                :questionID="question.id"
-                :questionData="question"
-                :authorData="users[question.author]"
-                :snackbar="snackbar" />
-        </md-dialog>
+        <MoveQuestion :active="moveQuestion"
+            :currentTopicID="question.topic"
+            :questionID="question.id"
+            :questionData="question"
+            :authorData="users[question.author]"
+            :snackbar="snackbar"
+            :callback="onMove" />
 
         <md-dialog :md-active.sync="showProfile"
             class="embedProfile">
@@ -114,9 +114,17 @@ export default {
         }
     },
     methods: {
+        onMove (data) {
+            if (this.onUpdate) {
+                this.onUpdate({
+                    type: 'move',
+                    question: data
+                })
+            }
+        },
         exitEditing (data) {
             this.editing = false;
-            if(this.onUpdate){
+            if (this.onUpdate) {
                 this.onUpdate(data);
             }
         },
@@ -135,30 +143,30 @@ export default {
 </script>
 <style lang="scss" scoped>
 .questionCard {
-	.md-list-item-text {
-		white-space: normal !important;
-	}
+  .md-list-item-text {
+    white-space: normal !important;
+  }
 }
 
 .embedProfile {
-	@media (min-width: 600px) {
-		height: 100vh;
-		width: 95vw;
-	}
+  @media (min-width: 600px) {
+    height: 100vh;
+    width: 95vw;
+  }
 
-	.embedProfile--toolbar {
-		position: sticky;
-		top: 0;
-		left: 0;
-	}
+  .embedProfile--toolbar {
+    position: sticky;
+    top: 0;
+    left: 0;
+  }
 
-	.userProfile {
-		overflow-y: auto;
-		overflow-x: hidden;
-	}
+  .userProfile {
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
 }
 
 .embedProfile--trigger {
-	cursor: pointer;
+  cursor: pointer;
 }
 </style>
