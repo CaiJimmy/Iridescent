@@ -50,14 +50,15 @@ export default {
 		login: function () {
 			this.loading.login = true;
 
-			var provider = new firebase.auth.GoogleAuthProvider();
+			let provider = new firebase.auth.GoogleAuthProvider();
 			firebase.auth().signInWithPopup(provider).then(result => {
 				this.loading.login = false;
 			}).catch(error => {
-				var errorCode = error.code;
-				var errorMessage = error.message;
-				console.error(error);
+				let errorCode = error.code,
+					errorMessage = error.message;
 
+				console.error(error);
+				
 				this.snackbar.message = errorMessage; /// Display error message using snackbar
 				this.snackbar.display = true;
 
