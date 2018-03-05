@@ -99,7 +99,7 @@ export default {
             moveQuestion: false
         }
     },
-    props: ['question', 'snackbar'],
+    props: ['question', 'snackbar', 'onUpdate'],
     components: {
         QuestionForm,
         ProfilePage,
@@ -114,8 +114,11 @@ export default {
         }
     },
     methods: {
-        exitEditing () {
-            this.editing = false
+        exitEditing (data) {
+            this.editing = false;
+            if(this.onUpdate){
+                this.onUpdate(data);
+            }
         },
         editQuestion () {
             this.editing = true;
