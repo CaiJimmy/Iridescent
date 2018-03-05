@@ -56,7 +56,7 @@
                     <md-button class="md-accent"
                         v-on:click="deleteQuestionConfirm()">Eliminar</md-button>
                     <md-button class="md-primary"
-                        v-on:click="callback(questionID)">Cancelar</md-button>
+                        v-on:click="callback({type: 'edit', edited: false})">Cancelar</md-button>
                     <md-button class="md-primary"
                         @click.native="editQuestion()"
                         :disabled="loading.form"
@@ -134,9 +134,19 @@ export default {
             this.deleteConfirm.show = true;
         },
         deleteQuestion (questionID) {
+            let questionData = this.question;
+
             firebase.firestore().collection('questions').doc(questionID).delete().then(() => {
                 this.snackbar.message = 'La pregunta ha sido eliminada';
                 this.snackbar.display = true;
+
+                if (this.callback) {
+                    this.callback({
+                        type: 'delete',
+                        delete: true,
+                        question: questionData
+                    })
+                }
             });
         },
         editQuestion () {
@@ -150,7 +160,11 @@ export default {
                         this.snackbar.display = true;
 
                         if (this.callback) {
-                            this.callback(this.questionID);
+                            this.callback({
+                                type: 'edit',
+                                edited: true,
+                                question: this.question
+                            });
                         }
                     });
                 }
@@ -173,7 +187,7 @@ export default {
                         ...this.question,
                         date: firebase.firestore.FieldValue.serverTimestamp()
                     }).then((ref) => {
-                        
+
                         this.question = {
                             title: null,
                             date: null,
@@ -193,7 +207,9 @@ export default {
                         this.snackbar.display = true;
 
                         if (this.callback) {
-                            this.callback('question');
+                            this.callback({
+                                type: 'add'
+                            });
                         }
                     });
                 }
