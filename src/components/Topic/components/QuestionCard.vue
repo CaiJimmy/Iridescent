@@ -110,7 +110,7 @@ export default {
             return this.$store.state.users
         },
         isAdmin: function () {
-            return this.$store.state.isAdmin;
+            return this.$store.state.user.isAdmin;
         }
     },
     methods: {

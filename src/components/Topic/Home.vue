@@ -113,7 +113,7 @@ export default {
             return this.$parent.paging.loading | this.$parent.paging.end;
         },
         isAdmin () {
-            return this.$store.state.isAdmin;
+            return this.$store.state.user.isAdmin;
         }
     },
     methods: {

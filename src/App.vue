@@ -35,7 +35,6 @@ import * as firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
 
-import { validAccountCheck, roleCheck } from '@/methods/auth.js';
 export default {
 	name: "app",
 	metaInfo: {
@@ -56,25 +55,8 @@ export default {
 	created () {
 		firebase.auth().onAuthStateChanged((user) => {
 			if (user) {
-				validAccountCheck().then((validAccount) => {  /// Check if user has a valid email account
-
-					if (validAccount) {
-						this.redirect();
-						this.$store.dispatch('initApp'); /// Start down
-					}
-					else {
-						this.snackbar.message = 'No es una cuenta válida';
-						this.snackbar.display = true;
-						this.logOut();
-					};
-
-				}).then(() => {
-					roleCheck().then((isAdmin) => {
-						this.$store.commit('isAdmin', isAdmin);
-					});
-				})
-
 				this.loggedIn = true;
+				this.$store.dispatch('initApp');
 			}
 			else {
 				this.loggedIn = false;
@@ -92,8 +74,8 @@ export default {
 				return 1;
 			};
 		},
-		isAdmin: function () {
-			return this.$store.state.isAdmin;
+		isAdmin () {
+			return this.$store.state.user.isAdmin;
 		}
 	},
 	watch: {
@@ -130,61 +112,61 @@ export default {
 
 @import "~vue-material/dist/theme/all"; // Apply the theme
 .container {
-	max-width: 850px;
-	padding: 0 15px;
-	margin: 0 auto;
-	&.extend {
-		max-width: 1200px;
-	}
-	&.compact {
-		max-width: 650px;
-	}
+  max-width: 850px;
+  padding: 0 15px;
+  margin: 0 auto;
+  &.extend {
+    max-width: 1200px;
+  }
+  &.compact {
+    max-width: 650px;
+  }
 }
 
 .md-drawer {
-	width: 230px !important;
-	max-width: calc(100vw - 125px) !important;
-	position: fixed !important;
+  width: 230px !important;
+  max-width: calc(100vw - 125px) !important;
+  position: fixed !important;
 }
 
 .md-fab {
-	z-index: 2;
+  z-index: 2;
 }
 
 #app {
-	height: 100%;
+  height: 100%;
 }
 
 @media only screen and (min-width: 500px) {
-	.navBar {
-		position: sticky !important;
-		top: 0 !important;
-		z-index: 3 !important;
-	}
+  .navBar {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 3 !important;
+  }
 }
 
 .siteLogo {
-	width: 40px;
-	height: 40px;
+  width: 40px;
+  height: 40px;
 
-	& + .md-title {
-		vertical-align: middle !important;
-	}
+  & + .md-title {
+    vertical-align: middle !important;
+  }
 }
 
 .notFound {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate3d(-50%, -50%, 0);
-	max-width: 400px;
-	width: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0);
+  max-width: 400px;
+  width: 100%;
 
-	.md-card {
-		padding: 15px;
-	}
+  .md-card {
+    padding: 15px;
+  }
 }
 .mainContent {
-	margin: 2em auto;
+  margin: 2em auto;
 }
 </style>

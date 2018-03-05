@@ -46,7 +46,7 @@ export default {
 			return this.$store.state.loading.levels | this.$store.state.loading.topics;
 		},
 		isAdmin: function () {
-			return this.$store.state.isAdmin;
+			return this.user.isAdmin;
 		},
 		user: function () {
 			return this.$store.state.user;

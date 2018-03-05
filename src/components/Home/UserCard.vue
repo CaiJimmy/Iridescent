@@ -33,7 +33,7 @@ export default {
             }
         },
         isAdmin: function () {
-            return this.$store.state.isAdmin;
+            return this.$store.state.user.isAdmin;
         },
         userRole: function () {
             if (this.isAdmin) {

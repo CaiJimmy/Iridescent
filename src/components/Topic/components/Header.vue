@@ -63,7 +63,7 @@ export default {
 	components: { EditTopic },
 	computed: {
 		isAdmin () {
-			return this.$store.state.isAdmin;
+			return this.$store.state.user.isAdmin;
 		},
 		headerImageStyle () {
 			if (this.topic.image) {

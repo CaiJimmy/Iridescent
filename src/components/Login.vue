@@ -22,6 +22,7 @@
 <script>
 import * as firebase from "firebase/app";
 import "firebase/auth";
+import { validAccountCheck } from '@/methods/auth.js';
 
 export default {
 	name: "Login",
@@ -37,6 +38,7 @@ export default {
 		};
 	},
 	created: function () {
+		console.log(firebase.auth().currentUser);
 		if (firebase.auth().currentUser) { // Already Logged In
 			this.redirect();
 		}
@@ -53,12 +55,26 @@ export default {
 			let provider = new firebase.auth.GoogleAuthProvider();
 			firebase.auth().signInWithPopup(provider).then(result => {
 				this.loading.login = false;
+
+				validAccountCheck().then((validAccount) => {  /// Check if user has a valid email account
+
+					if (validAccount) {
+						this.redirect();
+					}
+					else {
+						this.snackbar.message = 'No es una cuenta válida';
+						this.snackbar.display = true;
+						firebase.auth().signOut();
+					};
+
+				});
+
 			}).catch(error => {
 				let errorCode = error.code,
 					errorMessage = error.message;
 
 				console.error(error);
-				
+
 				this.snackbar.message = errorMessage; /// Display error message using snackbar
 				this.snackbar.display = true;
 

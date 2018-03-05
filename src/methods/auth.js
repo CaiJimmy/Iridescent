@@ -19,20 +19,6 @@ function validAccountCheck() {
 	});
 }
 
-function roleCheck() {
-	let user = firebase.auth().currentUser;
-
-	return firestore.collection('admins').get().then(() => {
-		console.log('Admin account verified');
-		return true;
-	}).catch((err) => { // The account is not in admin-list
-		console.log('Not a admin account');
-		return false;
-	});
-
-}
-
 export {
-	roleCheck,
 	validAccountCheck
 };
