@@ -146,6 +146,11 @@ export default {
                     this.bindTopic()
                 }
             }
+        },
+        newQuestions: function () {
+            if (this.newQuestions.length) {
+                this.newQuestionAlert = true;
+            }
         }
     },
     created: function () {
@@ -157,23 +162,12 @@ export default {
         };
 
         this.ref.newQuestions = this.ref.questions.where('date', '>', new Date());
-        this.ref.newQuestions.onSnapshot((snapshot) => {
-            if (snapshot.size) {
-                this.newQuestionAlert = true;
-
-                snapshot.forEach((doc) => {
-                    this.newQuestions.push({
-                        ...doc.data(),
-                        id: doc.id
-                    });
-                });
-            };
-        });
+        this.$bind('newQuestions', this.ref.newQuestions);
     },
     methods: {
         pushNewQuestions () {
             this.questions = [...this.newQuestions, ...this.questions];   /// Prepend new questions to main question array
-            this.newQuestions = [];  /// Reset it
+            this.newQuestions.length = 0;  /// Reset it
             this.newQuestionAlert = false;  /// Hide notification
             window.scrollTo(0, 0); /// Scroll to top
         },
