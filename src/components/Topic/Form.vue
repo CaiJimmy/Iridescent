@@ -169,12 +169,11 @@ export default {
                     this.question.author = firebase.auth().currentUser.uid;
 
                     var ref = firebase.firestore().collection('questions/');
-                    ref.add(this.question).then((ref) => {
-
-                        ref.set({
-                            date: firebase.firestore.FieldValue.serverTimestamp()
-                        }, { merge: true });
-
+                    ref.add({
+                        ...this.question,
+                        date: firebase.firestore.FieldValue.serverTimestamp()
+                    }).then((ref) => {
+                        
                         this.question = {
                             title: null,
                             date: null,
