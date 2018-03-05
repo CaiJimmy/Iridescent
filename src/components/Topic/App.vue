@@ -146,11 +146,6 @@ export default {
                     this.bindTopic()
                 }
             }
-        },
-        newQuestions: function () {
-            if (this.newQuestions.length) {
-                this.newQuestionAlert = true;
-            }
         }
     },
     created: function () {
@@ -162,7 +157,18 @@ export default {
         };
 
         this.ref.newQuestions = this.ref.questions.where('date', '>', new Date());
-        this.$bind('newQuestions', this.ref.newQuestions);
+        this.ref.newQuestions.onSnapshot((snapshot) => {
+            if (snapshot.size) {
+                this.newQuestionAlert = true;
+
+                snapshot.forEach((doc) => {
+                    this.newQuestions.push({
+                        ...doc.data(),
+                        id: doc.id
+                    });
+                });
+            };
+        });
     },
     methods: {
         pushNewQuestions () {
