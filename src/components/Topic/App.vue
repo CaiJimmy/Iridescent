@@ -166,6 +166,10 @@ export default {
     },
     methods: {
         pushNewQuestions () {
+            this.newQuestions.forEach((question) => {
+                fetchUserDatas(question.author);
+            });
+            
             this.questions = [...this.newQuestions, ...this.questions];   /// Prepend new questions to main question array
             this.newQuestions.length = 0;  /// Reset it
             this.newQuestionAlert = false;  /// Hide notification
