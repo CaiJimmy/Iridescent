@@ -1,7 +1,11 @@
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
-
+/**
+ * Check if the account used for login is valid
+ * 
+ * @returns {Promise} Boolean which indicates account is valid or not
+ */
 function validAccountCheck() {
 	let user = firebase.auth().currentUser;
 
