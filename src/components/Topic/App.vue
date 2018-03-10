@@ -168,9 +168,12 @@ export default {
         pushNewQuestions () {
             this.newQuestions.forEach((question) => {
                 fetchUserDatas(question.author);
+                this.questions.unshift({
+                    ...question,
+                    id: question.id /// 'id' is non-enumerable 
+                })
             });
             
-            this.questions = [...this.newQuestions, ...this.questions];   /// Prepend new questions to main question array
             this.newQuestions.length = 0;  /// Reset it
             this.newQuestionAlert = false;  /// Hide notification
             window.scrollTo(0, 0); /// Scroll to top
