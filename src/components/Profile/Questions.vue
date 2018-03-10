@@ -50,7 +50,7 @@
                 <div v-else>
                     <div v-if="questions.length">
                         <div class="questionContainer"
-                            v-for="(item, index) in paginatedQuestions"
+                            v-for="(item) in paginatedQuestions"
                             :key="item.id">
                             <question-card :question="item"
                                 :snackbar="snackbar" />
