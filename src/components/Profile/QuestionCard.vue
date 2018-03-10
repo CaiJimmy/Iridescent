@@ -49,25 +49,19 @@
                 </md-list>
             </md-card-content>
             <md-card-actions>
-                <md-button v-if="isAdmin"
+                <md-button v-if="isAdmin && !embed"
                     v-on:click="moveQuestion = true">Mover la pregunta</md-button>
                 <md-button v-if="question.author == $store.state.user.uid || isAdmin"
                     v-on:click="editQuestion()">Editar</md-button>
             </md-card-actions>
         </md-card>
 
-        <md-dialog :md-active.sync="moveQuestion"
-            :md-fullscreen="false">
-            <md-dialog-title>Mover Pregunta</md-dialog-title>
-            <div class="md-dialog-content">
-                <MoveQuestion :currentTopicID="question.topic"
-                    :questionID="question.id"
-                    :questionData="question"
-                    :authorData="users[question.author]"
-                    :snackbar="snackbar"
-                    :callback="moveQuestionCallback" />
-            </div>
-        </md-dialog>
+        <MoveQuestion v-if="!embed" :active="moveQuestion"
+            :currentTopicID="question.topic"
+            :questionID="question.id"
+            :questionData="question"
+            :authorData="users[question.author]"
+            :snackbar="snackbar" />
 
     </div>
 </template>
@@ -96,6 +90,9 @@ export default {
         },
         isAdmin: function () {
             return this.$store.state.user.isAdmin;
+        },
+        embed(){
+            return this.$parent.$parent.embed;
         }
     },
     methods: {
@@ -120,8 +117,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .questionCard {
-	.md-list-item-text {
-		white-space: normal !important;
-	}
+  .md-list-item-text {
+    white-space: normal !important;
+  }
 }
 </style>
