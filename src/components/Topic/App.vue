@@ -198,6 +198,8 @@ export default {
                         questionData.id = doc.id;
 
                         this.questions.push(questionData);
+
+                        fetchUserDatas(questionData.author);
                     });
 
                     console.log(documentSnapshots);
@@ -211,7 +213,6 @@ export default {
                         .startAfter(lastVisible)
                         .limit(this.paging.question_per_page);
 
-                    fetchUserDatas(documentSnapshots)
                     resolve(documentSnapshots);
                 });
             });

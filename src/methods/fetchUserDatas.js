@@ -1,24 +1,26 @@
 import store from '@/store';
 import * as firebase from "firebase/app";
 import "firebase/firestore";
+/**
+ * Fetch user's profile data from Firestore
+ * 
+ * @export
+ * @param {string} userID 
+ */
+export default function (userID) {
+	if (!store.state.users.hasOwnProperty(userID)) {
 
-export default function(questionArray){
-    questionArray.forEach((questionData) => {
-        let question = questionData.data();   /// Question Array that we passed it's a Firestore doc array. To read item's data, we need to use .data() method
-        if (!store.state.users.hasOwnProperty(question.author)) {
+		let tempData = { /// Prevent fetch multiple time same user's data
+			uid: userID,
+			loading: true
+		};
+		store.commit('addUser', tempData);
 
-            let tempData = {  /// Prevent fetch multiple time same user's data
-                uid: question.author,
-                loading: true
-            };
-            store.commit('addUser', tempData);
-
-            firebase.firestore().collection('users').doc(question.author).get().then(snapshot => {
-                let userData = snapshot.data();
-                userData.uid = question.author;
-                userData.loading = false;
-                store.commit('addUser', userData);
-            })
-        }
-    })
+		firebase.firestore().collection('users').doc(userID).get().then(snapshot => {
+			let userData = snapshot.data();
+			userData.uid = userID;
+			userData.loading = false;
+			store.commit('addUser', userData);
+		})
+	}
 }
