@@ -39,7 +39,8 @@
                 <md-list>
                     <md-list-item v-for="(value, letter, index) in question.answers"
                         v-bind:key="index">
-                        <div class="md-list-item-text">
+                        <div class="md-list-item-text"
+                            :class="{'correctAnswer':question.correctAnswer == letter }">
                             {{letter.toUpperCase()}}. {{value}}
                         </div>
                         <md-button v-if="question.correctAnswer == letter"
@@ -145,6 +146,11 @@ export default {
 .questionCard {
   .md-list-item-text {
     white-space: normal !important;
+    line-height: 1.5!important;
+    margin-bottom: 0.5em!important;
+  }
+  .correctAnswer {
+    font-weight: bold !important;
   }
 }
 

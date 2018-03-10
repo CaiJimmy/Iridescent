@@ -37,7 +37,8 @@
                 <md-list>
                     <md-list-item v-for="(value, letter, index) in question.answers"
                         v-bind:key="index">
-                        <div class="md-list-item-text">
+                        <div class="md-list-item-text"
+                            :class="{'correctAnswer':question.correctAnswer == letter }">
                             {{letter.toUpperCase()}}. {{value}}
                         </div>
                         <md-button v-if="question.correctAnswer == letter"
@@ -56,7 +57,8 @@
             </md-card-actions>
         </md-card>
 
-        <MoveQuestion v-if="!embed" :active="moveQuestion"
+        <MoveQuestion v-if="!embed"
+            :active="moveQuestion"
             :currentTopicID="question.topic"
             :questionID="question.id"
             :questionData="question"
@@ -91,7 +93,7 @@ export default {
         isAdmin: function () {
             return this.$store.state.user.isAdmin;
         },
-        embed(){
+        embed () {
             return this.$parent.$parent.embed;
         }
     },
@@ -119,6 +121,11 @@ export default {
 .questionCard {
   .md-list-item-text {
     white-space: normal !important;
+    line-height: 1.5 !important;
+    margin-bottom: 0.5em !important;
+  }
+  .correctAnswer {
+    font-weight: bold !important;
   }
 }
 </style>
