@@ -134,6 +134,8 @@ export default {
 								name: null
 							};
 							this.callback();
+
+							this.$router.push(`/t/${topicRef.id}`);
 						});
 					});
 
