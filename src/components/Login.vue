@@ -11,7 +11,7 @@
 			    md-description="Por favor, inicie la sesión con la cuenta institucional.">
 				<md-button class="md-primary md-raised"
 				    v-on:click="login()"
-					:disabled="loading.login">Comenzar</md-button>
+				    :disabled="loading.login">Comenzar</md-button>
 			</md-empty-state>
 		</div>
 		<md-snackbar :md-duration="10000"
@@ -55,7 +55,6 @@ export default {
 
 			let provider = new firebase.auth.GoogleAuthProvider();
 			firebase.auth().signInWithPopup(provider).then(result => {
-				this.loading.login = false;
 
 				validAccountCheck().then((validAccount) => {  /// Check if user has a valid email account
 
@@ -68,6 +67,8 @@ export default {
 						firebase.auth().signOut();
 					};
 
+				}).then(() => {
+					this.loading.login = false;
 				});
 
 			}).catch(error => {
