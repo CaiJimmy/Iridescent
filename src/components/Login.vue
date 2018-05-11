@@ -10,7 +10,8 @@
 			    md-label="Bienvenidos"
 			    md-description="Por favor, inicie la sesión con la cuenta institucional.">
 				<md-button class="md-primary md-raised"
-				    v-on:click="login()">Comenzar</md-button>
+				    v-on:click="login()"
+					:disabled="loading.login">Comenzar</md-button>
 			</md-empty-state>
 		</div>
 		<md-snackbar :md-duration="10000"
