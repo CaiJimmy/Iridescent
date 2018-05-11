@@ -29,7 +29,7 @@ export default {
     computed: {
         headerImage () {
             return {
-                "background-image": "url(https://source.unsplash.com/500x400/daily?techonology)"
+                "background-image": "url(https://source.unsplash.com/300x150/daily?techonology)"
             }
         },
         isAdmin: function () {
