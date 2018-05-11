@@ -12,6 +12,7 @@
 	"dependencies": {
 		"@xkeshi/vue-countdown": "^0.5.0",
 		"firebase": "^4.6.2",
+		"image-compressor.js": "^1.1.3",
 		"node-sass": "^4.7.2",
 		"node-vibrant": "^3.0.0",
 		"npm": "^5.7.1",
