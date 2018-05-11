@@ -43,10 +43,10 @@
 <script>
 import * as firebase from "firebase/app";
 import "firebase/firestore";
-import "firebase/storage";
 import resizeImage from '@/methods/resizeImage.js';
 import EditTopic from '@/components/Settings/Topics/Add.vue';
 import getColorFromImage from '@/methods/getColorFromImage.js';
+import uploadFile from '@/methods/uploadFile.js';
 
 export default {
 	props: ['topic', 'topicRef'],
@@ -85,27 +85,6 @@ export default {
 		showFileDialog () {
 			this.$refs.fileInput.click();
 		},
-		uploadFile (file, path) {
-			var storageRef = firebase.storage().ref();
-			var metadata = {
-				contentType: file.type
-			};
-			return firebase
-				.storage()
-				.ref(path || "coverImage/" + file.name)
-				.put(file, metadata)
-				.then(function (snapshot) {
-					console.log("Uploaded", snapshot.totalBytes, "bytes.");
-					console.log(snapshot.metadata);
-					var url = snapshot.downloadURL;
-					console.log("File available at", url);
-
-					return snapshot;
-				})
-				.catch(function (error) {
-					console.error("Upload failed:", error);
-				});
-		},
 		async changeHeaderImage (imageFile) {
 			if (imageFile) {
 				window.test = imageFile;
@@ -116,7 +95,7 @@ export default {
 
 				console.log(resizedImage);
 
-				this.uploadFile(resizedImage, `${this.topicRef.id}/${imageFile.name}`).then(async (snapshot) => {
+				uploadFile(resizedImage, `${this.topicRef.id}/${imageFile.name}`).then(async (snapshot) => {
 					let imageURL = snapshot.downloadURL;
 
 					let color = await getColorFromImage(URL.createObjectURL(imageFile));

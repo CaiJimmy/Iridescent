@@ -64,6 +64,8 @@
 import * as firebase from "firebase/app";
 import "firebase/firestore";
 import getColorFromImage from '@/methods/getColorFromImage.js';
+import uploadFile from '@/methods/uploadFile.js';
+import resizeImage from '@/methods/resizeImage.js';
 
 export default {
 	name: "AddTopic",
@@ -100,11 +102,15 @@ export default {
 			});
 		},
 		getRandomPic: async function () {
-			return fetch("https://source.unsplash.com/1000x500/?technology").then(async (response) => {   /// Fetch a random image from Unsplash, and add it to form
-				let color = await getColorFromImage(response.url);
+			return fetch("https://source.unsplash.com/1500x500/?technology").then(async (response) => {   /// Fetch a random image from Unsplash, and add it to form
+				let imageFile = await fetch(response.url).then(res => {
+					return res.blob();
+				});
+
 				return {
 					url: response.url,
-					color: color
+					color: await getColorFromImage(URL.createObjectURL(imageFile)),
+					file: imageFile
 				};
 			})
 		},
@@ -114,18 +120,22 @@ export default {
 					this.sending = true;
 					this.form.level = this.selectedLevel;
 
-					this.getRandomPic().then((response) => {
-						this.form.image = response.url;
+					this.getRandomPic().then(async (response) => {
+						let resizedImage = await resizeImage(response.file, 1500);
+
+						/// By default, the image will be uploaded to /coverImage/ folder, because we don't have yet the topic id
+						this.form.image = await uploadFile(resizedImage).then(snapshot => snapshot.downloadURL);   
+						
 						this.form.color = response.color;
 
-						firebase.firestore().collection("topics").add(this.form).then(() => {
+						firebase.firestore().collection("topics").add(this.form).then((topicRef) => {
 							this.sending = false;
 							this.form = {
 								name: null
 							};
 							this.callback();
 						});
-					})
+					});
 
 				}
 			});
