@@ -11,29 +11,31 @@
         v-else>
         <md-card class="questionCard"
             :id="question.id">
-            <md-card-header v-if="users.hasOwnProperty(question.author) && !users[question.author].loading">
-                <md-avatar>
-                    <img :src="users[question.author].photoURL"
-                        :alt="users[question.author].displayName">
-                </md-avatar>
-                <div class="md-title">
-                    <a v-on:click="showProfile = true"
-                        class="embedProfile--trigger">
-                        {{ users[question.author].displayName }}
-                    </a>
-                </div>
-                <div class="md-subhead">
-                    <span>
-                        <timeago :auto-update="60"
-                            :since="question.date"></timeago>
-                    </span>
-                </div>
-            </md-card-header>
-            <md-progress-bar v-else
-                class="md-primary"
-                md-mode="indeterminate"
-                :md-diameter="30"
-                :md-stroke="3"></md-progress-bar>
+            <template v-if="(isAdmin || isAuthor)">
+                <md-card-header v-if="users.hasOwnProperty(question.author) && !users[question.author].loading">
+                    <md-avatar>
+                        <img :src="users[question.author].photoURL"
+                            :alt="users[question.author].displayName">
+                    </md-avatar>
+                    <div class="md-title">
+                        <a v-on:click="showProfile = true"
+                            class="embedProfile--trigger">
+                            {{ users[question.author].displayName }}
+                        </a>
+                    </div>
+                    <div class="md-subhead">
+                        <span>
+                            <timeago :auto-update="60"
+                                :since="question.date"></timeago>
+                        </span>
+                    </div>
+                </md-card-header>
+                <md-progress-bar v-else
+                    class="md-primary"
+                    md-mode="indeterminate"
+                    :md-diameter="30"
+                    :md-stroke="3"></md-progress-bar>
+            </template>
             <md-card-content>
                 {{ question.title }}
                 <md-list>
@@ -112,6 +114,9 @@ export default {
         },
         isAdmin: function () {
             return this.$store.state.user.isAdmin;
+        },
+        isAuthor () {
+            return this.question.author == this.$store.state.user.uid;
         }
     },
     methods: {
@@ -146,8 +151,8 @@ export default {
 .questionCard {
   .md-list-item-text {
     white-space: normal !important;
-    line-height: 1.5!important;
-    margin-bottom: 0.5em!important;
+    line-height: 1.5 !important;
+    margin-bottom: 0.5em !important;
   }
   .correctAnswer {
     font-weight: bold !important;
