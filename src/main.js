@@ -83,27 +83,26 @@ Vue.use(VueTimeago, {
 
 import VueAnalytics from 'vue-analytics'
 Vue.use(VueAnalytics, {
-	id: 'UA-109882635-1',
+	id: process.env.GA_TRACKINGID,
 	router
 })
 
 import Raven from 'raven-js';
 import RavenVue from 'raven-js/plugins/vue';
 
-if (process.env.NODE_ENV == 'production') {
+if (process.env.NODE_ENV == 'production' && process.env.SENTRY_API) {
 	Raven
-		.config('https://4df6cbc1bf6649558d711777044cf971@sentry.io/253780')
+		.config(process.env.SENTRY_API)
 		.addPlugin(RavenVue, Vue)
 		.install();
 };
 
 var config = {
-	apiKey: "AIzaSyB-E8FlF70tYS8Rq4fQURI2HcfeisSrSls",
-	authDomain: "elysian-9d52f.firebaseapp.com",
-	databaseURL: "https://elysian-9d52f.firebaseio.com",
-	projectId: "elysian-9d52f",
-	storageBucket: "elysian-9d52f.appspot.com",
-	messagingSenderId: "434339917281"
+	apiKey: process.env.FIREBASE_API_KEY,
+	authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+	databaseURL: process.env.FIREBASE_DATABASE_URL,
+	projectId: process.env.FIREBASE_PROJECT_ID,
+	storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
 };
 
 firebase.initializeApp(config);
