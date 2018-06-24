@@ -30,7 +30,6 @@
 
 			<router-view />
 
-			<md-snackbar :md-active.sync="snackbar.display">{{ snackbar.message }}</md-snackbar>
 		</div>
 	</div>
 </template>
@@ -48,13 +47,8 @@ export default {
 	},
 	data () {
 		return {
-			snackbar: {
-				display: false,
-				message: null
-			},
 			firebaseReady: false,   /* Indicates if Firebase Auth is ready or not */
 			loggedIn: false,
-			menuVisible: false
 		}
 	},
 	created () {
@@ -84,9 +78,6 @@ export default {
 		}
 	},
 	watch: {
-		"$route.fullPath": function () {
-			this.menuVisible = false;
-		},
 		"$store.state.loading.role": function () {
 			if (this.$route.meta.isAdmin && !this.isAdmin && !this.$store.state.loading.role) {
 				this.$router.push('/403');
