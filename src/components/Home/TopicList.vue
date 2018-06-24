@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-for="(level, index) in arrayLevels"
+        <div v-for="level in arrayLevels"
             :key="level.id">
             <div v-if="getTopicsByLevel(level.id).length"
                 class="levelWrapper md-layout md-gutter md-layout-column-xsmall md-alignment">
@@ -9,7 +9,7 @@
                     <h3 class="levelName">{{ level.name }}</h3>
                 </div>
                 <div class="topicCards--wrapper md-layout-column md-layout-item md-size-85 md-small-size-100 md-gutter">
-                    <TopicCard v-for="(topic, index) in getTopicsByLevel(level.id)"
+                    <TopicCard v-for="topic in getTopicsByLevel(level.id)"
                         :key="topic.id"
                         :topic="topic"
                         :topicID="topic.id" />
