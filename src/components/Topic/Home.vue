@@ -135,6 +135,11 @@ export default {
     },
     watch: {
         newQuestions: function () {
+            if(this.dialog.question){
+                this.pushNewQuestions();
+                return;
+            };
+            
             if (this.newQuestions.length) {
                 this.newQuestionAlert = true;
             }
