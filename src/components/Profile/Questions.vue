@@ -53,7 +53,8 @@
                             v-for="(item) in paginatedQuestions"
                             :key="item.id">
                             <question-card :question="item"
-                                :snackbar="snackbar" />
+                                :snackbar="snackbar"
+                                :isProfile="true" />
                         </div>
                         <mugen-scroll :handler="loadMore"
                             :should-handle="!loadMoreDisabled">
@@ -81,7 +82,7 @@
 <script>
 import * as firebase from "firebase/app";
 import "firebase/firestore";
-import QuestionCard from './QuestionCard.vue';
+import QuestionCard from '@/components/Topic/components/QuestionCard.vue';
 import MugenScroll from 'vue-mugen-scroll';
 
 export default {
@@ -224,25 +225,25 @@ export default {
 
 <style lang="scss" scoped>
 .loader-wrapper {
-	text-align: center;
+  text-align: center;
 }
 .questionContainer {
-	margin-bottom: 16px;
+  margin-bottom: 16px;
 }
 
 .mainContent {
-	margin: 2em auto;
+  margin: 2em auto;
 }
 .filterMessage {
-	margin-bottom: 2em;
+  margin-bottom: 2em;
 }
 .endOfPage {
-	text-align: center;
-	display: block;
-	color: #999;
+  text-align: center;
+  display: block;
+  color: #999;
 }
 
 .topicName {
-	white-space: normal;
+  white-space: normal;
 }
 </style>

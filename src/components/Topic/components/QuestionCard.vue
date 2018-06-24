@@ -21,17 +21,17 @@
         v-else>
         <md-card class="questionCard"
             :id="question.id">
-            <template v-if="(isAdmin || isAuthor)">
+
+            <template v-if="isProfile">   <!-- Card header for profile page -->
                 <md-card-header v-if="users.hasOwnProperty(question.author) && !users[question.author].loading">
                     <md-avatar>
-                        <img :src="users[question.author].photoURL"
-                            :alt="users[question.author].displayName">
+                        <img :src="topics[question.topic].image"
+                            :alt="topics[question.topic].name">
                     </md-avatar>
                     <div class="md-title">
-                        <a v-on:click="showProfile(question)"
-                            class="embedProfile--trigger">
-                            {{ users[question.author].displayName }}
-                        </a>
+                        <router-link :to="{ path: '/profile/' + question.author, query: { topic: question.topic }}">
+                            {{ topics[question.topic].name }}
+                        </router-link>
                     </div>
                     <div class="md-subhead">
                         <span>
@@ -40,11 +40,34 @@
                         </span>
                     </div>
                 </md-card-header>
-                <md-progress-bar v-else
-                    class="md-primary"
-                    md-mode="indeterminate"
-                    :md-diameter="30"
-                    :md-stroke="3"></md-progress-bar>
+            </template>
+
+            <template v-else>  <!-- Card header for topic page -->
+                <template v-if="(isAdmin || isAuthor)">
+                    <md-card-header v-if="users.hasOwnProperty(question.author) && !users[question.author].loading">
+                        <md-avatar>
+                            <img :src="users[question.author].photoURL"
+                                :alt="users[question.author].displayName">
+                        </md-avatar>
+                        <div class="md-title">
+                            <a v-on:click="showProfile(question)"
+                                class="embedProfile--trigger">
+                                {{ users[question.author].displayName }}
+                            </a>
+                        </div>
+                        <div class="md-subhead">
+                            <span>
+                                <timeago :auto-update="60"
+                                    :since="question.date"></timeago>
+                            </span>
+                        </div>
+                    </md-card-header>
+                    <md-progress-bar v-else
+                        class="md-primary"
+                        md-mode="indeterminate"
+                        :md-diameter="30"
+                        :md-stroke="3"></md-progress-bar>
+                </template>
             </template>
             <md-card-content>
                 {{ question.title }}
@@ -83,7 +106,7 @@ export default {
             movingQuestion: false
         }
     },
-    props: ['question', 'snackbar', 'onUpdate', 'showProfile'],
+    props: ['question', 'snackbar', 'onUpdate', 'showProfile', 'isProfile'],
     components: {
         QuestionForm,
         MoveQuestion
@@ -97,7 +120,10 @@ export default {
         },
         isAuthor () {
             return this.question.author == this.$store.state.user.uid;
-        }
+        },
+        topics () {
+            return this.$store.state.topics
+        },
     },
     methods: {
         toggleMoveQuestion () {
