@@ -7,6 +7,16 @@
             :callback="exitEditing"
             :snackbar="snackbar" />
     </div>
+    <div class="md-elevation-1"
+        v-else-if="movingQuestion">
+        <MoveQuestion :currentTopicID="question.topic"
+            :questionID="question.id"
+            :questionData="question"
+            :authorData="users[question.author]"
+            :snackbar="snackbar"
+            :callback="onMove"
+            :exitMoving="exitMoving" />
+    </div>
     <div v-on:copy="copyBlock"
         v-else>
         <md-card class="questionCard"
@@ -55,20 +65,11 @@
             </md-card-content>
             <md-card-actions>
                 <md-button v-if="isAdmin"
-                    v-on:click="moveQuestion = true">Mover la pregunta</md-button>
+                    v-on:click="toggleMoveQuestion()">Mover la pregunta</md-button>
                 <md-button v-if="question.author == $store.state.user.uid || isAdmin"
                     v-on:click="editQuestion()">Editar</md-button>
             </md-card-actions>
         </md-card>
-
-        <MoveQuestion :active="moveQuestion"
-            :currentTopicID="question.topic"
-            :questionID="question.id"
-            :questionData="question"
-            :authorData="users[question.author]"
-            :snackbar="snackbar"
-            :callback="onMove" />
-
     </div>
 </template>
 <script>
@@ -79,7 +80,7 @@ export default {
     data () {
         return {
             editing: false,
-            moveQuestion: false
+            movingQuestion: false
         }
     },
     props: ['question', 'snackbar', 'onUpdate', 'showProfile'],
@@ -99,6 +100,9 @@ export default {
         }
     },
     methods: {
+        toggleMoveQuestion () {
+            this.movingQuestion = !this.movingQuestion;
+        },
         onMove (data) {
             if (this.onUpdate) {
                 this.onUpdate({
@@ -106,6 +110,9 @@ export default {
                     question: data
                 })
             }
+        },
+        exitMoving () {
+            this.movingQuestion = false;
         },
         exitEditing (data) {
             this.editing = false;

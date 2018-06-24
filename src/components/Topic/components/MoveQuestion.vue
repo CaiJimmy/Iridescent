@@ -1,55 +1,48 @@
 <template>
-    <div>
-        <md-dialog :md-active.sync="active">
-            <md-dialog-title>Mover Pregunta</md-dialog-title>
-            <md-dialog-content>
-                <md-list>
-                    <div v-for="level in arrayLevels"
-                        :key="level.id">
-                        <div v-if="getTopicsByLevel(level.id).length">
-
-                            <md-subheader>{{ level.name }}</md-subheader>
-                            <md-list-item v-for="topic in getTopicsByLevel(level.id)"
-                                :key="topic.id">
-                                <md-radio v-model="selected"
-                                    :value="topic.id" />
-                                <span class="md-list-item-text">{{ topic.name }}</span>
-                            </md-list-item>
-                        </div>
+    <md-card>
+        <md-card-header>
+            <div class="md-title">Mover la pregunta</div>
+            <div class="md-subhead">{{ questionData.title }}</div>
+        </md-card-header>
+        <md-card-content>
+            <md-list>
+                <div v-for="level in arrayLevels"
+                    :key="level.id">
+                    <div v-if="getTopicsByLevel(level.id).length">
+                        <md-subheader>{{ level.name }}</md-subheader>
+                        <md-list-item v-for="topic in getTopicsByLevel(level.id)"
+                            :key="topic.id">
+                            <md-radio v-model="selected"
+                                :value="topic.id" />
+                            <span class="md-list-item-text">{{ topic.name }}</span>
+                        </md-list-item>
                     </div>
-                </md-list>
-            </md-dialog-content>
-            <md-dialog-actions>
-                <md-button class="md-primary"
-                    :disabled="selected == currentTopicID"
-                    v-on:click="confirmDialog = true">Mover</md-button>
-            </md-dialog-actions>
-        </md-dialog>
-
-        <md-dialog :md-active.sync="confirmDialog"
-            :md-fullscreen="false">
-            <md-dialog-title>Confirmación</md-dialog-title>
-            <div class="md-dialog-content"
-                v-html="confirmText"></div>
-            <md-dialog-actions>
-                <md-button class="md-accent"
-                    @click="moveQuestion()">Procesar</md-button>
-                <md-button class="md-primary"
-                    @click="confirmDialog = false">Cancelar</md-button>
-            </md-dialog-actions>
-        </md-dialog>
-    </div>
+                </div>
+            </md-list>
+            <md-checkbox v-model="confirmed"
+                v-if="selected !== currentTopicID">
+                <span v-html="confirmText"></span>
+            </md-checkbox>
+        </md-card-content>
+        <md-card-actions>
+            <md-button class="md-accent"
+                @click="moveQuestion()"
+                :disabled="!confirmed">Procesar</md-button>
+            <md-button class="md-primary"
+                @click="exitMoving()">Cancelar</md-button>
+        </md-card-actions>
+    </md-card>
 </template>
 <script>
 import * as firebase from "firebase/app";
 import "firebase/firestore";
 
 export default {
-    props: ['active', 'questionID', 'currentTopicID', 'authorData', 'questionData', 'snackbar', 'callback'],
+    props: ['questionID', 'currentTopicID', 'authorData', 'questionData', 'snackbar', 'callback', 'exitMoving'],
     data () {
         return {
             selected: null,
-            confirmDialog: false
+            confirmed: false
         }
     },
     created () {

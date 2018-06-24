@@ -12,6 +12,7 @@ import {
 	MdButton,
 	MdAvatar,
 	MdCard,
+	MdCheckbox,
 	MdDivider,
 	MdDialog,
 	MdElevation,
@@ -34,6 +35,7 @@ import 'vue-material/dist/vue-material.min.css';
 Vue.use(MdButton)
 Vue.use(MdAvatar)
 Vue.use(MdCard)
+Vue.use(MdCheckbox)
 Vue.use(MdDivider)
 Vue.use(MdElevation)
 Vue.use(MdField)
