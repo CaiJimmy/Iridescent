@@ -1,9 +1,13 @@
 <template>
 	<div id="app">
+
+		<!-- Show progress bar while loading Firebase Auth -->
 		<md-progress-bar class="md-accent"
 		    md-mode="indeterminate"
 		    v-if="!firebaseReady"></md-progress-bar>
+
 		<div v-else>
+			<!-- Start top toolbar -->
 			<md-toolbar class="md-primary navBar"
 			    :md-elevation="toolbarElevation"
 			    v-if="loggedIn && !$route.meta.hideNav">
@@ -22,6 +26,7 @@
 				<span v-else-if="!$route.meta.hideToolbarTitle"
 				    class="md-title">{{ $meta().refresh().titleChunk }}</span>
 			</md-toolbar>
+			<!-- End top toolbar -->
 
 			<router-view />
 
@@ -47,7 +52,7 @@ export default {
 				display: false,
 				message: null
 			},
-			firebaseReady: false,
+			firebaseReady: false,   /* Indicates if Firebase Auth is ready or not */
 			loggedIn: false,
 			menuVisible: false
 		}
