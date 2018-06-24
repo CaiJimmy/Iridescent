@@ -8,7 +8,6 @@ import "firebase/firestore";
  * @param {string} userID 
  */
 export default function (userID) {
-	console.log((store.state.user.isAdmin || userID == store.state.user.uid));
 	if(!(store.state.user.isAdmin || userID == store.state.user.uid)){   /// Don't fetch user data if current user is not admin
 		return;
 	};
