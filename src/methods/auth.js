@@ -9,7 +9,7 @@ import 'firebase/auth';
 function validAccountCheck() {
 	let user = firebase.auth().currentUser;
 
-	return firestore.collection('users').doc(user.uid).set({
+	return firebase.firestore().collection('users').doc(user.uid).set({
 		'displayName': user.displayName,
 		'email': user.email,
 		'photoURL': user.photoURL
