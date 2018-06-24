@@ -79,7 +79,9 @@ export default {
 	},
 	watch: {
 		"$store.state.loading.role": function () {
-			if (this.$route.meta.isAdmin && !this.isAdmin && !this.$store.state.loading.role) {
+			if (this.$route.meta.isAdmin /* If that page requires admin permission */
+				&& !this.isAdmin /* And current user is not an admin */
+			) {
 				this.$router.push('/403');
 			}
 		}
@@ -101,10 +103,13 @@ export default {
 <style lang="scss">
 @import "~vue-material/dist/theme/engine"; // Import the theme engine
 
-@include md-register-theme("default", (
-  primary: md-get-palette-color(teal, A700), 
-  accent: md-get-palette-color(pink, 500) 
-));
+@include md-register-theme(
+  "default",
+  (
+    primary: md-get-palette-color(teal, A700),
+    accent: md-get-palette-color(pink, 500)
+  )
+);
 
 @import "~vue-material/dist/theme/all"; // Apply the theme
 .container {
