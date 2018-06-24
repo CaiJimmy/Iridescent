@@ -22,8 +22,7 @@
         <md-card class="questionCard"
             :id="question.id">
 
-            <template v-if="isProfile">
-                <!-- Card header for profile page -->
+            <template v-if="isProfile">   <!-- Card header for profile page -->
                 <md-card-header v-if="users.hasOwnProperty(question.author) && !users[question.author].loading">
                     <md-avatar>
                         <img :src="topics[question.topic].image"
@@ -43,8 +42,7 @@
                 </md-card-header>
             </template>
 
-            <template v-else>
-                <!-- Card header for topic page -->
+            <template v-else>  <!-- Card header for topic page -->
                 <template v-if="(isAdmin || isAuthor)">
                     <md-card-header v-if="users.hasOwnProperty(question.author) && !users[question.author].loading">
                         <md-avatar>
@@ -93,7 +91,6 @@
                     v-on:click="toggleMoveQuestion()">Mover la pregunta</md-button>
                 <md-button v-if="question.author == $store.state.user.uid || isAdmin"
                     v-on:click="editQuestion()">Editar</md-button>
-                <md-switch v-model="_hideQuestion">Ocultar</md-switch>
             </md-card-actions>
         </md-card>
     </div>
@@ -106,8 +103,7 @@ export default {
     data () {
         return {
             editing: false,
-            movingQuestion: false,
-            _hideQuestion: false
+            movingQuestion: false
         }
     },
     props: ['question', 'snackbar', 'onUpdate', 'showProfile', 'isProfile'],
