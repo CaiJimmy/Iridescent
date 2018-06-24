@@ -35,7 +35,8 @@
                             :key="item.id">
                             <question-card :question="item"
                                 :snackbar="snackbar"
-                                :onUpdate="onUpdate" />
+                                :onUpdate="onUpdate"
+                                :showProfile="showProfile" />
                         </div>
                         <mugen-scroll :handler="loadMore"
                             :should-handle="!loadMoreDisabled">
@@ -71,6 +72,25 @@
             v-on:click="dialog.question = true;">
             <md-icon>add</md-icon>
         </md-button>
+
+        <md-dialog :md-active.sync="dialog.embedProfile"
+            class="embedProfile">
+            <md-toolbar class="embedProfile--toolbar">
+                <h3 class="md-title"
+                    style="flex: 1">Perfil</h3>
+                <md-button class="md-icon-button"
+                    v-on:click="$router.push({ path: '/profile/' + activeQuestion.author, query: { topic: activeQuestion.topic }})">
+                    <md-icon>open_in_new</md-icon>
+                </md-button>
+                <md-button class="md-icon-button"
+                    v-on:click="dialog.embedProfile = false;">
+                    <md-icon>close</md-icon>
+                </md-button>
+            </md-toolbar>
+            <profile-page :userID="activeQuestion.author"
+                :embed="true"
+                :topicID="activeQuestion.topic" />
+        </md-dialog>
     </div>
 </template>
 <script>
@@ -79,22 +99,27 @@ import "firebase/firestore";
 import MugenScroll from 'vue-mugen-scroll';
 import QuestionForm from './Form.vue';
 import QuestionCard from './components/QuestionCard.vue';
+import ProfilePage from '@/components/Profile/App.vue';
 
 export default {
     name: 'TopicPage',
     data: () => ({
         dialog: {
             question: false,
+            embedProfile: false,
         },
+
         snackbar: {
             display: false,
             message: null
-        }
+        },
+        activeQuestion: {}
     }),
     components: {
         MugenScroll,
         QuestionForm,
-        QuestionCard
+        QuestionCard,
+        ProfilePage
     },
     computed: {
         question_bar: function () {
@@ -117,6 +142,10 @@ export default {
         }
     },
     methods: {
+        showProfile (question) {
+            this.activeQuestion = question;
+            this.dialog.embedProfile = true;
+        },
         onUpdate (data) {
             let type = data.type,
                 index = -1;
@@ -195,5 +224,23 @@ form {
   text-align: center;
   display: block;
   color: #999;
+}
+
+.embedProfile {
+  @media (min-width: 600px) {
+    height: 100vh;
+    width: 95vw;
+  }
+
+  .embedProfile--toolbar {
+    position: sticky;
+    top: 0;
+    left: 0;
+  }
+
+  .userProfile {
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
 }
 </style>

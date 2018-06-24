@@ -18,7 +18,7 @@
                             :alt="users[question.author].displayName">
                     </md-avatar>
                     <div class="md-title">
-                        <a v-on:click="showProfile = true"
+                        <a v-on:click="showProfile(question)"
                             class="embedProfile--trigger">
                             {{ users[question.author].displayName }}
                         </a>
@@ -69,43 +69,22 @@
             :snackbar="snackbar"
             :callback="onMove" />
 
-        <md-dialog :md-active.sync="showProfile"
-            class="embedProfile">
-            <md-toolbar class="embedProfile--toolbar">
-                <h3 class="md-title"
-                    style="flex: 1">Perfil</h3>
-                <md-button class="md-icon-button"
-                    v-on:click="$router.push({ path: '/profile/' + question.author, query: { topic: question.topic }})">
-                    <md-icon>open_in_new</md-icon>
-                </md-button>
-                <md-button class="md-icon-button"
-                    v-on:click="showProfile = false;">
-                    <md-icon>close</md-icon>
-                </md-button>
-            </md-toolbar>
-            <profile-page :userID="question.author"
-                :embed="true"
-                :topicID="question.topic" />
-        </md-dialog>
     </div>
 </template>
 <script>
 import QuestionForm from './../Form.vue';
-import ProfilePage from '@/components/Profile/App.vue';
 import MoveQuestion from './MoveQuestion.vue';
 
 export default {
     data () {
         return {
             editing: false,
-            showProfile: false,
             moveQuestion: false
         }
     },
-    props: ['question', 'snackbar', 'onUpdate'],
+    props: ['question', 'snackbar', 'onUpdate', 'showProfile'],
     components: {
         QuestionForm,
-        ProfilePage,
         MoveQuestion
     },
     computed: {
@@ -156,24 +135,6 @@ export default {
   }
   .correctAnswer {
     font-weight: bold !important;
-  }
-}
-
-.embedProfile {
-  @media (min-width: 600px) {
-    height: 100vh;
-    width: 95vw;
-  }
-
-  .embedProfile--toolbar {
-    position: sticky;
-    top: 0;
-    left: 0;
-  }
-
-  .userProfile {
-    overflow-y: auto;
-    overflow-x: hidden;
   }
 }
 
