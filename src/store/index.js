@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
+import 'firebase/firestore';
 
 Vue.use(Vuex);
 
@@ -84,7 +85,7 @@ export default new Vuex.Store({
 			});
 
 			let user = firebase.auth().currentUser;
-			firestore.collection('users').doc(user.uid).onSnapshot((snapshot) => {
+			firebase.firestore().collection('users').doc(user.uid).onSnapshot((snapshot) => {
 				let userData = snapshot.data();
 				userData.uid = user.uid;
 				commit('setUserData', userData);
