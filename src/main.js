@@ -8,6 +8,10 @@ import App from './App'
 import router from './router'
 import store from './store'
 
+/*
+	Import Vue Material components
+	Only import needed components
+*/
 import {
 	MdButton,
 	MdAvatar,
@@ -32,6 +36,9 @@ import {
 } from 'vue-material/dist/components';
 import 'vue-material/dist/vue-material.min.css';
 
+/*
+	Load Vue Material components
+*/
 Vue.use(MdButton)
 Vue.use(MdAvatar)
 Vue.use(MdCard)
@@ -53,17 +60,32 @@ Vue.use(MdSubheader)
 Vue.use(MdTooltip)
 Vue.use(MdTabs)
 
+/*
+	Prevent the production tip on Vue startup.
+*/
 Vue.config.productionTip = false;
 
+/*
+	Import & Load Firebase base
+*/
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 
+/*
+	Import & Load VueFire
+*/
 import VueFire from 'vuefire';
 Vue.use(VueFire);
 
+/*
+	Import & Load VeeValidate
+*/
 import VeeValidate from 'vee-validate';
 Vue.use(VeeValidate);
 
+/*
+	Import & Load VueTimeago
+*/
 import VueTimeago from 'vue-timeago'
 Vue.use(VueTimeago, {
 	name: 'timeago',
@@ -81,12 +103,18 @@ Vue.use(VueTimeago, {
 	}
 });
 
+/*
+	Import & Load VueAnalytics
+*/
 import VueAnalytics from 'vue-analytics'
 Vue.use(VueAnalytics, {
 	id: process.env.GA_TRACKINGID,
 	router
 })
 
+/*
+	Import & Load Sentry.io
+*/
 import Raven from 'raven-js';
 import RavenVue from 'raven-js/plugins/vue';
 
@@ -97,16 +125,17 @@ if (process.env.NODE_ENV == 'production' && process.env.SENTRY_API) {
 		.install();
 };
 
-var config = {
+
+/*
+	Initialize Firebase App using environment variables
+*/
+firebase.initializeApp({
 	apiKey: process.env.FIREBASE_API_KEY,
 	authDomain: process.env.FIREBASE_AUTH_DOMAIN,
 	databaseURL: process.env.FIREBASE_DATABASE_URL,
 	projectId: process.env.FIREBASE_PROJECT_ID,
 	storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-};
-
-firebase.initializeApp(config);
-window.firestore = firebase.firestore();
+});
 
 /* eslint-disable no-new */
 new Vue({
