@@ -43,14 +43,6 @@
             </div>
         </div>
         <md-snackbar :md-active.sync="snackbar.display">{{ snackbar.message }}</md-snackbar>
-        <md-snackbar id="newQuestionAlert"
-            :md-active.sync="newQuestionAlert"
-            md-position="left"
-            :md-duration="Infinity">
-            <span>Hay nuevas preguntas</span>
-            <md-button class="md-primary"
-                @click="pushNewQuestions()">Mostrar</md-button>
-        </md-snackbar>
     </div>
 </template>
 
@@ -79,7 +71,6 @@ export default {
         userQuestions: [],
 
         newQuestions: [],
-        newQuestionAlert: false,
 
         paging: {
             question_per_page: 20, /// Number of questions per page
@@ -145,11 +136,6 @@ export default {
                 if (!this.$store.state.loading.topics) {
                     this.bindTopic()
                 }
-            }
-        },
-        newQuestions: function () {
-            if (this.newQuestions.length) {
-                this.newQuestionAlert = true;
             }
         }
     },

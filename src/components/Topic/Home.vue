@@ -68,6 +68,15 @@
                 type="send" />
         </md-dialog>
 
+        <md-snackbar id="newQuestionAlert"
+            :md-active.sync="newQuestionAlert"
+            md-position="left"
+            :md-duration="Infinity">
+            <span>Hay nuevas preguntas</span>
+            <md-button class="md-primary"
+                @click="pushNewQuestions()">Mostrar</md-button>
+        </md-snackbar>
+
         <md-button class="md-fab md-primary addQuestion"
             v-on:click="dialog.question = true;">
             <md-icon>add</md-icon>
@@ -113,7 +122,10 @@ export default {
             display: false,
             message: null
         },
-        activeQuestion: {}
+
+        activeQuestion: {},
+
+        newQuestionAlert: false,
     }),
     components: {
         MugenScroll,
@@ -121,7 +133,20 @@ export default {
         QuestionCard,
         ProfilePage
     },
+    watch: {
+        newQuestions: function () {
+            if (this.newQuestions.length) {
+                this.newQuestionAlert = true;
+            }
+        }
+    },
     computed: {
+        pushNewQuestions(){
+            return this.$parent.pushNewQuestions;
+        },
+        newQuestions(){
+            return this.$parent.newQuestions;
+        },
         question_bar: function () {
             return this.$parent.question_bar;
         },
