@@ -106,25 +106,28 @@ Vue.use(VueTimeago, {
 /*
 	Import & Load VueAnalytics
 */
-import VueAnalytics from 'vue-analytics'
-Vue.use(VueAnalytics, {
-	id: process.env.GA_TRACKINGID,
-	router
-})
+if (process.env.NODE_ENV == 'production' && process.env.GA_TRACKINGID) {
+	import ('vue-analytics').then((VueAnalytics) => {
+		Vue.use(VueAnalytics, {
+			id: process.env.GA_TRACKINGID,
+			router
+		})
+	});
+}
 
 /*
 	Import & Load Sentry.io
 */
-import Raven from 'raven-js';
-import RavenVue from 'raven-js/plugins/vue';
-
 if (process.env.NODE_ENV == 'production' && process.env.SENTRY_API) {
-	Raven
-		.config(process.env.SENTRY_API)
-		.addPlugin(RavenVue, Vue)
-		.install();
+	import ('raven-js').then((Raven) => {
+		import ('raven-js/plugins/vue').then((RavenVue) => {
+			Raven
+				.config(process.env.SENTRY_API)
+				.addPlugin(RavenVue, Vue)
+				.install();
+		});
+	});
 };
-
 
 /*
 	Initialize Firebase App using environment variables
