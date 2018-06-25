@@ -119,50 +119,54 @@ export default {
 
 <style lang="scss" scoped>
 .topicPage--header {
-	height: 300px;
-	position: relative;
-	display: flex;
-	align-items: center;
-	justify-content: center;
+  height: 300px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-	.topicPage--header--image,
-	&:after {
-		position: absolute;
-		top: 0;
-		left: 0;
-		height: 100%;
-		width: 100%;
-		background-repeat: no-repeat;
-		background-size: cover;
-		background-position: center center;
-	}
+  .topicPage--header--image,
+  &:after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+  }
 
-	&:after {
-		content: "";
-		background: rgba(0, 0, 0, 0.5);
-		display: block;
-	}
+  .topicPage--header--image {
+    background: var(--md-theme-default-primary, #00bfa5);
+  }
 
-	.topicPage--header--meta {
-		text-align: center;
-		z-index: 2;
-		line-height: 1;
-		h1 {
-			color: #fff;
-			font-size: 2.5em;
-			font-weight: lighter;
-		}
-		h2 {
-			color: #999;
-			font-weight: 400;
-		}
-	}
+  &:after {
+    content: "";
+    background: rgba(0, 0, 0, 0.5);
+    display: block;
+  }
+
+  .topicPage--header--meta {
+    text-align: center;
+    z-index: 2;
+    line-height: 1;
+    h1 {
+      color: #fff;
+      font-size: 2.5em;
+      font-weight: lighter;
+    }
+    h2 {
+      color: #999;
+      font-weight: 400;
+    }
+  }
 }
 
 .changeHeaderImage {
-	position: absolute;
-	bottom: 20px;
-	right: 20px;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
 }
 </style>
 
