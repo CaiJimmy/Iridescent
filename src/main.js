@@ -69,7 +69,6 @@ Vue.config.productionTip = false;
 	Import & Load Firebase base
 */
 import * as firebase from 'firebase/app';
-import 'firebase/auth';
 
 /*
 	Import & Load VueFire
