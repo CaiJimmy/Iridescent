@@ -7,7 +7,7 @@
                 class="md-layout-column md-layout-item md-size-25 md-small-size-100">
 
                 <UserStat :topicData="topic" />
-                <TopicStat :topicData="topic" />
+                <TopicStat v-if="isAdmin" :topicData="topic" />
 
             </div>
 
