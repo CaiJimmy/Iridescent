@@ -133,6 +133,7 @@ exports.questionChange = functions.firestore.document('questions/{questionID}').
 		}
 	});
 
+/* HTTP Function to initialize/reset question counter manually */
 exports.reCount = functions.https.onRequest((req, res) => {
 	const topicID = req.query.topic,
 		topicRef = db.collection('topics').doc(topicID);
@@ -168,5 +169,4 @@ exports.reCount = functions.https.onRequest((req, res) => {
 			});
 		});
 	})
-
 });
