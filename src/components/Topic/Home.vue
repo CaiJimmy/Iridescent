@@ -271,6 +271,8 @@ form {
   .userProfile {
     overflow-y: auto;
     overflow-x: hidden;
+    background-color: #fafafa;
+    background-color: var(--md-theme-default-background-variant, #fafafa);
   }
 }
 </style>
