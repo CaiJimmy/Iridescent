@@ -40,6 +40,7 @@
                 <router-view :topicID="topicID"
                     class="mainContent"
                     :topicData="topic"
+                    :topicRef="ref.topic"
                     :key="$route.name + (topicID|| '')"></router-view>
             </div>
         </div>
