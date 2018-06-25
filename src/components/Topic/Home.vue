@@ -133,9 +133,6 @@ export default {
         newQuestions(){
             return this.$parent.newQuestions;
         },
-        question_bar: function () {
-            return this.$parent.question_bar;
-        },
         questions: function () {
             return (this.$parent.questions)
         },
