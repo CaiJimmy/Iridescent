@@ -18,6 +18,8 @@
                     </md-card-header>
                     <md-card-content>Para este tema, necesitas enviar {{ $parent.topic.questionCount }} preguntas, llevas {{ userQuestions.length }}</md-card-content>
                 </md-card>
+
+                <TopicStat :topicData="topic" />
             </div>
 
             <div class="md-layout-column md-layout-item md-size-75 md-small-size-100 md-gutter">
@@ -97,6 +99,7 @@ import "firebase/firestore";
 import QuestionForm from './Form.vue';
 import QuestionCard from './components/QuestionCard.vue';
 import ProfilePage from '@/components/Profile/App.vue';
+import TopicStat from './components/TopicStat.vue';
 
 export default {
     name: 'TopicPage',
@@ -118,7 +121,8 @@ export default {
     components: {
         QuestionForm,
         QuestionCard,
-        ProfilePage
+        ProfilePage,
+        TopicStat
     },
     watch: {
         newQuestions: function () {
@@ -156,6 +160,9 @@ export default {
         },
         isAdmin () {
             return this.$store.state.user.isAdmin;
+        },
+        topic(){
+            return this.$parent.topic;
         }
     },
     methods: {
