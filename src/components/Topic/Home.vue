@@ -38,17 +38,6 @@
                                 :onUpdate="onUpdate"
                                 :showProfile="showProfile" />
                         </div>
-                        <mugen-scroll :handler="loadMore"
-                            :should-handle="!loadMoreDisabled">
-                            <div class="loader-wrapper"
-                                v-if="!loadMoreDisabled">
-                                <md-progress-spinner :md-diameter="30"
-                                    :md-stroke="3"
-                                    md-mode="indeterminate"></md-progress-spinner>
-                            </div>
-                            <span class="endOfPage"
-                                v-if="$parent.paging.end">Todas las preguntas han sido cargadas</span>
-                        </mugen-scroll>
                     </div>
                     <md-empty-state v-else
                         md-icon="question_answer"
@@ -105,7 +94,6 @@
 <script>
 import * as firebase from "firebase/app";
 import "firebase/firestore";
-import MugenScroll from 'vue-mugen-scroll';
 import QuestionForm from './Form.vue';
 import QuestionCard from './components/QuestionCard.vue';
 import ProfilePage from '@/components/Profile/App.vue';
@@ -128,7 +116,6 @@ export default {
         newQuestionAlert: false,
     }),
     components: {
-        MugenScroll,
         QuestionForm,
         QuestionCard,
         ProfilePage
