@@ -91,7 +91,7 @@ export default {
 
 				this.uploading = true;
 
-				let resizedImage = await resizeImage(imageFile, 1500);
+				let resizedImage = await resizeImage(imageFile, 200);
 
 				console.log(resizedImage);
 
