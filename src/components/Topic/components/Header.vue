@@ -141,11 +141,7 @@ export default {
   .topicPage--header--image {
     background: var(--md-theme-default-primary, #00bfa5);
 	filter: blur(10px);
-<<<<<<< HEAD
-	transform: scale(1.1);  /* To hide while borders caused by blur filter */
-=======
 	transform: scale(1.2);  /* To hide while borders caused by blur filter */
->>>>>>> 7c71622d052217d127c38ca686de20f90a46c371
   }
 
   &:after {
