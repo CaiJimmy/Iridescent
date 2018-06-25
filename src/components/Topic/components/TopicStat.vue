@@ -16,6 +16,10 @@
                 </md-list-item>
             </md-list>
         </md-card-content>
+        <md-card-actions>
+            <md-button class="md-primary"
+                @click="reCount()" :disabled="reCounting">Refrescar</md-button>
+        </md-card-actions>
     </md-card>
 </template>
 
@@ -23,6 +27,11 @@
 export default {
     name: 'TopicStat',
     props: ['topicData'],
+    data(){
+        return{
+            reCounting: false
+        }
+    },
     computed: {
         totalCount () {
             /*
@@ -30,7 +39,7 @@ export default {
             */
 
             if (this.topicData.hasOwnProperty('count')) {
-                return topicData.count.total || 0;
+                return this.topicData.count.total || 0;
             }
             else {
                 return 0;
@@ -38,11 +47,22 @@ export default {
         },
         hiddenCount () {
             if (this.topicData.hasOwnProperty('count')) {
-                return topicData.count.hidden || 0;
+                return this.topicData.count.hidden || 0;
             }
             else {
                 return 0;
             }
+        }
+    },
+    methods: {
+        reCount () {
+            const firebase_function_url = process.env.FIREBASE_FUNCTION_URL;
+            
+            this.reCounting = true;
+
+            fetch(`${firebase_function_url}/reCount?topic=${this.topicData.id}`).then(() => {
+                this.reCounting = false;    
+            })
         }
     }
 }
