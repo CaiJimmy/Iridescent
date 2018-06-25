@@ -112,9 +112,6 @@ export default {
         }
     },
     computed: {
-        pushNewQuestions () {
-            return this.$parent.pushNewQuestions;
-        },
         isAdmin () {
             return this.$store.state.user.isAdmin;
         },
@@ -123,6 +120,19 @@ export default {
         }
     },
     methods: {
+        pushNewQuestions () {
+            this.newQuestions.forEach((question) => {
+                fetchUserDatas(question.author);
+                this.questions.unshift({
+                    ...question,
+                    id: question.id /// 'id' is non-enumerable 
+                })
+            });
+            
+            this.newQuestions.length = 0;  /// Reset it
+            this.newQuestionAlert = false;  /// Hide notification
+            window.scrollTo(0, 0); /// Scroll to top
+        },
         showProfile (question) {
             this.activeQuestion = question;
             this.dialog.embedProfile = true;
