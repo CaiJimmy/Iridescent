@@ -60,7 +60,7 @@ export default {
             
             this.reCounting = true;
 
-            fetch(`${firebase_function_url}/reCount?topic=${this.topicData.id}`).then(() => {
+            fetch(`${firebase_function_url}/reCount/?topic=${this.topicData.id}`).then(() => {
                 this.reCounting = false;    
             })
         }
