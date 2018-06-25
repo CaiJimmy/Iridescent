@@ -68,7 +68,6 @@ export default {
         notFound: false,
 
         questions: [],
-        userQuestions: [],
 
         newQuestions: [],
 
@@ -80,14 +79,12 @@ export default {
 
         loading: {
             metadata: true,
-            questions: true,
-            userQuestions: true
+            questions: true
         },
 
         ref: {
             topic: null,
             questions: null,
-            userQuestions: null,
             questionsFirst: null,
             questionsNext: null
         },
@@ -95,9 +92,7 @@ export default {
         snackbar: {
             display: false,
             message: null
-        },
-
-        question_bar: 0
+        }
     }),
     computed: {
         topic () {
@@ -115,18 +110,11 @@ export default {
                 this.bindTopic()
             }
         },
-        userQuestions: function () {
-            this.renderQuestionProgressBar();
-        },
-        "topic.questionCount": function () {
-            this.renderQuestionProgressBar();
-        },
         topicID: function (id) {  /// When topic ID changes, re-render page
             if (this.topicID) {
                 this.loading = {
                     metadata: true,
-                    questions: true,
-                    userQuestions: true
+                    questions: true
                 };
 
                 this.paging.current = 1;
@@ -210,14 +198,6 @@ export default {
                 });
             });
         },
-        renderQuestionProgressBar () {
-            if (this.topic.questionCount) {
-                let current = this.userQuestions.length,
-                    total = this.topic.questionCount;
-
-                this.question_bar = current / total * 100
-            }
-        },
         bindTopic () {
             if (this.$store.state.topics.hasOwnProperty(this.topicID)) {
                 this.loading.metadata = false;
@@ -233,11 +213,6 @@ export default {
 
             this.handleQuestions(this.ref.questionsFirst).then(() => {
                 this.loading.questions = false;
-            });
-
-            this.ref.userQuestions = this.ref.questions.where('author', '==', firebase.auth().currentUser.uid);
-            this.$bind('userQuestions', this.ref.userQuestions).then(() => {
-                this.loading.userQuestions = false;
             });
 
             if (this.topic.color) {

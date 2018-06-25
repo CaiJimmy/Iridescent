@@ -4,22 +4,10 @@
             class="md-layout md-gutter md-layout-column-xsmall md-alignment">
 
             <div class="md-layout-column md-layout-item md-size-25 md-small-size-100 questions--sidebar">
-                <div class="loader-wrapper"
-                    v-if="loading.userQuestions">
-                    <md-progress-spinner md-mode="indeterminate"
-                        :md-diameter="30"
-                        :md-stroke="3"></md-progress-spinner>
-                </div>
-                <md-card v-if="!loading.userQuestions && $parent.topic.questionCount">
-                    <md-progress-bar md-mode="determinate"
-                        :md-value="question_bar"></md-progress-bar>
-                    <md-card-header>
-                        <div class="md-subhead">Preparar el examen</div>
-                    </md-card-header>
-                    <md-card-content>Para este tema, necesitas enviar {{ $parent.topic.questionCount }} preguntas, llevas {{ userQuestions.length }}</md-card-content>
-                </md-card>
 
+                <UserStat :topicData="topic" />
                 <TopicStat :topicData="topic" />
+
             </div>
 
             <div class="md-layout-column md-layout-item md-size-75 md-small-size-100 md-gutter">
@@ -100,6 +88,7 @@ import QuestionForm from './Form.vue';
 import QuestionCard from './components/QuestionCard.vue';
 import ProfilePage from '@/components/Profile/App.vue';
 import TopicStat from './components/TopicStat.vue';
+import UserStat from './components/UserStat.vue';
 
 export default {
     name: 'TopicPage',
@@ -122,7 +111,8 @@ export default {
         QuestionForm,
         QuestionCard,
         ProfilePage,
-        TopicStat
+        TopicStat,
+        UserStat
     },
     watch: {
         newQuestions: function () {
@@ -148,9 +138,6 @@ export default {
         },
         questions: function () {
             return (this.$parent.questions)
-        },
-        userQuestions: function () {
-            return this.$parent.userQuestions
         },
         loading: function () {
             return this.$parent.loading
