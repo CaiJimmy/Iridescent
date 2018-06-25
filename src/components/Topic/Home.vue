@@ -6,21 +6,21 @@
             <div id="sidebar"
                 class="md-layout-column md-layout-item md-size-25 md-small-size-100">
 
-                <UserStat :topicData="topic" />
+                <UserStat :topicData="topicData" />
                 <TopicStat v-if="isAdmin"
-                    :topicData="topic" />
+                    :topicData="topicData" />
 
             </div>
 
             <div class="md-layout-column md-layout-item md-size-75 md-small-size-100 md-gutter">
-                <QuestionList :topicData="topic"
+                <QuestionList :topicData="topicData"
                     :showProfile="showProfile" />
             </div>
         </div>
 
         <md-dialog :md-fullscreen="false"
             :md-active.sync="dialog.question">
-            <question-form :topicRef="$parent.ref.topic"
+            <question-form :topicRef="topicRef"
                 :callback="closeDialog"
                 :snackbar="snackbar"
                 type="send" />
@@ -71,6 +71,7 @@ import QuestionList from './components/QuestionList.vue';
 
 export default {
     name: 'TopicPage',
+    props: ['topicData', 'topicRef'],
     data: () => ({
         dialog: {
             question: false,
@@ -114,9 +115,6 @@ export default {
     computed: {
         isAdmin () {
             return this.$store.state.user.isAdmin;
-        },
-        topic () {
-            return this.$parent.topic;
         }
     },
     methods: {
