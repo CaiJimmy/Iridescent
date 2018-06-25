@@ -71,12 +71,6 @@ export default {
 
         newQuestions: [],
 
-        paging: {
-            question_per_page: 20, /// Number of questions per page
-            end: false,
-            loading: false
-        },
-
         loading: {
             metadata: true,
             questions: true
@@ -201,7 +195,7 @@ export default {
         bindTopic () {
             if (this.$store.state.topics.hasOwnProperty(this.topicID)) {
                 this.loading.metadata = false;
-                this.bindQuestions();
+                //this.bindQuestions();
             }
             else {
                 this.loading.metadata = false;

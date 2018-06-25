@@ -7,38 +7,16 @@
                 class="md-layout-column md-layout-item md-size-25 md-small-size-100">
 
                 <UserStat :topicData="topic" />
-                <TopicStat v-if="isAdmin" :topicData="topic" />
+                <TopicStat v-if="isAdmin"
+                    :topicData="topic" />
 
             </div>
 
             <div class="md-layout-column md-layout-item md-size-75 md-small-size-100 md-gutter">
-                <div class="loader-wrapper"
-                    v-if="loading.questions">
-                    <md-progress-spinner md-mode="indeterminate"
-                        :md-diameter="30"
-                        :md-stroke="3"></md-progress-spinner>
-                </div>
-
-                <div v-else>
-                    <div v-if="questions.length">
-                        <div class="questionContainer"
-                            v-for="(item) in questions"
-                            :key="item.id">
-                            <question-card :question="item"
-                                :snackbar="snackbar"
-                                :onUpdate="onUpdate"
-                                :showProfile="showProfile" />
-                        </div>
-                    </div>
-                    <md-empty-state v-else
-                        md-icon="question_answer"
-                        md-label="Crear preguntas"
-                        md-description="Parece ser que no hay ninguna pregunta en este tema">
-                    </md-empty-state>
-                </div>
+                <QuestionList :topicData="topic"
+                    :showProfile="showProfile" />
             </div>
         </div>
-        <md-snackbar :md-active.sync="snackbar.display">{{ snackbar.message }}</md-snackbar>
 
         <md-dialog :md-fullscreen="false"
             :md-active.sync="dialog.question">
@@ -47,6 +25,8 @@
                 :snackbar="snackbar"
                 type="send" />
         </md-dialog>
+
+        <md-snackbar :md-active.sync="snackbar.display">{{ snackbar.message }}</md-snackbar>
 
         <md-snackbar id="newQuestionAlert"
             :md-active.sync="newQuestionAlert"
@@ -83,13 +63,11 @@
     </div>
 </template>
 <script>
-import * as firebase from "firebase/app";
-import "firebase/firestore";
 import QuestionForm from './Form.vue';
-import QuestionCard from './components/QuestionCard.vue';
 import ProfilePage from '@/components/Profile/App.vue';
 import TopicStat from './components/TopicStat.vue';
 import UserStat from './components/UserStat.vue';
+import QuestionList from './components/QuestionList.vue';
 
 export default {
     name: 'TopicPage',
@@ -99,21 +77,27 @@ export default {
             embedProfile: false,
         },
 
+        activeQuestion: {},
+
+        newQuestionAlert: false,
+
+        ref: {
+            newQuestions: null
+        },
+
+        newQuestions: [],
+        
         snackbar: {
             display: false,
             message: null
         },
-
-        activeQuestion: {},
-
-        newQuestionAlert: false,
     }),
     components: {
         QuestionForm,
-        QuestionCard,
         ProfilePage,
         TopicStat,
-        UserStat
+        UserStat,
+        QuestionList
     },
     watch: {
         newQuestions: function () {
@@ -131,18 +115,6 @@ export default {
         pushNewQuestions () {
             return this.$parent.pushNewQuestions;
         },
-        newQuestions () {
-            return this.$parent.newQuestions;
-        },
-        questions: function () {
-            return (this.$parent.questions)
-        },
-        loading: function () {
-            return this.$parent.loading
-        },
-        loadMoreDisabled: function () {
-            return this.$parent.paging.loading | this.$parent.paging.end;
-        },
         isAdmin () {
             return this.$store.state.user.isAdmin;
         },
@@ -155,37 +127,8 @@ export default {
             this.activeQuestion = question;
             this.dialog.embedProfile = true;
         },
-        onUpdate (data) {
-            let type = data.type,
-                index = -1;
-
-            if (!type) {
-                return;
-            };
-
-            if (data.question) {
-                index = this.questions.findIndex((question) => question.id == data.question.id);
-            }
-            switch (type) {
-                case 'edit':
-                    if (index > -1) {
-                        this.$parent.questions[index] = data.question;
-                    };
-                    break;
-
-                case 'delete':
-                case 'move':
-                    if (index > -1) {
-                        this.$parent.questions.splice(index, 1);
-                    };
-            }
-
-        },
         closeDialog (where) {
             this.dialog[where] = false;
-        },
-        loadMore: function () {
-            this.$parent.loadMore();
         }
     }
 }
@@ -194,10 +137,6 @@ export default {
 <style lang="scss" scoped>
 form {
   overflow-y: auto;
-}
-
-.questionContainer {
-  margin-bottom: 16px;
 }
 
 .md-dialog {
