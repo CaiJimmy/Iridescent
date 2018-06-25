@@ -39,6 +39,26 @@ exports.questionChange = functions.firestore.document('questions/{questionID}').
 					merge: true
 				});
 			});
+			
+			return;
+
+		} else if (!change.after.exists) {
+			// Deleting question : subtract one from count.total and count.hidden if the question was hidden
+
+			const wasHidden = oldQuestion.hidden;
+
+			oldTopicRef.get().then(snap => {
+				oldTopicRef.set({
+					count: {
+						hidden: snap.data().count.hidden + (wasHidden ? -1 : 0),
+						total: snap.data().count.total - 1
+					}
+				}, {
+					merge: true
+				});
+			});
+
+			return;
 
 		} else if (change.before.exists && change.after.exists) {
 			// Updating existing document
@@ -114,22 +134,6 @@ exports.questionChange = functions.firestore.document('questions/{questionID}').
 			}
 
 			return;
-
-		} else if (!event.data.exists) {
-			// Deleting question : subtract one from count.total and count.hidden if the question was hidden
-
-			const wasHidden = oldQuestion.hidden;
-
-			oldTopicRef.get().then(snap => {
-				oldTopicRef.set({
-					count: {
-						hidden: snap.data().count.hidden + (wasHidden ? -1 : 0),
-						total: snap.data().count.total - 1
-					}
-				}, {
-					merge: true
-				});
-			});
 		}
 	});
 
