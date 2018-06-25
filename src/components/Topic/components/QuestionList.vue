@@ -22,11 +22,15 @@
                         :showProfile="showProfile" />
                 </div>
             </paginate>
-            <paginate-links for="questions"
-                @change="onPageChange"></paginate-links>
-            <span v-if="$refs.paginator">
-                Viewing {{$refs.paginator.pageItemsCount}} results
-            </span>
+            <div class="pagination md-elevation-1">
+                <paginate-links for="questions"
+                    @change="onPageChange"
+                    :limit="2"></paginate-links>
+                <p class="pagination-indicator"
+                    v-if="$refs.paginator">
+                    Viewing {{$refs.paginator.pageItemsCount}} results
+                </p>
+            </div>
         </div>
         <md-empty-state v-else
             md-icon="question_answer"
@@ -216,8 +220,52 @@ export default {
     }
 }
 </script>
-<style scoped>
+<style lang="scss">
 .questionContainer {
   margin-bottom: 16px;
+}
+
+.pagination {
+  background: #fff;
+  .pagination-indicator {
+    padding: 15px;
+    text-align: center;
+    display: block;
+    margin: 0;
+    border-top: 1px solid #e1e1e1;
+    color: #999;
+  }
+}
+ul.paginate-links {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  background: #fff;
+  display: flex;
+  & > li {
+    display: flex;
+    flex: 1;
+    a {
+      flex: 1;
+      text-align: center;
+      padding: 15px;
+      font-size: 1em;
+      border-right: 1px solid #e1e1e1;
+      cursor: pointer;
+    }
+
+    &.active {
+      a {
+        background: #00bfa5;
+        background: var(--md-theme-default-primary-on-background, #00bfa5);
+        color: #fff;
+        border-right: 0;
+
+        &:hover {
+          color: #fff;
+        }
+      }
+    }
+  }
 }
 </style>
