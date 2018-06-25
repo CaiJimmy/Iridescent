@@ -3,7 +3,8 @@
         <div id="mainGrid"
             class="md-layout md-gutter md-layout-column-xsmall md-alignment">
 
-            <div class="md-layout-column md-layout-item md-size-25 md-small-size-100 questions--sidebar">
+            <div id="sidebar"
+                class="md-layout-column md-layout-item md-size-25 md-small-size-100">
 
                 <UserStat :topicData="topic" />
                 <TopicStat :topicData="topic" />
@@ -116,21 +117,21 @@ export default {
     },
     watch: {
         newQuestions: function () {
-            if(this.dialog.question){
+            if (this.dialog.question) {
                 this.pushNewQuestions();
                 return;
             };
-            
+
             if (this.newQuestions.length) {
                 this.newQuestionAlert = true;
             }
         }
     },
     computed: {
-        pushNewQuestions(){
+        pushNewQuestions () {
             return this.$parent.pushNewQuestions;
         },
-        newQuestions(){
+        newQuestions () {
             return this.$parent.newQuestions;
         },
         questions: function () {
@@ -145,7 +146,7 @@ export default {
         isAdmin () {
             return this.$store.state.user.isAdmin;
         },
-        topic(){
+        topic () {
             return this.$parent.topic;
         }
     },
@@ -220,11 +221,16 @@ form {
   right: 20px;
   z-index: 2;
 }
-@media only screen and (min-width: 944px) {
-  .questions--sidebar {
+
+#sidebar {
+  @media only screen and (min-width: 944px) {
     position: sticky;
     top: 80px;
     align-self: flex-start;
+  }
+
+  .md-card {
+    margin-bottom: 16px;
   }
 }
 
