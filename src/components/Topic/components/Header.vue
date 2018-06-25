@@ -124,6 +124,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;  /* Background image has been scaled using transform, so we need to hide it */
 
   .topicPage--header--image,
   &:after {
@@ -132,13 +133,19 @@ export default {
     left: 0;
     height: 100%;
     width: 100%;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center center;
+    background-repeat: no-repeat!important;
+    background-size: cover!important;
+    background-position: center center!important;
   }
 
   .topicPage--header--image {
     background: var(--md-theme-default-primary, #00bfa5);
+	filter: blur(10px);
+<<<<<<< HEAD
+	transform: scale(1.1);  /* To hide while borders caused by blur filter */
+=======
+	transform: scale(1.2);  /* To hide while borders caused by blur filter */
+>>>>>>> 7c71622d052217d127c38ca686de20f90a46c371
   }
 
   &:after {
