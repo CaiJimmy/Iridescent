@@ -125,13 +125,13 @@ export default {
 
             this.bindQuestions();
         },
-        handleQuestions (ref) {
+        handleQuestions (ref, index = 0) {
             return new Promise((resolve, reject) => {
                 console.log(ref);
                 ref.get().then((documentSnapshots) => {
 
                     let _questions = [],
-                        _index = 0;
+                        _index = index || 0;
 
                     console.log(documentSnapshots);
 
@@ -159,7 +159,7 @@ export default {
         bindQuestions () {
             this.onPageChange(0);
         },
-        onPageChange (toPage, fromPage) {
+        async onPageChange (toPage, fromPage) {
             let currentPage = toPage,
                 per_page = this.paging.question_per_page,
                 startAt = null,
@@ -178,7 +178,30 @@ export default {
                 index = 0;
             };
 
-            startAt = this.ref.questions.limit(limit);
+            let questionBefore = this.questions[index - 1];
+
+            console.log('questionBeforeIndex', index - 1);
+            console.log('questionBefore', questionBefore)
+
+            if (questionBefore && !questionBefore.loading) {
+                /* 
+                    If the question before that page is loaded, 
+                    we can build it's documentSnapshot to query the following page only
+                */
+
+                let questionBeforeRef = firebase.firestore().collection('questions').doc(questionBefore.id);
+                console.log(questionBeforeRef);
+
+                let questionBeforeSnapshot = await questionBeforeRef.get();
+                startAt = this.ref.questions.startAfter(questionBeforeSnapshot).limit(per_page);
+            }
+            else {
+                /* 
+                    But if it's not loaded, we'll have to request all questions between first page and current page
+                */
+               
+                startAt = this.ref.questions.limit(limit);
+            }
 
             console.log('Limit', limit);
             console.log('Start at index', index);
