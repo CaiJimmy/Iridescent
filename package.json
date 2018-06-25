@@ -24,6 +24,7 @@
 		"vue-analytics": "^5.8.0",
 		"vue-material": "^1.0.0-beta-10.2",
 		"vue-meta": "^1.4.2",
+		"vue-paginate": "^3.6.0",
 		"vue-router": "^3.0.1",
 		"vue-timeago": "^3.4.2",
 		"vuefire": "^2.0.0-alpha.7",
