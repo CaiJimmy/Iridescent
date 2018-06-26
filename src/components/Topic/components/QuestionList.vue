@@ -1,5 +1,5 @@
 <template>
-    <div class="loader-wrapper"
+    <div class="loaderWrapper"
         v-if="loading.questions">
         <md-progress-spinner md-mode="indeterminate"
             :md-diameter="30"
@@ -20,6 +20,13 @@
                 tag="div"
                 ref="paginator"
                 id="questionWrapper">
+
+                <div class="loaderWrapper"
+                    v-if="paging.loading">
+                    <md-progress-spinner md-mode="indeterminate"
+                        :md-diameter="30"
+                        :md-stroke="3"></md-progress-spinner>
+                </div>
 
                 <div class="questionContainer"
                     v-for="(item) in paginated('questions')"
@@ -177,6 +184,9 @@ export default {
                 return;
             };
 
+            /* Display progress spinner */
+            this.paging.loading = true;
+
             if (limit <= 0) {
                 limit = per_page;
             };
@@ -258,6 +268,12 @@ export default {
 <style lang="scss">
 .questionContainer {
   margin-bottom: 16px;
+}
+
+.loaderWrapper{
+    display: flex;
+    margin: 1em 0;
+    justify-content: center;
 }
 
 .pagination {
