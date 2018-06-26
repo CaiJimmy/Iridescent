@@ -128,3 +128,8 @@ export default {
     }
 }
 </script>
+<style lang="scss" scoped>
+.md-tabs-navigation .md-ripple {
+    z-index: 4;  /* By default, it's 5, but it enters conflict with top fixed navbar */
+}
+</style>
