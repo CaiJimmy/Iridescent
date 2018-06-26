@@ -18,7 +18,8 @@
                 :list="questions"
                 :per="paging.question_per_page"
                 tag="div"
-                ref="paginator">
+                ref="paginator"
+                id="questionWrapper">
 
                 <div class="questionContainer"
                     v-for="(item) in paginated('questions')"
@@ -216,8 +217,12 @@ export default {
                 this.paging.loading = false;
                 this.loading.questions = false;
 
-
+                /* Add current page to paging.loaded to avoid requesting the data again */
                 this.paging.loaded.push(currentPage);
+
+                /* Scroll to the start of list after changed page */
+                const questionWrapper = document.getElementById('questionWrapper');
+                window.scrollTo(0, questionWrapper.offsetTop - 60);
             })
         },
         onUpdate (data) {
