@@ -56,17 +56,6 @@
                                 :snackbar="snackbar"
                                 :isProfile="true" />
                         </div>
-                        <mugen-scroll :handler="loadMore"
-                            :should-handle="!loadMoreDisabled">
-                            <div class="loader-wrapper"
-                                v-if="!loadMoreDisabled">
-                                <md-progress-spinner :md-diameter="30"
-                                    :md-stroke="3"
-                                    md-mode="indeterminate"></md-progress-spinner>
-                            </div>
-                            <span class="endOfPage"
-                                v-if="paging.end">Todas las preguntas han sido cargadas</span>
-                        </mugen-scroll>
                     </div>
                     <md-empty-state v-else
                         md-icon="question_answer"
@@ -83,13 +72,11 @@
 import * as firebase from "firebase/app";
 import "firebase/firestore";
 import QuestionCard from '@/components/Topic/components/QuestionCard.vue';
-import MugenScroll from 'vue-mugen-scroll';
 
 export default {
     props: ['user', 'embed', 'topicID'],
     components: {
-        QuestionCard,
-        MugenScroll
+        QuestionCard
     },
     data () {
         return {

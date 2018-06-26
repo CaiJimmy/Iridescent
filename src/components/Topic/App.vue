@@ -33,12 +33,14 @@
                     <md-tab id="tab-home"
                         md-label="Preguntas"
                         :to="'/t/' + topicID + '/'"></md-tab>
-                    <md-tab id="tab-pages"
+                    <!--<md-tab id="tab-pages"
                         md-label="Examinar"
-                        :to="'/t/' + topicID + '/exam/'"></md-tab>
+                        :to="'/t/' + topicID + '/exam/'"></md-tab>-->
                 </md-tabs>
                 <router-view :topicID="topicID"
                     class="mainContent"
+                    :topicData="topic"
+                    :topicRef="ref.topic"
                     :key="$route.name + (topicID|| '')"></router-view>
             </div>
         </div>
@@ -49,9 +51,7 @@
 <script>
 import * as firebase from "firebase/app";
 import "firebase/firestore";
-import "firebase/auth";
 import TopicHeader from './components/Header.vue';
-import fetchUserDatas from '@/methods/fetchUserDatas.js';
 
 export default {
     name: 'TopicPage',
@@ -67,29 +67,8 @@ export default {
     data: () => ({
         notFound: false,
 
-        questions: [],
-        userQuestions: [],
-
-        newQuestions: [],
-
-        paging: {
-            question_per_page: 20, /// Number of questions per page
-            end: false,
-            loading: false
-        },
-
         loading: {
-            metadata: true,
-            questions: true,
-            userQuestions: true
-        },
-
-        ref: {
-            topic: null,
-            questions: null,
-            userQuestions: null,
-            questionsFirst: null,
-            questionsNext: null
+            metadata: true
         },
 
         snackbar: {
@@ -97,12 +76,14 @@ export default {
             message: null
         },
 
-        question_bar: 0
+        ref: {
+            topic: null
+        }
     }),
     computed: {
         topic () {
             if (!this.$store.state.loading.topics && this.$store.state.topics.hasOwnProperty(this.topicID)) {  /// If not ready yet, then wait till it's ready, but return .name to avoid error
-                return this.$store.state.topics[this.topicID]
+                return this.$store.state.topics[this.topicID];
             }
             else {
                 return {};
@@ -115,22 +96,9 @@ export default {
                 this.bindTopic()
             }
         },
-        userQuestions: function () {
-            this.renderQuestionProgressBar();
-        },
-        "topic.questionCount": function () {
-            this.renderQuestionProgressBar();
-        },
         topicID: function (id) {  /// When topic ID changes, re-render page
             if (this.topicID) {
-                this.loading = {
-                    metadata: true,
-                    questions: true,
-                    userQuestions: true
-                };
-
-                this.paging.current = 1;
-                this.paging.end = false;
+                this.loading.metadata = true;
 
                 this.notFound = false;
                 if (!this.$store.state.loading.topics) {
@@ -141,108 +109,21 @@ export default {
     },
     created: function () {
         this.ref.topic = firebase.firestore().collection('topics').doc(this.topicID);
-        this.ref.questions = firebase.firestore().collection('questions').where('topic', '==', this.ref.topic.id).orderBy("date", 'desc');
 
         if (!this.$store.state.loading.topics) {
             this.bindTopic()
         };
-
-        this.ref.newQuestions = this.ref.questions.where('date', '>', new Date());
-        this.$bind('newQuestions', this.ref.newQuestions);
     },
     methods: {
-        pushNewQuestions () {
-            this.newQuestions.forEach((question) => {
-                fetchUserDatas(question.author);
-                this.questions.unshift({
-                    ...question,
-                    id: question.id /// 'id' is non-enumerable 
-                })
-            });
-            
-            this.newQuestions.length = 0;  /// Reset it
-            this.newQuestionAlert = false;  /// Hide notification
-            window.scrollTo(0, 0); /// Scroll to top
-        },
-        loadMore () {
-            if (this.paging.end) {
-                return;
-            };
-
-            this.paging.loading = true;
-            this.handleQuestions(this.ref.questionsNext).then((documentSnapshots) => {
-                this.paging.loading = false;
-
-                if (documentSnapshots.empty) {
-                    this.paging.end = true;
-                }
-            })
-        },
-        handleQuestions (ref) {
-            return new Promise((resolve, reject) => {
-                ref.get().then((documentSnapshots) => {
-                    if (documentSnapshots.empty) {
-                        this.paging.end = true;
-                        resolve(documentSnapshots);
-                    };
-
-                    documentSnapshots.forEach((doc) => {
-                        let questionData = doc.data();
-                        questionData.id = doc.id;
-
-                        this.questions.push(questionData);
-
-                        fetchUserDatas(questionData.author);
-                    });
-
-                    console.log(documentSnapshots);
-                    let lastVisible = documentSnapshots.docs[documentSnapshots.size - 1];  /// Build query for next page
-
-                    if (!lastVisible) {
-                        return;
-                    };
-
-                    this.ref.questionsNext = this.ref.questions
-                        .startAfter(lastVisible)
-                        .limit(this.paging.question_per_page);
-
-                    resolve(documentSnapshots);
-                });
-            });
-        },
-        renderQuestionProgressBar () {
-            if (this.topic.questionCount) {
-                let current = this.userQuestions.length,
-                    total = this.topic.questionCount;
-
-                this.question_bar = current / total * 100
-            }
-        },
         bindTopic () {
             if (this.$store.state.topics.hasOwnProperty(this.topicID)) {
                 this.loading.metadata = false;
-                this.bindQuestions();
+                this.$store.commit('setPrimaryColor', this.topic.color);
             }
             else {
                 this.loading.metadata = false;
                 this.notFound = true;
-            }
-        },
-        bindQuestions () {
-            this.ref.questionsFirst = this.ref.questions.limit(this.paging.question_per_page);
-
-            this.handleQuestions(this.ref.questionsFirst).then(() => {
-                this.loading.questions = false;
-            });
-
-            this.ref.userQuestions = this.ref.questions.where('author', '==', firebase.auth().currentUser.uid);
-            this.$bind('userQuestions', this.ref.userQuestions).then(() => {
-                this.loading.userQuestions = false;
-            });
-
-            if (this.topic.color) {
-                this.$store.commit('setPrimaryColor', this.topic.color);
-            }
+            };
         }
     }
 }

@@ -6,6 +6,7 @@ module.exports = {
 	FIREBASE_DATABASE_URL: JSON.stringify(process.env.FIREBASE_DATABASE_URL),
 	FIREBASE_PROJECT_ID: JSON.stringify(process.env.FIREBASE_PROJECT_ID),
 	FIREBASE_STORAGE_BUCKET: JSON.stringify(process.env.FIREBASE_STORAGE_BUCKET),
+	FIREBASE_FUNCTION_URL: JSON.stringify(process.env.FIREBASE_FUNCTION_URL),
 	SENTRY_API: JSON.stringify(process.env.SENTRY_API),
 	GA_TRACKINGID: JSON.stringify(process.env.GA_TRACKINGID)
 };

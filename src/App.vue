@@ -4,7 +4,7 @@
 		<!-- Show progress bar while loading Firebase Auth -->
 		<md-progress-bar class="md-accent"
 			md-mode="indeterminate"
-			v-if="!firebaseReady"></md-progress-bar>
+			v-if="!firebaseReady || $store.state.loading.user"></md-progress-bar>
 
 		<div v-else>
 			<!-- Start top toolbar -->
@@ -28,7 +28,13 @@
 			</md-toolbar>
 			<!-- End top toolbar -->
 
-			<router-view />
+			<template v-if="loggedIn">
+				<router-view v-if="!$store.state.loading.user"/>
+			</template>
+
+			<template v-else>
+				<router-view />
+			</template>
 
 		</div>
 	</div>

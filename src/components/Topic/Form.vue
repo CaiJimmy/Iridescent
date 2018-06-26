@@ -97,7 +97,8 @@ export default {
                 b: null,
                 c: null,
                 d: null
-            }
+            },
+            hidden: false
         },
         loading: {
             form: false

@@ -129,6 +129,12 @@ if (process.env.NODE_ENV == 'production' && process.env.SENTRY_API) {
 };
 
 /*
+	Import & Load VuePaginate
+*/
+import VuePaginate from 'vue-paginate'
+Vue.use(VuePaginate)
+
+/*
 	Initialize Firebase App using environment variables
 */
 firebase.initializeApp({
