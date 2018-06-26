@@ -14,7 +14,8 @@
 
             <div class="md-layout-column md-layout-item md-size-75 md-small-size-100 md-gutter">
                 <QuestionList :topicData="topicData"
-                    :showProfile="showProfile" />
+                    :showProfile="showProfile"
+                    :isQuestionDialogActive="dialog.question" />
             </div>
         </div>
 
@@ -27,15 +28,6 @@
         </md-dialog>
 
         <md-snackbar :md-active.sync="snackbar.display">{{ snackbar.message }}</md-snackbar>
-
-        <md-snackbar id="newQuestionAlert"
-            :md-active.sync="newQuestionAlert"
-            md-position="left"
-            :md-duration="Infinity">
-            <span>Hay nuevas preguntas</span>
-            <md-button class="md-primary"
-                @click="pushNewQuestions()">Mostrar</md-button>
-        </md-snackbar>
 
         <md-button class="md-fab md-primary addQuestion"
             v-on:click="dialog.question = true;">
@@ -79,14 +71,6 @@ export default {
         },
 
         activeQuestion: {},
-
-        newQuestionAlert: false,
-
-        ref: {
-            newQuestions: null
-        },
-
-        newQuestions: [],
         
         snackbar: {
             display: false,
@@ -100,37 +84,12 @@ export default {
         UserStat,
         QuestionList
     },
-    watch: {
-        newQuestions: function () {
-            if (this.dialog.question) {
-                this.pushNewQuestions();
-                return;
-            };
-
-            if (this.newQuestions.length) {
-                this.newQuestionAlert = true;
-            }
-        }
-    },
     computed: {
         isAdmin () {
             return this.$store.state.user.isAdmin;
         }
     },
     methods: {
-        pushNewQuestions () {
-            this.newQuestions.forEach((question) => {
-                fetchUserDatas(question.author);
-                this.questions.unshift({
-                    ...question,
-                    id: question.id /// 'id' is non-enumerable 
-                })
-            });
-            
-            this.newQuestions.length = 0;  /// Reset it
-            this.newQuestionAlert = false;  /// Hide notification
-            window.scrollTo(0, 0); /// Scroll to top
-        },
         showProfile (question) {
             this.activeQuestion = question;
             this.dialog.embedProfile = true;

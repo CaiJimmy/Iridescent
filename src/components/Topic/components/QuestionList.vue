@@ -8,11 +8,18 @@
 
     <div v-else>
         <div v-if="questions.length">
+
+            <NewQuestions :questionsRef="ref.questions"
+                :isQuestionDialogActive="isQuestionDialogActive"
+                :snackbar="snackbar"
+                :showProfile="showProfile" />
+
             <paginate name="questions"
                 :list="questions"
                 :per="paging.question_per_page"
                 tag="div"
                 ref="paginator">
+
                 <div class="questionContainer"
                     v-for="(item) in paginated('questions')"
                     :key="item.id">
@@ -39,7 +46,6 @@
         </md-empty-state>
 
         <md-snackbar :md-active.sync="snackbar.display">{{ snackbar.message }}</md-snackbar>
-
     </div>
 </template>
 
@@ -48,10 +54,11 @@ import * as firebase from "firebase/app";
 import "firebase/firestore";
 import QuestionCard from './QuestionCard.vue';
 import fetchUserDatas from '@/methods/fetchUserDatas.js';
+import NewQuestions from './NewQuestions.vue';
 
 export default {
     name: 'QuestionList',
-    props: ['topicData', 'showProfile'],
+    props: ['topicData', 'showProfile', 'isQuestionDialogActive'],
     data: () => ({
         questions: [],
         paginate: ['questions'],
@@ -76,7 +83,8 @@ export default {
         },
     }),
     components: {
-        QuestionCard
+        QuestionCard,
+        NewQuestions
     },
     watch: {
         "topicData.id" () {
@@ -119,9 +127,6 @@ export default {
                     .where('hidden', '==', false)
                     .orderBy("date", 'desc');
             };
-
-            this.ref.newQuestions = this.ref.questions.where('date', '>', new Date());
-            this.$bind('newQuestions', this.ref.newQuestions);
 
             this.bindQuestions();
         },
@@ -199,7 +204,7 @@ export default {
                 /* 
                     But if it's not loaded, we'll have to request all questions between first page and current page
                 */
-               
+
                 startAt = this.ref.questions.limit(limit);
             }
 
