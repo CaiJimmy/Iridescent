@@ -20,9 +20,11 @@
     <div v-on:copy="copyBlock"
         v-else>
         <md-card class="questionCard"
-            :id="question.id">
+            :id="question.id"
+            :class="{'hidden': hidden}">
 
-            <template v-if="isProfile">   <!-- Card header for profile page -->
+            <template v-if="isProfile">
+                <!-- Card header for profile page -->
                 <md-card-header v-if="users.hasOwnProperty(question.author) && !users[question.author].loading">
                     <md-avatar>
                         <img :src="topics[question.topic].image"
@@ -42,25 +44,33 @@
                 </md-card-header>
             </template>
 
-            <template v-else>  <!-- Card header for topic page -->
+            <template v-else>
+                <!-- Card header for topic page -->
                 <template v-if="(isAdmin || isAuthor)">
                     <md-card-header v-if="users.hasOwnProperty(question.author) && !users[question.author].loading">
-                        <md-avatar>
-                            <img :src="users[question.author].photoURL"
-                                :alt="users[question.author].displayName">
-                        </md-avatar>
-                        <div class="md-title">
-                            <a v-on:click="showProfile(question)"
-                                class="embedProfile--trigger">
-                                {{ users[question.author].displayName }}
-                            </a>
-                        </div>
-                        <div class="md-subhead">
-                            <span>
-                                <timeago :auto-update="60"
-                                    :since="question.date"></timeago>
-                            </span>
-                        </div>
+                        <md-card-header-text>
+                            <md-avatar>
+                                <img :src="users[question.author].photoURL"
+                                    :alt="users[question.author].displayName">
+                            </md-avatar>
+                            <div class="md-title">
+                                <a v-on:click="showProfile(question)"
+                                    class="embedProfile--trigger">
+                                    {{ users[question.author].displayName }}
+                                </a>
+                            </div>
+                            <div class="md-subhead">
+                                <span>
+                                    <timeago :auto-update="60"
+                                        :since="question.date"></timeago>
+                                </span>
+                            </div>
+                        </md-card-header-text>
+                        <md-button class="md-icon-button"
+                            v-on:click="toggleHidden()">
+                            <md-icon v-if="hidden">visibility_off</md-icon>
+                            <md-icon v-else>visibility</md-icon>
+                        </md-button>
                     </md-card-header>
                     <md-progress-bar v-else
                         class="md-primary"
@@ -96,6 +106,8 @@
     </div>
 </template>
 <script>
+import * as firebase from "firebase/app";
+import "firebase/firestore";
 import QuestionForm from './../Form.vue';
 import MoveQuestion from './MoveQuestion.vue';
 
@@ -103,13 +115,17 @@ export default {
     data () {
         return {
             editing: false,
-            movingQuestion: false
+            movingQuestion: false,
+            hidden: false
         }
     },
     props: ['question', 'snackbar', 'onUpdate', 'showProfile', 'isProfile'],
     components: {
         QuestionForm,
         MoveQuestion
+    },
+    created () {
+        this.hidden = this.question.hidden || false;
     },
     computed: {
         users () {
@@ -126,6 +142,17 @@ export default {
         },
     },
     methods: {
+        toggleHidden () {
+            const questionRef = firebase.firestore().collection('questions').doc(this.question.id);
+
+            this.hidden = !this.hidden; /* Invert true/false */
+
+            questionRef.set({
+                hidden: this.hidden
+            }, {
+                    merge: true
+                });
+        },
         toggleMoveQuestion () {
             this.movingQuestion = !this.movingQuestion;
         },
@@ -161,6 +188,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 .questionCard {
+  &.hidden {
+    opacity: 0.5;
+  }
   .md-list-item-text {
     white-space: normal !important;
     line-height: 1.5 !important;
