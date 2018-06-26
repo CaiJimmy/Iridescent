@@ -126,8 +126,9 @@ export default {
 
 @media only screen and (min-width: 500px) {
 	.navBar {
-		position: sticky;
-		top: 0;
+		position: sticky !important;
+		top: 0 !important;
+		z-index: 3 !important;
 	}
 }
 
