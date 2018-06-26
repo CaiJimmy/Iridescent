@@ -51,8 +51,9 @@ export default {
         this.$bind('newQuestions', this.ref.newQuestions);
     },
     watch: {
-        newQuestions () {
-            if (this.newQuestions.length) {
+        newQuestions (newArr, oldArr) {
+            if (newArr.length && newArr.length > oldArr.length) {
+                /* Triggered only when a question is added (newArr.length > oldArr.length) */
                 this.newQuestionAlert = true;
             };
         }
