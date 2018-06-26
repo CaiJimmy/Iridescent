@@ -24,7 +24,8 @@
                 <div class="questionContainer"
                     v-for="(item) in paginated('questions')"
                     :key="item.id">
-                    <question-card :question="item"
+                    <question-card v-if="!item.loading"
+                        :question="item"
                         :snackbar="snackbar"
                         :onUpdate="onUpdate"
                         :showProfile="showProfile" />
