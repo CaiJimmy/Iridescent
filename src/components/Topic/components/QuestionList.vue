@@ -233,7 +233,7 @@ export default {
 
                 /* Scroll to the start of list after changed page */
                 const questionWrapper = document.getElementById('questionWrapper');
-                window.scrollTo(0, questionWrapper.offsetTop - 60);
+                window.scrollTo(0, questionWrapper.offsetTop - 100);
             })
         },
         onUpdate (data) {
