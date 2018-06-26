@@ -128,7 +128,7 @@ export default {
 	.navBar {
 		position: sticky !important;
 		top: 0 !important;
-		z-index: 3 !important;
+		z-index: 5 !important;
 	}
 }
 
