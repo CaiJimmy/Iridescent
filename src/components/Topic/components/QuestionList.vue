@@ -206,6 +206,7 @@ export default {
                 */
 
                 startAt = this.ref.questions.limit(limit);
+                index = 0;
             }
 
             console.log('Limit', limit);
