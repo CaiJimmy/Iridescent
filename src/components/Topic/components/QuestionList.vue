@@ -259,7 +259,15 @@ export default {
             })
         },
         onUpdate (data) {
-            let type = data.type,
+            /*
+                Due to the fact that I loaded old questions using .get(), 
+                they will not be updated automatically as they are not subscribed to realtime update.
+                So I came up with this method that modify question data locally.
+                It is passed as a callback to QuestionCard, 
+                and run after doing modifications to question, like editing, moving or deleting.
+            */
+
+            let type = data.type,   /* Indicates which type of action has done to the question: 'delete', 'move' or 'edit */
                 index = -1;
 
             if (!type) {
@@ -271,6 +279,7 @@ export default {
             }
             switch (type) {
                 case 'edit':
+                    /* Replace old question data with new one, passed as parameter `data.question` */
                     if (index > -1) {
                         this.$set(this.questions, index, data.question)
                     };
@@ -278,6 +287,8 @@ export default {
 
                 case 'delete':
                 case 'move':
+                    /* Remove question from `questions` array if it has been moved or deleted */
+
                     if (index > -1) {
                         this.questions.splice(index, 1);
                     };
