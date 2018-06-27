@@ -174,11 +174,13 @@ export default {
             this.onPageChange(0);
         },
         async onPageChange (toPage, fromPage) {
-            let currentPage = toPage,
-                per_page = this.paging.question_per_page,
-                startAt = null,
-                limit = currentPage * per_page,
-                index = per_page * (currentPage - 1);
+            const currentPage = toPage,
+                per_page = this.paging.question_per_page;
+
+            let startAfter = null,
+                limit = per_page,
+                index = per_page * (currentPage - 1),   /* Start after the question before that page */
+                startAfterAvailable;
 
             if (this.paging.loaded.includes(currentPage)) {
                 return;
@@ -187,18 +189,7 @@ export default {
             /* Display progress spinner */
             this.paging.loading = true;
 
-            if (limit <= 0) {
-                limit = per_page;
-            };
-
-            if (index < 0) {
-                index = 0;
-            };
-
-            let questionBefore = this.questions[index - 1];
-
-            console.log('questionBeforeIndex', index - 1);
-            console.log('questionBefore', questionBefore)
+            const questionBefore = this.questions[index - 1];
 
             if (questionBefore && !questionBefore.loading) {
                 /* 
@@ -206,30 +197,61 @@ export default {
                     we can build it's documentSnapshot to query the following page only
                 */
 
-                let questionBeforeRef = firebase.firestore().collection('questions').doc(questionBefore.id);
-                console.log(questionBeforeRef);
+                const questionBeforeRef = firebase.firestore().collection('questions').doc(questionBefore.id),
+                    questionBeforeSnapshot = await questionBeforeRef.get();
 
-                let questionBeforeSnapshot = await questionBeforeRef.get();
-                startAt = this.ref.questions.startAfter(questionBeforeSnapshot).limit(per_page);
+                startAfter = this.ref.questions.startAfter(questionBeforeSnapshot).limit(per_page);
+
+                if (index < 0) {
+                    index = 0;
+                };
+
+                startAfterAvailable = true;
             }
             else {
                 /* 
                     But if it's not loaded, we'll have to request all questions between first page and current page
                 */
 
-                startAt = this.ref.questions.limit(limit);
-                index = 0;
+                limit = currentPage * per_page;   /* Load all question from first page to current page */
+
+                if (limit <= 0) {
+                    /* 
+                        Limit can not be less or equal to zero
+                        This happend when currentPage == 0 
+                    */
+
+                    limit = per_page;
+                };
+
+                startAfter = this.ref.questions.limit(limit);
+                index = 0;   /* Start loop from first page */
+
+                startAfterAvailable = false;
             }
 
             console.log('Limit', limit);
             console.log('Start at index', index);
 
-            this.handleQuestions(startAt, index).then((documentSnapshots) => {
+            this.handleQuestions(startAfter, index).then((documentSnapshots) => {
                 this.paging.loading = false;
                 this.loading.questions = false;
 
-                /* Add current page to paging.loaded to avoid requesting the data again */
-                this.paging.loaded.push(currentPage);
+                if (startAfterAvailable) {
+                    /*  startAfterAvailable = true
+                            => Only requested current page 
+                        Add current page to paging.loaded to avoid requesting the data again
+                    */
+                    this.paging.loaded.push(currentPage);
+                }
+                else {
+                    /* 
+                        Request from 0 to current page 
+                        Add those pages to paging.loaded 
+                    */
+
+                    this.paging.loaded = Array.from(Array(currentPage).keys());
+                };
 
                 /* Scroll to the start of list after changed page */
                 const questionWrapper = document.getElementById('questionWrapper');
@@ -270,10 +292,10 @@ export default {
   margin-bottom: 16px;
 }
 
-.loaderWrapper{
-    display: flex;
-    margin: 1em 0;
-    justify-content: center;
+.loaderWrapper {
+  display: flex;
+  margin: 1em 0;
+  justify-content: center;
 }
 
 .pagination {
