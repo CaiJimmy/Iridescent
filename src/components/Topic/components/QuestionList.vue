@@ -101,11 +101,6 @@ export default {
         QuestionCard,
         NewQuestions
     },
-    watch: {
-        "topicData.id" () {
-            this.init();
-        }
-    },
     created () {
         this.init();
     },
@@ -159,7 +154,10 @@ export default {
                     .orderBy("date", 'desc');
             };
 
-            this.bindQuestions();
+            /*
+                Load questions of first page
+            */
+            this.onPageChange(0);
         },
         handleQuestions (ref, index = 0) {
             /*
@@ -193,12 +191,6 @@ export default {
                     resolve(documentSnapshots);
                 });
             });
-        },
-        bindQuestions () {
-            /*
-                Load questions of first page
-            */
-            this.onPageChange(0);
         },
         async onPageChange (toPage, fromPage) {
             const currentPage = toPage,
