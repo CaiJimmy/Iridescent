@@ -7,46 +7,48 @@
     </div>
 
     <div v-else>
-        <div v-if="questions.length">
+        <div v-if="visibleQuestionCount">
 
             <NewQuestions :questionsRef="ref.questions"
                 :isQuestionDialogActive="isQuestionDialogActive"
                 :snackbar="snackbar"
                 :showProfile="showProfile" />
 
-            <paginate name="questions"
-                :list="questions"
-                :per="paging.question_per_page"
-                tag="div"
-                ref="paginator"
-                id="questionWrapper">
+            <template v-if="questions.length">
+                <paginate name="questions"
+                    :list="questions"
+                    :per="paging.question_per_page"
+                    tag="div"
+                    ref="paginator"
+                    id="questionWrapper">
 
-                <div class="loaderWrapper"
-                    v-if="paging.loading">
-                    <md-progress-spinner md-mode="indeterminate"
-                        :md-diameter="30"
-                        :md-stroke="3"></md-progress-spinner>
-                </div>
+                    <div class="loaderWrapper"
+                        v-if="paging.loading">
+                        <md-progress-spinner md-mode="indeterminate"
+                            :md-diameter="30"
+                            :md-stroke="3"></md-progress-spinner>
+                    </div>
 
-                <div class="questionContainer"
-                    v-for="(item) in paginated('questions')"
-                    :key="item.id">
-                    <question-card v-if="!item.loading"
-                        :question="item"
-                        :snackbar="snackbar"
-                        :onUpdate="onUpdate"
-                        :showProfile="showProfile" />
+                    <div class="questionContainer"
+                        v-for="(item) in paginated('questions')"
+                        :key="item.id">
+                        <question-card v-if="!item.loading"
+                            :question="item"
+                            :snackbar="snackbar"
+                            :onUpdate="onUpdate"
+                            :showProfile="showProfile" />
+                    </div>
+                </paginate>
+                <div class="pagination md-elevation-1">
+                    <paginate-links for="questions"
+                        @change="onPageChange"
+                        :limit="2"></paginate-links>
+                    <p class="pagination-indicator"
+                        v-if="$refs.paginator">
+                        Viewing {{$refs.paginator.pageItemsCount}} results
+                    </p>
                 </div>
-            </paginate>
-            <div class="pagination md-elevation-1">
-                <paginate-links for="questions"
-                    @change="onPageChange"
-                    :limit="2"></paginate-links>
-                <p class="pagination-indicator"
-                    v-if="$refs.paginator">
-                    Viewing {{$refs.paginator.pageItemsCount}} results
-                </p>
-            </div>
+            </template>
         </div>
         <md-empty-state v-else
             md-icon="question_answer"
@@ -106,6 +108,14 @@ export default {
     computed: {
         isAdmin () {
             return this.$store.state.user.isAdmin;
+        },
+        visibleQuestionCount () {
+            if (this.isAdmin) {
+                return this.topicData.count.total;
+            }
+            else {
+                return this.topicData.count.total - this.topicData.count.hidden;
+            }
         }
     },
     methods: {
