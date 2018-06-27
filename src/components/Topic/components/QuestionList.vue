@@ -167,13 +167,13 @@ export default {
                 And if user is admin, query userdata of each question (Check /methods/fetchUserDatas.js)
             */
             return new Promise((resolve, reject) => {
-                console.log(ref);
+                console.log('Questions reference: ', ref);
                 ref.get().then((documentSnapshots) => {
 
                     let _questions = [],
                         _index = index || 0;
 
-                    console.log(documentSnapshots);
+                    console.log('Questions document snapshots: ', documentSnapshots);
 
                     documentSnapshots.forEach((doc) => {
                         let questionData = doc.data();
@@ -189,8 +189,6 @@ export default {
 
                         fetchUserDatas(questionData.author);
                     });
-
-                    console.log(_questions);
 
                     resolve(documentSnapshots);
                 });
@@ -259,8 +257,8 @@ export default {
                 startAfterAvailable = false;
             }
 
-            console.log('Limit', limit);
-            console.log('Start at index', index);
+            console.log('Question request limit: ', limit);
+            console.log('Start at index: ', index);
 
             this.handleQuestions(startAfter, index).then((documentSnapshots) => {
                 this.paging.loading = false;
