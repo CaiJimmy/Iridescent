@@ -75,21 +75,21 @@ export default {
         isQuestionDialogActive: Boolean
     },
     data: () => ({
-        questions: [],
-        paginate: ['questions'],
+        questions: [],  /* Old questions (existed before page loaded) are  stored here */
+        paginate: ['questions'],  /* Vue-Paginate config */
 
         paging: {
-            question_per_page: 20, /// Number of questions per page
-            loading: false,
-            loaded: []
+            question_per_page: 20,   /* Number of questions per page */
+            loading: false, 
+            loaded: []   /* Loaded pages, to avoid querying data again */
         },
 
         ref: {
-            questions: null,
+            questions: null,   /* Old questions Firestore Reference */
         },
 
         loading: {
-            questions: true
+            questions: true   /* To display progress spinner */
         },
 
         snackbar: {
@@ -124,14 +124,18 @@ export default {
     },
     methods: {
         init () {
-            console.log(this.topicData);
             if (!this.topicData) {
                 return;
             };
 
             const count = this.topicData.count;
-
+            
             if (this.isAdmin) {
+                /* 
+                    Hidden questions are visible to admins
+                */
+
+                /* Fill array with placeholders, to build pagination */
                 this.questions = new Array(count.total).fill({
                     loading: true
                 });
@@ -141,6 +145,10 @@ export default {
                     .orderBy("date", 'desc');
             }
             else {
+                /*
+                    For students, they can not see hidden questions
+                */
+
                 this.questions = new Array(count.total - count.hidden).fill({
                     loading: true
                 });
@@ -154,6 +162,10 @@ export default {
             this.bindQuestions();
         },
         handleQuestions (ref, index = 0) {
+            /*
+                Fetch questions of given reference
+                And if user is admin, query userdata of each question (Check /methods/fetchUserDatas.js)
+            */
             return new Promise((resolve, reject) => {
                 console.log(ref);
                 ref.get().then((documentSnapshots) => {
@@ -185,6 +197,9 @@ export default {
             });
         },
         bindQuestions () {
+            /*
+                Load questions of first page
+            */
             this.onPageChange(0);
         },
         async onPageChange (toPage, fromPage) {
