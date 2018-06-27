@@ -7,7 +7,7 @@
             <md-list>
                 <md-list-item>
                     <md-icon>visibility</md-icon>
-                    <span class="md-list-item-text">Visibles: {{ totalCount }}</span>
+                    <span class="md-list-item-text">Visibles: {{ totalCount - hiddenCount }}</span>
                 </md-list-item>
 
                 <md-list-item>
