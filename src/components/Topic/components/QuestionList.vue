@@ -69,7 +69,11 @@ import NewQuestions from './NewQuestions.vue';
 
 export default {
     name: 'QuestionList',
-    props: ['topicData', 'showProfile', 'isQuestionDialogActive'],
+    props: {
+        topicData: Object,   /* Passed from Topic/App.vue -> Topic/Home.app though <router-view> */
+        showProfile: Function,   /* Function that triggers embed profile */
+        isQuestionDialogActive: Boolean
+    },
     data: () => ({
         questions: [],
         paginate: ['questions'],
