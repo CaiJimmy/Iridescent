@@ -221,7 +221,9 @@ export default {
         },
         onPageChange (toPage, fromPage) {
             const questionWrapper = document.getElementById('questionWrapper');
-            window.scrollTo(0, questionWrapper.offsetTop - 100);
+            if(questionWrapper){
+                window.scrollTo(0, questionWrapper.offsetTop - 100);
+            };
         },
         bindQuestions () {
             const questionRef = firebase.firestore().collection('questions')
