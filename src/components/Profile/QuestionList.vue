@@ -176,6 +176,13 @@ export default {
                         query: {}
                     })
                 }
+            };
+
+            /*
+                Go to page 1 after filter change
+            */
+            if (this.$refs.paginator) {
+                this.$refs.paginator.goToPage(1);
             }
         },
         "$route.query.topic" () {
