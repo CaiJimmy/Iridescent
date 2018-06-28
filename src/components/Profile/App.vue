@@ -44,13 +44,9 @@
                     :md-stroke="3"></md-progress-bar>
 
                 <div v-else>
-                    <QuestionsList :user="user"
+                    <QuestionList :user="user"
                         :embed="embed"
-                        v-if="embed"
                         :topicID="topicID" />
-                    <router-view v-else
-                        :embed="embed"
-                        :user="user" />
                 </div>
             </div>
         </div>
@@ -59,12 +55,12 @@
 <script>
 import * as firebase from "firebase/app";
 import "firebase/firestore";
-import QuestionsList from './Questions.vue'
+import QuestionList from './QuestionList.vue'
 
 export default {
     props: ['userID', 'embed', 'topicID'],
     components: {
-        QuestionsList
+        QuestionList
     },
     metaInfo () {
         if (!this.embed) {
