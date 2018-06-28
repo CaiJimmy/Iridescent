@@ -26,7 +26,7 @@ export default {
     data () {
         return {
             ref: {
-                questions: null
+                questions: firebase.firestore().collection('questions').where('topic', '==', this.topicID)
             },
             allQuestions: [],
             examQuestions: [],
@@ -46,11 +46,6 @@ export default {
         questions () {
             return this.$parent.questions;
         }
-    },
-    created () {
-        window.db = firebase.firestore();
-        this.ref.questions = firebase.firestore().collection('questions').where('topic', '==', this.topicID);
-        this.$bind('allQuestions', this.ref.questions);
     },
     methods: {
         shuffle (array) {
@@ -74,7 +69,15 @@ export default {
             return array;
         },
         prepareQuestions(){
-            return new Promise(resolve => {
+            return new Promise(async resolve => {
+                if(this.topicData.count.total && !this.allQuestions.length){
+                    /* 
+                        Questions not downloaded yet.
+                    */
+
+                    await this.$bind('allQuestions', this.ref.questions);
+                };
+                
                 this.examQuestions = this.shuffle(this.allQuestions).slice(0, this.config.numberOfQuestions);
                 resolve();
             })
