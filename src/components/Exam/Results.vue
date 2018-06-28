@@ -49,7 +49,7 @@
                     :itemChosen="chosen[question.id]" />
             </div>
             <!-- End right side -->
-            
+
         </div>
         <!-- End Grid -->
     </div>
@@ -59,7 +59,11 @@ import QuestionCard from './QuestionCard.vue';
 
 export default {
     name: 'ExamResults',
-    props: ['chosen', 'examQuestions', 'topicID'],
+    props: {
+        chosen: Object,   /* Pair of `questionID - chosen answer letter` */
+        examQuestions: Array,
+        topicID: String
+    },
     components: {
         QuestionCard
     },
@@ -75,6 +79,9 @@ export default {
     },
     created () {
         if (!this.examQuestions.length) {
+            /* 
+                If user entered this page directly
+            */
             this.$router.replace('/t/' + this.topicID);
         }
         else {
@@ -97,6 +104,11 @@ export default {
         checkAnswers () {
             let chosen = this.chosen,
                 result = this.result;
+            
+            /*
+                Loop though all exam questions
+                And check if chosen answer == correct answer
+            */
             this.examQuestions.forEach((question) => {
                 if (!chosen.hasOwnProperty(question.id)) {
                     result.blank.push({
@@ -114,24 +126,23 @@ export default {
                 }
             });
             this.result.grade = (this.result.correct.length / this.examQuestions.length) * 10;
-        },
-
+        }
     }
 }
 </script>
 <style lang="scss" scoped>
 .md-card {
-	margin-bottom: 1em;
+  margin-bottom: 1em;
 }
 .exitExam {
-	width: 100%;
-	margin: 0;
+  width: 100%;
+  margin: 0;
 }
 .leftSide {
-	@media only screen and (min-width: 944px) {
-		position: sticky;
-		top: 80px;
-		align-self: flex-start;
-	}
+  @media only screen and (min-width: 944px) {
+    position: sticky;
+    top: 80px;
+    align-self: flex-start;
+  }
 }
 </style>
