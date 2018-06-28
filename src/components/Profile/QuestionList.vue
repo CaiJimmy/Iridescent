@@ -1,5 +1,6 @@
 <template>
     <div class="container extend mainContent">
+        <!-- Filter message start -->
         <md-toolbar class="md-primary filterMessage"
             v-if="filter.selected"
             md-elevation="1">
@@ -12,15 +13,24 @@
                 v-if="!embed">Ir al tema</md-button>
             <md-button @click="filter.selected = null">Mostrar todas</md-button>
         </md-toolbar>
-        <div class="md-layout md-gutter md-layout-column-xsmall md-alignment ">
+        <!-- Filter message end -->
+
+        <!-- Start grid -->
+        <div class="md-layout md-gutter md-layout-column-xsmall md-alignment">
+
+            <!-- Start left side: Sidebar -->
             <div class="md-layout-column md-layout-item md-size-25 md-small-size-100 sidebar">
+
+                <!-- Display progress spinner while loading questions -->
                 <div class="loader-wrapper"
                     v-if="loading">
                     <md-progress-spinner md-mode="indeterminate"
                         :md-diameter="30"
                         :md-stroke="3"></md-progress-spinner>
                 </div>
+
                 <div v-else>
+                    <!-- Start filter options card -->
                     <md-card v-if="questions.length">
                         <md-list>
                             <md-subheader class="md-primary">Filtrar por temas</md-subheader>
@@ -36,10 +46,16 @@
                             </div>
                         </md-list>
                     </md-card>
+                    <!-- End filter options card -->
                 </div>
-            </div>
 
+            </div>
+            <!-- End left side: Sidebar -->
+
+            <!-- Start right side: Question List -->
             <div class="md-layout-column md-layout-item md-size-75 md-small-size-100 md-gutter">
+
+                <!-- Display progress spinner while loading questions -->
                 <div class="loader-wrapper"
                     v-if="loading">
                     <md-progress-spinner md-mode="indeterminate"
@@ -47,8 +63,10 @@
                         :md-stroke="3"></md-progress-spinner>
                 </div>
 
-                <div v-else>
-                    <div v-if="questions.length">
+                <template v-else>
+                    <template v-if="questions.length">
+                        
+                        <!-- Start pagination -->
                         <paginate name="questions"
                             :list="filteredQuestions"
                             :per="question_per_page"
@@ -74,15 +92,20 @@
                                 Viewing {{$refs.paginator.pageItemsCount}} results
                             </p>
                         </div>
-                    </div>
+                        <!-- End pagination -->
+
+                    </template>
+
+                    <!-- If user has not published any question -->
                     <md-empty-state v-else
                         md-icon="question_answer"
                         md-label="Nothing..."
                         md-description="El usuario no ha publicado ninguna pregunta">
                     </md-empty-state>
-                </div>
+                </template>
             </div>
         </div>
+        <!-- End grid -->
         <md-snackbar :md-active.sync="snackbar.display">{{ snackbar.message }}</md-snackbar>
     </div>
 </template>
