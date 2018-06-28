@@ -179,22 +179,7 @@ export default {
             }
         },
         "$route.query.topic" () {
-            /*
-                Check if topicID from query string exists
-            */
-            if (this.$store.state.topics.hasOwnProperty(this.$route.query.topic)) {
-                /*
-                    If topic ID is valid, select it
-                */
-                this.filter.selected = this.$route.query.topic;
-            } else {
-                /*
-                    Remove query string if there's no such topic
-                */
-                this.$router.replace({
-                    query: {}
-                })
-            }
+            this.handleTopicID();
         }
     },
     computed: {
@@ -212,6 +197,28 @@ export default {
         },
     },
     methods: {
+        handleTopicID () {
+            const topicID = this.topicID || this.$route.query.topic;
+            if (this.isTopicIdValid(topicID)) {
+                /*
+                    If topic ID is valid, select it
+                */
+                this.filter.selected = topicID;
+            } else {
+                /*
+                    Remove query string if there's no such topic
+                */
+                this.$router.replace({
+                    query: {}
+                })
+            }
+        },
+        isTopicIdValid (topicID) {
+            /*
+                Check if topicID from query string exists
+            */
+            return this.$store.state.topics.hasOwnProperty(topicID);
+        },
         onPageChange (toPage, fromPage) {
             const questionWrapper = document.getElementById('questionWrapper');
             window.scrollTo(0, questionWrapper.offsetTop - 100);
@@ -224,12 +231,8 @@ export default {
             /* Download questions and subscribe to real time updates */
             this.$bind('questions', questionRef).then(() => {
                 /* Once downloaded, start to build filter options */
-                this.buildFilter().then(() => { 
-                    const topicID = this.topicID || this.$route.query.topic;
-
-                    if (topicID) {
-                        this.filter.selected = topicID;
-                    };
+                this.buildFilter().then(() => {
+                    this.handleTopicID();
                     this.loading = false;
                 });
             })
