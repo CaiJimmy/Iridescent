@@ -46,11 +46,7 @@
                 <div v-else>
                     <QuestionsList :user="user"
                         :embed="embed"
-                        v-if="embed"
                         :topicID="topicID" />
-                    <router-view v-else
-                        :embed="embed"
-                        :user="user" />
                 </div>
             </div>
         </div>
