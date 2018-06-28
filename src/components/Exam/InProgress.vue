@@ -23,11 +23,11 @@
                 </md-card>
             </div>
             <div class="md-layout-item md-size-75 md-small-size-100 md-gutter">
-                <QuestionCard v-for="(question,index) in shuffledQuestions"
+                <QuestionCard v-for="(question,index) in examQuestions"
                     :key="question.id"
                     :item="question"
                     :index="index"
-                    :total="shuffledQuestions.length"
+                    :total="examQuestions.length"
                     :onChosen="onChosen" />
 
                 <md-button class="md-primary md-raised submitExam"
@@ -38,10 +38,10 @@
 </template>
 <script>
 import QuestionCard from './QuestionCard.vue';
-import VueCountdown from '@xkeshi/vue-countdown'
+import VueCountdown from '@xkeshi/vue-countdown';
 
 export default {
-    props: ['shuffledQuestions', 'config', 'onChosen', 'topicID'],
+    props: ['examQuestions', 'config', 'onChosen', 'topicID'],
     data () {
         return {
             examCountdownProgress: 0
@@ -52,7 +52,7 @@ export default {
         VueCountdown
     },
     created(){
-        if(!this.shuffledQuestions.length){
+        if(!this.examQuestions.length){
             this.$router.replace('/t/' + this.topicID);
         }
         else{

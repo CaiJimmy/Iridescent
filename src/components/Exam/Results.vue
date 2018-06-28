@@ -37,11 +37,11 @@
 
             <!-- Right Side Start -->
             <div class="rightSide md-layout-item md-size-70 md-small-size-100 md-gutter">
-                <QuestionCard v-for="(question,index) in shuffledQuestions"
+                <QuestionCard v-for="(question,index) in examQuestions"
                     :key="question.id"
                     :item="question"
                     :index="index"
-                    :total="shuffledQuestions.length"
+                    :total="examQuestions.length"
                     :correctAnswer="question.correctAnswer"
                     :itemChosen="chosen[question.id]" />
             </div>
@@ -53,7 +53,7 @@
 import QuestionCard from './QuestionCard.vue';
 
 export default {
-    props: ['chosen', 'shuffledQuestions', 'topicID'],
+    props: ['chosen', 'examQuestions', 'topicID'],
     components: {
         QuestionCard
     },
@@ -68,7 +68,7 @@ export default {
         }
     },
     created () {
-        if (!this.shuffledQuestions.length) {
+        if (!this.examQuestions.length) {
             this.$router.replace('/t/' + this.topicID);
         }
         else {
@@ -91,7 +91,7 @@ export default {
         checkAnswers () {
             let chosen = this.chosen,
                 result = this.result;
-            this.shuffledQuestions.forEach((question) => {
+            this.examQuestions.forEach((question) => {
                 if (!chosen.hasOwnProperty(question.id)) {
                     result.blank.push({
                         'id': question.id
@@ -107,7 +107,7 @@ export default {
                     });
                 }
             });
-            this.result.grade = (this.result.correct.length / this.shuffledQuestions.length) * 10;
+            this.result.grade = (this.result.correct.length / this.examQuestions.length) * 10;
         },
 
     }
