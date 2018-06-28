@@ -236,6 +236,10 @@ export default {
   white-space: normal;
 }
 
+.sidebar{
+    margin-bottom: 1em;
+}
+
 .pagination {
   background: #fff;
   .pagination-indicator {
