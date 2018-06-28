@@ -5,14 +5,16 @@
         </md-card-header>
 
         <md-card-content>
+            
             <md-field :class="{ 'md-invalid': errors.has('numberOfQuestions') }">
                 <label>Número de preguntas</label>
                 <md-input type="number"
                     v-model="config.numberOfQuestions"
                     data-vv-name="numberOfQuestions"
-                    v-validate="rule"></md-input>
+                    v-validate="numberOfQuestionsRule"></md-input>
                 <span class="md-error">{{errors.first('numberOfQuestions')}}</span>
             </md-field>
+            
             <md-field :class="{ 'md-invalid': errors.has('examTime') }">
                 <label>Tiempo</label>
                 <md-input type="number"
@@ -21,6 +23,7 @@
                     v-validate="'required|numeric|min_value:1|max_value:20'"></md-input>
                 <span class="md-error">{{errors.first('examTime')}}</span>
             </md-field>
+            
         </md-card-content>
 
         <md-card-actions>
@@ -31,7 +34,9 @@
 <script>
 export default {
     name: 'ExamHome',
-    props: ['topicData', 'questions', 'shuffledQuestions'],
+    props: {
+        topicData: Object   /* Passed though Vue Router, with current topic's data */
+    },
     data () {
         return {
             config: {
@@ -41,7 +46,7 @@ export default {
         }
     },
     computed: {
-        rule: function () {
+        numberOfQuestionsRule () {
             return {
                 required: true,
                 numeric: true,
