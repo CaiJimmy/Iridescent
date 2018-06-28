@@ -70,12 +70,17 @@ import "firebase/firestore";
 import QuestionList from './QuestionList.vue'
 
 export default {
-    props: ['userID', 'embed', 'topicID'],
+    props: {
+        userID: String,   /* Passed though Vue Router */
+        embed: Boolean,   /* Is embed on topic page or not */
+        topicID: String   /* Display by default questions under that topic */
+    },
     components: {
         QuestionList
     },
     metaInfo () {
         if (!this.embed) {
+            /* Do not change page title if it is embed on topic page */
             return {
                 title: this.user.displayName || 'Perfil'
             }
@@ -83,21 +88,19 @@ export default {
     },
     data () {
         return {
-            user: {
-                displayName: null
-            },
+            user: {},    /* User info */
+
             loading: {
                 user: true
             },
+
             notFound: false
         }
     },
     watch: {
-        userID: function (id) {  /// When topic ID changes, re-render page
+        userID (id) {  /* When topic ID changes, re-render page */
             if (this.userID) {
-                this.loading = {
-                    user: true
-                };
+                this.loading.user = true;
                 this.notFound = false;
                 this.init();
             }
@@ -109,18 +112,27 @@ export default {
     methods: {
         init () {
             if (this.$store.state.users.hasOwnProperty(this.userID)) {
+                /* 
+                    If that user ID is found under $store.state.users[], copy it directly
+                */
                 this.user = this.$store.state.users[this.userID];
                 this.loading.user = false;
             }
             else {
+                /*
+                    Otherwise, fetch user data and add it to $store.state.users[]
+                */
+                
                 firebase.firestore().collection('users').doc(this.userID).get().then((snapshot) => {
                     if (snapshot.exists) {
+                        /* User ID found on databse */
                         this.user = snapshot.data();
                         this.user.uid = this.userID;
                         this.$store.commit('addUser', this.user);
                         this.loading.user = false;
                     }
                     else {
+                        /* Wrong user ID, display not found error */
                         this.notFound = true;
                         this.loading.user = false;
                     }
