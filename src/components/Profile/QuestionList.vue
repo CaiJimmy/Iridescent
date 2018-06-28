@@ -65,7 +65,7 @@
 
                 <template v-else>
                     <template v-if="questions.length">
-                        
+
                         <!-- Start pagination -->
                         <paginate name="questions"
                             :list="filteredQuestions"
@@ -116,20 +116,25 @@ import QuestionCard from '@/components/Topic/components/QuestionCard.vue';
 
 export default {
     props: ['user', 'embed', 'topicID'],
+    props: {
+        user: Object,     /* User data passed from Profile/App.vue */
+        embed: Boolean,   /* Is embed on topic page or not */
+        topicID: String   /* Display by default questions under that topic */
+    },
     components: {
         QuestionCard
     },
     data () {
         return {
-            questions: [],
+            questions: [],    /* Questions published by user */
             loading: true,
 
-            paginate: ['questions'],  /* Vue-Paginate config */
-            question_per_page: 20, /// Number of questions per page
+            paginate: ['questions'],   /* Vue-Paginate config */
+            question_per_page: 20,   /* Number of questions per page */
 
             filter: {
-                selected: null,
-                options: {}
+                selected: null,   /* Which topic's question should display */
+                options: {}   /* Show available topics */
             },
 
             snackbar: {
@@ -142,14 +147,21 @@ export default {
         this.bindQuestions();
     },
     watch: {
-        questions: function () {
+        questions () {
             if (this.questions.length && !this.loading) {
-                this.buildFilter();/// Rebuild the filter when question list updates
+                /* Rebuild the filter when question list updates */
+                this.buildFilter();
             }
         },
-        "filter.selected": function () {
+        "filter.selected" () {
             if (!this.embed) {
+                /* 
+                    Update URL query if it is not embedded on topic page 
+                */
                 if (this.filter.selected) {
+                    /*
+                        Add query string if a topic is selected
+                    */
                     this.$router.replace({
                         query: {
                             topic: this.filter.selected
@@ -157,24 +169,39 @@ export default {
                     })
                 }
                 else {
-                    this.$router.replace({   /// Remove query string if there's no selected topic
+                    /* 
+                        Remove query string if there's no selected topic
+                    */
+                    this.$router.replace({
                         query: {}
                     })
                 }
             }
         },
-        "$route.query.topic": function () {
+        "$route.query.topic" () {
+            /*
+                Check if topicID from query string exists
+            */
             if (this.$store.state.topics.hasOwnProperty(this.$route.query.topic)) {
+                /*
+                    If topic ID is valid, select it
+                */
                 this.filter.selected = this.$route.query.topic;
             } else {
-                this.$router.replace({   /// Remove query string if there's no such topic
+                /*
+                    Remove query string if there's no such topic
+                */
+                this.$router.replace({
                     query: {}
                 })
             }
         }
     },
     computed: {
-        filteredQuestions: function () {
+        filteredQuestions () {
+            /*
+                Build filtered question array
+            */
             if (this.filter.selected) {
                 return this.questions.filter((question) => {
                     return question.topic == this.filter.selected
@@ -190,9 +217,15 @@ export default {
             window.scrollTo(0, questionWrapper.offsetTop - 100);
         },
         bindQuestions () {
-            this.$bind('questions', firebase.firestore().collection('questions').where('author', '==', this.user.uid).orderBy("date", 'desc')).then(() => {
-                this.buildFilter().then(() => { /// Rebuild the filter when question list updates
-                    let topicID = this.topicID || this.$route.query.topic;
+            const questionRef = firebase.firestore().collection('questions')
+                .where('author', '==', this.user.uid)
+                .orderBy("date", 'desc');
+
+            /* Download questions and subscribe to real time updates */
+            this.$bind('questions', questionRef).then(() => {
+                /* Once downloaded, start to build filter options */
+                this.buildFilter().then(() => { 
+                    const topicID = this.topicID || this.$route.query.topic;
 
                     if (topicID) {
                         this.filter.selected = topicID;
@@ -204,23 +237,36 @@ export default {
         buildFilter () {
             return new Promise((resolve, reject) => {
                 this.questions.forEach((question) => {
-                    let topicID = question.topic,
+                    const topicID = question.topic,   /* Topic that current question belongs to */
                         topicData = this.$store.state.topics[topicID];
 
                     if (!topicData) {
+                        /*
+                            Before loading this component, all topics data should be loaded. (Logic on Profile/App.vue)
+                            So, if that topic's data can not be found, means that topic ID is not valid.
+                        */
                         return;
                     };
 
-                    let levelID = topicData.level;
+                    const levelID = topicData.level;
 
                     if (!this.filter.options[levelID]) {
-                        this.filter.options[levelID] = this.$store.state.levels[levelID];
+                        /* 
+                            If this level has not been added yet to options, add it.
+                        */
+                        this.filter.options[levelID] = this.$store.state.levels[levelID];   /* Copy level data from $store.state */
                         this.filter.options[levelID].id = levelID;
-                        this.filter.options[levelID].topics = [];
+                        this.filter.options[levelID].topics = [];   /* Create a array of child topics */
                         this.filter.options[levelID].topics.push(topicData);
                     }
                     else {
+                        /* 
+                            This level has already been added to options.
+                        */
                         if (!this.filter.options[levelID].topics.includes(topicData)) {
+                            /*
+                                If this topic has not been added yet to options, add it.
+                            */
                             this.filter.options[levelID].topics.push(topicData);
                         }
                     }
@@ -259,8 +305,8 @@ export default {
   white-space: normal;
 }
 
-.sidebar{
-    margin-bottom: 1em;
+.sidebar {
+  margin-bottom: 1em;
 }
 
 .pagination {
