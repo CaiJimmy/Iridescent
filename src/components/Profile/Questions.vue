@@ -125,9 +125,6 @@ export default {
             }
         },
         "filter.selected": function () {
-            this.paging.end = false;
-            this.paging.current = 1;
-
             if (!this.embed) {
                 if (this.filter.selected) {
                     this.$router.replace({
