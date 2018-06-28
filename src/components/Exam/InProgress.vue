@@ -2,7 +2,7 @@
     <div class="container extend mainContent">
         <!-- Start grid -->
         <div class="md-layout md-gutter md-layout-column-xsmall md-alignment mainGrid">
-            
+
             <!-- Start left side -->
             <div class="md-layout-item md-size-25 md-small-size-100 md-gutter">
                 <md-card id="examDetails"
@@ -50,7 +50,12 @@ import VueCountdown from '@xkeshi/vue-countdown';
 
 export default {
     name: 'ExamInProgress',
-    props: ['examQuestions', 'config', 'onChosen', 'topicID'],
+    props: {
+        examQuestions: Array,
+        config: Object,
+        onChosen: Function,
+        topicID: String
+    },
     data () {
         return {
             examCountdownProgress: 0
@@ -60,26 +65,39 @@ export default {
         QuestionCard,
         VueCountdown
     },
-    created(){
-        if(!this.examQuestions.length){
+    created () {
+        if (!this.examQuestions.length) {
+            /* 
+                If user entered this page directly
+            */
             this.$router.replace('/t/' + this.topicID);
         }
-        else{
+        else {
             window.scrollTo(0, 0);
         }
     },
     computed: {
         time () {
+            /*
+                this.config.examTime (minutes)
+            */
             return this.config.examTime * 60 * 1000;
         }
     },
     methods: {
         submitExam () {
-             this.$router.replace('/t/' + this.topicID + '/exam/results');
+            /*
+                Go to results page
+            */
+            this.$router.replace('/t/' + this.topicID + '/exam/results');
         },
         onCountdownProgress (data) {
-            var total = this.time / 1000,
-                current = data.minutes * 60 + data.seconds;
+            /*
+                Build progress bar
+            */
+            let total = this.time / 1000,   /* Exam time in seconds */
+                current = data.minutes * 60 + data.seconds;   /* Time passed in seconds */
+            
             this.examCountdownProgress = current / total * 100;
         },
         onCountdownEnd () {
@@ -89,20 +107,20 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.submitExam{
-    width: 100%;
-    margin: 0;
+.submitExam {
+  width: 100%;
+  margin: 0;
 }
 
 .md-card {
-	margin-bottom: 1em;
+  margin-bottom: 1em;
 }
 
 #examDetails {
-	@media only screen and (min-width: 944px) {
-		position: sticky;
-		top: 80px;
-		align-self: flex-start;
-	}
+  @media only screen and (min-width: 944px) {
+    position: sticky;
+    top: 80px;
+    align-self: flex-start;
+  }
 }
 </style>
