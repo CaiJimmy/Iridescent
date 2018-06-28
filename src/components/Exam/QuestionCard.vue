@@ -33,6 +33,7 @@
 </template>
 <script>
 export default {
+    name: 'ExamQuestionCard',
     props: ['item', 'index', 'total', 'onChosen', 'correctAnswer', 'itemChosen'],
     data () {
         return {

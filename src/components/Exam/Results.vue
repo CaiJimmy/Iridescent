@@ -1,6 +1,9 @@
 <template>
     <div class="container extend mainContent">
+        <!-- Start Grid -->
         <div class="examResult md-layout md-gutter md-layout-column-xsmall md-alignment mainGrid">
+
+            <!-- Start left side -->
             <div class="leftSide md-layout-item md-size-30 md-small-size-100 md-gutter">
                 <md-card>
                     <md-card-header>
@@ -33,27 +36,34 @@
                 <md-button class="md-primary md-raised exitExam"
                     v-on:click="$router.replace('/t/' + topicID)">Terminar</md-button>
             </div>
-            <!-- Left Side End -->
+            <!-- End left side -->
 
-            <!-- Right Side Start -->
+            <!-- Start right side -->
             <div class="rightSide md-layout-item md-size-70 md-small-size-100 md-gutter">
-                <QuestionCard v-for="(question,index) in shuffledQuestions"
+                <QuestionCard v-for="(question,index) in examQuestions"
                     :key="question.id"
                     :item="question"
                     :index="index"
-                    :total="shuffledQuestions.length"
+                    :total="examQuestions.length"
                     :correctAnswer="question.correctAnswer"
                     :itemChosen="chosen[question.id]" />
             </div>
-            <!-- Right Side End -->
+            <!-- End right side -->
+
         </div>
+        <!-- End Grid -->
     </div>
 </template>
 <script>
 import QuestionCard from './QuestionCard.vue';
 
 export default {
-    props: ['chosen', 'shuffledQuestions', 'topicID'],
+    name: 'ExamResults',
+    props: {
+        chosen: Object,   /* Pair of `questionID - chosen answer letter` */
+        examQuestions: Array,
+        topicID: String
+    },
     components: {
         QuestionCard
     },
@@ -68,7 +78,10 @@ export default {
         }
     },
     created () {
-        if (!this.shuffledQuestions.length) {
+        if (!this.examQuestions.length) {
+            /* 
+                If user entered this page directly
+            */
             this.$router.replace('/t/' + this.topicID);
         }
         else {
@@ -91,7 +104,12 @@ export default {
         checkAnswers () {
             let chosen = this.chosen,
                 result = this.result;
-            this.shuffledQuestions.forEach((question) => {
+            
+            /*
+                Loop though all exam questions
+                And check if chosen answer == correct answer
+            */
+            this.examQuestions.forEach((question) => {
                 if (!chosen.hasOwnProperty(question.id)) {
                     result.blank.push({
                         'id': question.id
@@ -107,25 +125,24 @@ export default {
                     });
                 }
             });
-            this.result.grade = (this.result.correct.length / this.shuffledQuestions.length) * 10;
-        },
-
+            this.result.grade = (this.result.correct.length / this.examQuestions.length) * 10;
+        }
     }
 }
 </script>
 <style lang="scss" scoped>
 .md-card {
-	margin-bottom: 1em;
+  margin-bottom: 1em;
 }
 .exitExam {
-	width: 100%;
-	margin: 0;
+  width: 100%;
+  margin: 0;
 }
 .leftSide {
-	@media only screen and (min-width: 944px) {
-		position: sticky;
-		top: 80px;
-		align-self: flex-start;
-	}
+  @media only screen and (min-width: 944px) {
+    position: sticky;
+    top: 80px;
+    align-self: flex-start;
+  }
 }
 </style>

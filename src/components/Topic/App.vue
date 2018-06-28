@@ -33,9 +33,9 @@
                     <md-tab id="tab-home"
                         md-label="Preguntas"
                         :to="'/t/' + topicID + '/'"></md-tab>
-                    <!--<md-tab id="tab-pages"
+                    <md-tab id="tab-pages"
                         md-label="Examinar"
-                        :to="'/t/' + topicID + '/exam/'"></md-tab>-->
+                        :to="'/t/' + topicID + '/exam/'"></md-tab>
                 </md-tabs>
                 <router-view :topicID="topicID"
                     class="mainContent"
