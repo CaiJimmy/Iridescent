@@ -1,6 +1,9 @@
 <template>
     <div class="container extend mainContent">
+        <!-- Start Grid -->
         <div class="examResult md-layout md-gutter md-layout-column-xsmall md-alignment mainGrid">
+
+            <!-- Start left side -->
             <div class="leftSide md-layout-item md-size-30 md-small-size-100 md-gutter">
                 <md-card>
                     <md-card-header>
@@ -33,9 +36,9 @@
                 <md-button class="md-primary md-raised exitExam"
                     v-on:click="$router.replace('/t/' + topicID)">Terminar</md-button>
             </div>
-            <!-- Left Side End -->
+            <!-- End left side -->
 
-            <!-- Right Side Start -->
+            <!-- Start right side -->
             <div class="rightSide md-layout-item md-size-70 md-small-size-100 md-gutter">
                 <QuestionCard v-for="(question,index) in examQuestions"
                     :key="question.id"
@@ -45,8 +48,10 @@
                     :correctAnswer="question.correctAnswer"
                     :itemChosen="chosen[question.id]" />
             </div>
-            <!-- Right Side End -->
+            <!-- End right side -->
+            
         </div>
+        <!-- End Grid -->
     </div>
 </template>
 <script>
