@@ -49,12 +49,30 @@
 
                 <div v-else>
                     <div v-if="questions.length">
-                        <div class="questionContainer"
-                            v-for="(item) in paginatedQuestions"
-                            :key="item.id">
-                            <question-card :question="item"
-                                :snackbar="snackbar"
-                                :isProfile="true" />
+                        <paginate name="questions"
+                            :list="filteredQuestions"
+                            :per="question_per_page"
+                            tag="div"
+                            ref="paginator"
+                            id="questionWrapper">
+
+                            <div class="questionContainer"
+                                v-for="(item) in paginated('questions')"
+                                :key="item.id">
+                                <question-card v-if="!item.loading"
+                                    :question="item"
+                                    :snackbar="snackbar"
+                                    :isProfile="true" />
+                            </div>
+                        </paginate>
+                        <div class="pagination md-elevation-1">
+                            <paginate-links for="questions"
+                                @change="onPageChange"
+                                :limit="2"></paginate-links>
+                            <p class="pagination-indicator"
+                                v-if="$refs.paginator">
+                                Viewing {{$refs.paginator.pageItemsCount}} results
+                            </p>
                         </div>
                     </div>
                     <md-empty-state v-else
@@ -82,16 +100,15 @@ export default {
         return {
             questions: [],
             loading: true,
-            paging: {
-                current: 1,/// Current Page
-                question_per_page: 20, /// Number of questions per page
-                end: false,
-                loading: false,
-            },
+
+            paginate: ['questions'],  /* Vue-Paginate config */
+            question_per_page: 20, /// Number of questions per page
+
             filter: {
                 selected: null,
                 options: {}
             },
+
             snackbar: {
                 display: false,
                 message: null
@@ -137,9 +154,6 @@ export default {
         }
     },
     computed: {
-        paginatedQuestions: function () {
-            return this.filteredQuestions.slice(0, this.paging.question_per_page * this.paging.current);
-        },
         filteredQuestions: function () {
             if (this.filter.selected) {
                 return this.questions.filter((question) => {
@@ -149,11 +163,12 @@ export default {
                 return this.questions;
             }
         },
-        loadMoreDisabled: function () {
-            return this.paging.loading | this.paging.end;
-        },
     },
     methods: {
+        onPageChange (toPage, fromPage) {
+            const questionWrapper = document.getElementById('questionWrapper');
+            window.scrollTo(0, questionWrapper.offsetTop - 100);
+        },
         bindQuestions () {
             this.$bind('questions', firebase.firestore().collection('questions').where('author', '==', this.user.uid).orderBy("date", 'desc')).then(() => {
                 this.buildFilter().then(() => { /// Rebuild the filter when question list updates
@@ -193,24 +208,12 @@ export default {
 
                 resolve();
             });
-        },
-        loadMore () {
-            if (this.paging.end) {
-                return;
-            };
-
-            if (this.paging.question_per_page * this.paging.current >= this.questions.length) {
-                this.paging.end = true;
-                return;
-            };
-
-            this.paging.current += 1;
-        },
+        }
     }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .loader-wrapper {
   text-align: center;
 }
@@ -221,9 +224,11 @@ export default {
 .mainContent {
   margin: 2em auto;
 }
+
 .filterMessage {
   margin-bottom: 2em;
 }
+
 .endOfPage {
   text-align: center;
   display: block;
@@ -232,5 +237,49 @@ export default {
 
 .topicName {
   white-space: normal;
+}
+
+.pagination {
+  background: #fff;
+  .pagination-indicator {
+    padding: 15px;
+    text-align: center;
+    display: block;
+    margin: 0;
+    border-top: 1px solid #e1e1e1;
+    color: #999;
+  }
+}
+ul.paginate-links {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  background: #fff;
+  display: flex;
+  & > li {
+    display: flex;
+    flex: 1;
+    a {
+      flex: 1;
+      text-align: center;
+      padding: 15px;
+      font-size: 1em;
+      border-right: 1px solid #e1e1e1;
+      cursor: pointer;
+    }
+
+    &.active {
+      a {
+        background: #00bfa5;
+        background: var(--md-theme-default-primary-on-background, #00bfa5);
+        color: #fff;
+        border-right: 0;
+
+        &:hover {
+          color: #fff;
+        }
+      }
+    }
+  }
 }
 </style>
