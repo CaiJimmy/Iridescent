@@ -54,14 +54,14 @@ export default {
 
             var currentIndex = array.length, temporaryValue, randomIndex;
 
-            // While there remain elements to shuffle...
+            /* While there remain elements to shuffle... */
             while (0 !== currentIndex) {
 
-                // Pick a remaining element...
+                /* Pick a remaining element... */
                 randomIndex = Math.floor(Math.random() * currentIndex);
                 currentIndex -= 1;
 
-                // And swap it with the current element.
+                /* And swap it with the current element. */
                 temporaryValue = array[currentIndex];
                 array[currentIndex] = array[randomIndex];
                 array[randomIndex] = temporaryValue;
@@ -84,14 +84,21 @@ export default {
             })
         },
         startExam (config) {
+            /*
+                This function is called in Exam/Home.vue, with parameter `config`
+            */
             this.config = config;
 
+            /* Once copied config, start to download and shuffle questions */
             this.prepareQuestions().then(() => {
-                console.log('Exam questions: ', this.examQuestions);
                 this.$router.replace('/t/' + this.topicID + '/exam/progress');
             });
         },
         onChosen (questionID, letter) {
+            /*
+                This function is passed to ExamQuestionCard
+                To create a pair of `questionID - chosen answer letter`
+            */
             this.chosen[questionID] = letter;
         }
     }
