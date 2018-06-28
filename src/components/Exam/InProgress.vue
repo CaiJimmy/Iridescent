@@ -41,6 +41,7 @@ import QuestionCard from './QuestionCard.vue';
 import VueCountdown from '@xkeshi/vue-countdown';
 
 export default {
+    name: 'ExamInProgress',
     props: ['examQuestions', 'config', 'onChosen', 'topicID'],
     data () {
         return {

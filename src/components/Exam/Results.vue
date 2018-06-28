@@ -53,6 +53,7 @@
 import QuestionCard from './QuestionCard.vue';
 
 export default {
+    name: 'ExamResults',
     props: ['chosen', 'examQuestions', 'topicID'],
     components: {
         QuestionCard

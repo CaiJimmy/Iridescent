@@ -30,6 +30,7 @@
 </template>
 <script>
 export default {
+    name: 'ExamHome',
     props: ['topicData', 'questions', 'shuffledQuestions'],
     data () {
         return {

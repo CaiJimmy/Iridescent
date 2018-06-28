@@ -20,6 +20,7 @@ import * as firebase from "firebase/app";
 import "firebase/firestore";
 
 export default {
+    name: 'ExamPage',
     props: {
         topicID: String   /* Passed though Vue Router */
     },
@@ -77,7 +78,7 @@ export default {
 
                     await this.$bind('allQuestions', this.ref.questions);
                 };
-                
+
                 this.examQuestions = this.shuffle(this.allQuestions).slice(0, this.config.numberOfQuestions);
                 resolve();
             })
