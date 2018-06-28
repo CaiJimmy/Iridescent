@@ -1,6 +1,9 @@
 <template>
     <div class="container extend mainContent">
+        <!-- Start grid -->
         <div class="md-layout md-gutter md-layout-column-xsmall md-alignment mainGrid">
+            
+            <!-- Start left side -->
             <div class="md-layout-item md-size-25 md-small-size-100 md-gutter">
                 <md-card id="examDetails"
                     class="stickyCard">
@@ -18,10 +21,12 @@
                                 <template slot-scope="props">{{ props.minutes }} : {{ props.seconds }}</template>
                             </VueCountdown>
                         </div>
-
                     </md-card-header>
                 </md-card>
             </div>
+            <!-- End left side -->
+
+            <!-- Start right side -->
             <div class="md-layout-item md-size-75 md-small-size-100 md-gutter">
                 <QuestionCard v-for="(question,index) in examQuestions"
                     :key="question.id"
@@ -33,7 +38,10 @@
                 <md-button class="md-primary md-raised submitExam"
                     v-on:click="submitExam()">Entregar</md-button>
             </div>
+            <!-- End right side -->
+
         </div>
+        <!-- End grid -->
     </div>
 </template>
 <script>
