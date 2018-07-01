@@ -24,7 +24,7 @@
 					<span class="md-title">Iridescent</span>
 				</div>
 				<span v-else-if="!$route.meta.hideToolbarTitle"
-				    class="md-title">{{ $meta().refresh().titleChunk }}</span>
+				    class="md-title">{{ title }}</span>
 			</md-toolbar>
 			<!-- End top toolbar -->
 
@@ -49,13 +49,15 @@ import 'firebase/auth';
 export default {
 	name: "app",
 	metaInfo: {
-		title: 'Inicio',
-		titleTemplate: '%s | Iridescent'
+		titleTemplate: '%s | Iridescent',
+		changed (newInfo, addedTags, removedTags) {
+			this.$root.title = newInfo.titleChunk;
+		}
 	},
 	data () {
 		return {
 			firebaseReady: false,   /* Indicates if Firebase Auth is ready or not */
-			loggedIn: false,
+			loggedIn: false
 		}
 	},
 	created () {
@@ -79,6 +81,9 @@ export default {
 			else {
 				return 1;
 			};
+		},
+		title () {
+			return this.$root.title;
 		}
 	},
 	methods: {

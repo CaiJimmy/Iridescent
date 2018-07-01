@@ -84,15 +84,13 @@ import AddTopic from './Topics/Add.vue'
 import AddLevel from './Levels/Add.vue'
 
 export default {
-	name: "Topics",
+	name: "Taxonomy",
+	metaInfo: {
+        title: 'Añadir temas / niveles'
+    },
 	components: {
 		AddTopic,
 		AddLevel
-	},
-	metaInfo () {
-		return {
-			title: 'Temas'
-		}
 	},
 	data () {
 		return {

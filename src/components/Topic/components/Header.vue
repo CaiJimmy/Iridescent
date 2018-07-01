@@ -44,7 +44,7 @@
 import * as firebase from "firebase/app";
 import "firebase/firestore";
 import resizeImage from '@/methods/resizeImage.js';
-import EditTopic from '@/components/Settings/Topics/Add.vue';
+import EditTopic from '@/components/Admin/Taxonomy/Topics/Add.vue';
 import getColorFromImage from '@/methods/getColorFromImage.js';
 import uploadFile from '@/methods/uploadFile.js';
 

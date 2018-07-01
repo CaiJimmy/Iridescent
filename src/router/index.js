@@ -28,15 +28,25 @@ var router = new Router({
 			component: require('@/components/Home.vue').default,
 			auth: true
 		},
-
 		{
-			path: '/settings/topics/',
+			path: '/admin/',
 			component: () =>
-				import ('@/components/Settings/Topics.vue'),
+				import ('@/components/Admin/App.vue'),
 			auth: true,
 			meta: {
 				isAdmin: true
-			}
+			},
+			children: [{
+					path: '',
+					component: () =>
+						import ('@/components/Admin/Home.vue')
+				},
+				{
+					path: 'taxonomy',
+					component: () =>
+						import ('@/components/Admin/Taxonomy/App.vue'),
+				}
+			]
 		},
 		{
 			path: '/t/:topicID/',
