@@ -18,7 +18,7 @@
 					<UserCard :user="user" />
 					<md-button v-if="isAdmin"
 					    class="md-primary md-raised fullWidth"
-					    v-on:click="$router.push('/settings/topics/')">Añadir Temas / Nivels</md-button>
+					    v-on:click="$router.push('/admin/')">Administrar</md-button>
 				</div>
 				<!-- Right Side End -->
 			</div>
