@@ -37,19 +37,16 @@ var router = new Router({
 				isAdmin: true
 			},
 			children: [{
-				path: '',
-				component: () =>
-					import ('@/components/Admin/Home.vue')
-			}]
-		},
-		{
-			path: '/settings/topics/',
-			component: () =>
-				import ('@/components/Settings/Topics.vue'),
-			auth: true,
-			meta: {
-				isAdmin: true
-			}
+					path: '',
+					component: () =>
+						import ('@/components/Admin/Home.vue')
+				},
+				{
+					path: 'taxonomy',
+					component: () =>
+						import ('@/components/Admin/Taxonomy/App.vue'),
+				}
+			]
 		},
 		{
 			path: '/t/:topicID/',
