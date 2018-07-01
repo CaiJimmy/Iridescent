@@ -45,6 +45,11 @@ var router = new Router({
 					path: 'taxonomy',
 					component: () =>
 						import ('@/components/Admin/Taxonomy/App.vue'),
+				},
+				{
+					path: 'export',
+					component: () =>
+						import ('@/components/Admin/Export/App.vue'),
 				}
 			]
 		},

@@ -28,6 +28,11 @@ export default {
                     name: "Añadir temas / niveles",
                     slug: "taxonomy",
                     icon: "category"
+                },
+                {
+                    name: "Exportar",
+                    slug: "export",
+                    icon: "launch"
                 }
             ]
         }
