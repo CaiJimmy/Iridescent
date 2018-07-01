@@ -27,6 +27,9 @@ import { validAccountCheck } from '@/methods/auth.js';
 
 export default {
 	name: "Login",
+	metaInfo: {
+		title: 'Iniciar Sesión'
+	},
 	data: function () {
 		return {
 			loading: {
