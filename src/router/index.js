@@ -115,7 +115,7 @@ router.beforeEach(function (to, from, next) {
 			}
 		})
 	} else {
-		if (to.meta.isAdmin && !store.state.user.isAdmin && !store.state.loading.user) {
+		if (to.matched.some(m => m.meta.isAdmin) && !store.state.user.isAdmin && !store.state.loading.user) {
 			next({
 				path: '/403'
 			})
