@@ -49,9 +49,12 @@ import 'firebase/auth';
 export default {
 	name: "app",
 	metaInfo: {
-		titleTemplate: '%s | Iridescent',
 		changed (newInfo, addedTags, removedTags) {
 			this.$root.title = newInfo.titleChunk;
+		},
+		titleTemplate: (titleChunk) => {
+			// If undefined or blank then we don't need the hyphen
+			return titleChunk ? `${titleChunk} | Iridescent` : 'Iridescent';
 		}
 	},
 	data () {
