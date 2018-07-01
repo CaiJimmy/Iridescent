@@ -28,7 +28,20 @@ var router = new Router({
 			component: require('@/components/Home.vue').default,
 			auth: true
 		},
-
+		{
+			path: '/admin/',
+			component: () =>
+				import ('@/components/Admin/App.vue'),
+			auth: true,
+			meta: {
+				isAdmin: true
+			},
+			children: [{
+				path: '',
+				component: () =>
+					import ('@/components/Admin/Home.vue')
+			}]
+		},
 		{
 			path: '/settings/topics/',
 			component: () =>
