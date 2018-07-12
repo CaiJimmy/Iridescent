@@ -50,6 +50,11 @@ var router = new Router({
 					path: 'export',
 					component: () =>
 						import ('@/components/Admin/Export/App.vue'),
+				},
+				{
+					path: 'bulk',
+					component: () =>
+						import ('@/components/Admin/Bulk/App.vue'),
 				}
 			]
 		},
