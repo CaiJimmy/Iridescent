@@ -75,6 +75,9 @@
 </template>
 
 <script>
+import * as firebase from "firebase/app";
+import "firebase/firestore";
+
 export default {
     name: 'BulkEdit',
     metaInfo: {
@@ -109,6 +112,34 @@ export default {
         this.buildTopicList();
     },
     methods: {
+        bulildQuery () {
+            let query = firebase.firestore().collection('questions');
+
+            if (this.filter.topicID !== 0) {
+                query = query.where('topic', '==', this.filter.topicID);
+            };
+
+            if (this.filter.author) {
+                query = query.where('author', '==', this.filter.author);
+            };
+
+            if (this.filter.date.start) {
+                query = query.where('date', '>=', this.filter.date.start);
+            };
+
+            if (this.filter.date.end) {
+                query = query.where('date', '<=', this.filter.date.end);
+            }
+
+            if (this.filter.visibility == 'hidden') {
+                query = query.where('hidden', '==', true);
+            }
+            else {
+                query = query.where('hidden', '==', false);
+            };
+
+            return query;
+        },
         buildTopicList () {
             const topics = this.$store.state.topics,
                 levels = this.$store.state.levels;
