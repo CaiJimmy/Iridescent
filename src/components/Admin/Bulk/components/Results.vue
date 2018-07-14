@@ -13,8 +13,22 @@
                 <div class="md-toolbar-section-start">{{ getAlternateLabel(count) }}</div>
 
                 <div class="md-toolbar-section-end">
-                    <md-button class="md-icon-button">
+                    <md-button class="md-icon-button"
+                        v-on:click="bulkAction('delete')">
                         <md-icon>delete</md-icon>
+                        <md-tooltip md-direction="bottom">{{ actionName.delete }}</md-tooltip>
+                    </md-button>
+
+                    <md-button class="md-icon-button"
+                        v-on:click="bulkAction('show')">
+                        <md-icon>visibility</md-icon>
+                        <md-tooltip md-direction="bottom">{{ actionName.show }}</md-tooltip>
+                    </md-button>
+
+                    <md-button class="md-icon-button"
+                        v-on:click="bulkAction('hide')">
+                        <md-icon>visibility_off</md-icon>
+                        <md-tooltip md-direction="bottom">{{ actionName.hide }}</md-tooltip>
                     </md-button>
                 </div>
             </md-table-toolbar>
@@ -42,6 +56,39 @@
             md-label="No hay resultados"
             md-description="Prueba con otros parámetros">
         </md-empty-state>
+
+        <md-dialog :md-active.sync="showDialog"
+            :md-click-outside-to-close="false"
+            :md-close-on-esc="false">
+            <md-dialog-title>Confirmación</md-dialog-title>
+
+            <md-dialog-content>
+                Vas a
+                <strong>{{ currentActionName }}</strong>
+                <strong>{{ selected.length }} preguntas</strong>:
+                <ul>
+                    <li v-for="question in selected"
+                        :key="question.id">
+                        <strong>{{ question.title }}</strong> publicada por {{ getUserName(question.author) }}
+                    </li>
+                </ul>
+
+                <md-checkbox v-model="confirmedAction">
+                    <span>
+                        Confirmo
+                        <strong>{{ currentActionName }}</strong> esas preguntas
+                    </span>
+                </md-checkbox>
+            </md-dialog-content>
+
+            <md-dialog-actions>
+                <md-button class="md-primary"
+                    @click="showDialog = false">Cancelar</md-button>
+                <md-button class="md-accent"
+                    @click="bulkEdit()"
+                    :disabled="!confirmedAction">Aceptar</md-button>
+            </md-dialog-actions>
+        </md-dialog>
     </div>
 </template>
 <script>
@@ -52,8 +99,45 @@ export default {
     },
     data: () => ({
         selected: [],
+
+        action: null,
+        confirmedAction: false,
+
+        showDialog: false,
+
+        actionName: {
+            delete: 'Eliminar',
+            show: 'Hacer visible',
+            hide: 'Ocultar'
+        }
     }),
+    computed: {
+        currentActionName () {
+            return this.actionName[this.action];
+        }
+    },
     methods: {
+        bulkAction (action) {
+            this.action = action;
+            this.showDialog = true;
+            this.confirmedAction = false;
+        },
+        bulkEdit (action) {
+            if (action == 'delete') {
+
+                return;
+            }
+
+            if (action == 'hide') {
+
+                return;
+            }
+
+            if (action == 'show') {
+
+                return
+            }
+        },
         getUserName (userID) {
             return this.$store.state.users[userID].displayName;
         },
