@@ -44,12 +44,14 @@
                         <!-- Start datepickers -->
                         <div>
                             <span class="md-caption">Desde</span>
-                            <md-datepicker v-model="filter.date.start" />
+                            <md-datepicker v-model="filter.date.start"
+                                :md-disabled-dates="disabledDates" />
                         </div>
 
                         <div>
                             <span class="md-caption">Hasta</span>
-                            <md-datepicker v-model="filter.date.end" />
+                            <md-datepicker v-model="filter.date.end"
+                                :md-disabled-dates="disabledDates" />
                         </div>
                         <!-- End datepickers -->
 
@@ -94,6 +96,12 @@ export default {
                 levelsAndTopics: {
 
                 }
+            },
+
+            disabledDates: date => {
+                /* Disable future dates */
+
+                return date > new Date();
             }
         }
     },
