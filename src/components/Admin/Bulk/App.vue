@@ -14,6 +14,9 @@
                         <md-field>
                             <label for="topic">Tema</label>
                             <md-select v-model="filter.topicID">
+                                <md-option :value="0">Cualquier tema</md-option>
+                                <md-divider></md-divider>
+
                                 <md-optgroup :label="level.name"
                                     v-for="(level, levelID) in options.levelsAndTopics"
                                     :key="levelID">
@@ -32,9 +35,9 @@
 
                         <md-field>
                             <label>Visibilidad</label>
-                            <md-select v-model="filter.hidden">
-                                <md-option :value="false">Visible</md-option>
-                                <md-option :value="true">Oculta</md-option>
+                            <md-select v-model="filter.visibility">
+                                <md-option value="visible">Visible</md-option>
+                                <md-option value="hidden">Oculta</md-option>
                             </md-select>
                         </md-field>
 
@@ -79,12 +82,12 @@ export default {
         return {
             filter: {
                 author: null,
-                topicID: null,
+                topicID: 0,
                 date: {
                     start: null,
                     end: new Date()
                 },
-                hidden: false
+                visibility: 'visible'
             },
 
             options: {
