@@ -58,7 +58,7 @@
                     </md-card-content>
 
                     <md-card-actions>
-                        <md-button class="md-accent">Buscar</md-button>
+                        <md-button class="md-accent" v-on:click="doSearch()">Buscar</md-button>
                     </md-card-actions>
                 </md-card>
             </div>
@@ -77,6 +77,7 @@
 <script>
 import * as firebase from "firebase/app";
 import "firebase/firestore";
+import fetchUserDatas from '@/methods/fetchUserDatas.js';
 
 export default {
     name: 'BulkEdit',
@@ -105,13 +106,29 @@ export default {
                 /* Disable future dates */
 
                 return date > new Date();
-            }
+            },
+
+            results: []
         }
     },
     created () {
         this.buildTopicList();
     },
     methods: {
+        doSearch () {
+            this.results = [];
+
+            this.buildQuery().get().then(documentSnapshots => {
+                documentSnapshots.forEach((doc) => {
+                    let questionData = doc.data();
+                    questionData.id = doc.id;
+
+                    this.results.push(questionData);
+
+                    fetchUserDatas(questionData.author);
+                });
+            })
+        },
         buildQuery () {
             let query = firebase.firestore().collection('questions');
 
