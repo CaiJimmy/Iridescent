@@ -92,6 +92,9 @@
     </div>
 </template>
 <script>
+import * as firebase from "firebase/app";
+import "firebase/firestore";
+
 export default {
     name: 'BulkEdit-Results',
     props: {
@@ -122,21 +125,30 @@ export default {
             this.showDialog = true;
             this.confirmedAction = false;
         },
-        bulkEdit (action) {
-            if (action == 'delete') {
+        bulkEdit () {
+            const ref = firebase.firestore().collection('questions'),
+                action = this.action,
+                selected = this.selected;
 
-                return;
-            }
+            selected.forEach(async (question, i) => {
+                if (action == 'delete') {
+                    await ref.doc(question.id).delete()
+                }
+                else if (action == 'hide') {
+                    await ref.doc(question.id).update({
+                        hidden: true
+                    })
+                } else if (action == 'show') {
+                    await ref.doc(question.id).update({
+                        hidden: false
+                    })
+                };
 
-            if (action == 'hide') {
-
-                return;
-            }
-
-            if (action == 'show') {
-
-                return
-            }
+                if (i == selected.length - 1) {
+                    console.info(`${selected.length} questions ${action}`);
+                    this.showDialog = false;
+                }
+            });
         },
         getUserName (userID) {
             return this.$store.state.users[userID].displayName;
