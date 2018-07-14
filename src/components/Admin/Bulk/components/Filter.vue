@@ -125,7 +125,7 @@ export default {
             };
 
             if (this.filter.date.end) {
-                query = query.where('date', '<=', this.filter.date.end);
+                query = query.where('date', '<=', new Date(this.filter.date.end.setHours(23, 59, 59, 999)));
             }
 
             if (this.filter.visibility == 'hidden') {
