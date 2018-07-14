@@ -112,7 +112,7 @@ export default {
         this.buildTopicList();
     },
     methods: {
-        bulildQuery () {
+        buildQuery () {
             let query = firebase.firestore().collection('questions');
 
             if (this.filter.topicID !== 0) {
