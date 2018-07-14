@@ -34,7 +34,8 @@ import {
 	MdTooltip,
 	MdTabs,
 	MdMenu,
-	MdDatepicker
+	MdDatepicker,
+	MdTable
 } from 'vue-material/dist/components';
 import 'vue-material/dist/vue-material.min.css';
 
@@ -63,6 +64,7 @@ Vue.use(MdTooltip)
 Vue.use(MdTabs)
 Vue.use(MdMenu)
 Vue.use(MdDatepicker)
+Vue.use(MdTable)
 
 /*
 	Prevent the production tip on Vue startup.
