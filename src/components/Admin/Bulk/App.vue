@@ -12,7 +12,7 @@
 
             <!-- Start result table -->
             <div class="md-layout-column md-layout-item md-size-70 md-small-size-100 md-gutter">
-
+                <ResultsCard :results="results" />
             </div>
             <!-- End result table -->
         </div>
@@ -21,6 +21,7 @@
 
 <script>
 import FilterCard from './components/Filter.vue';
+import ResultsCard from './components/Results.vue';
 
 export default {
     name: 'BulkEdit',
@@ -28,7 +29,8 @@ export default {
         title: 'Bulk Edit'
     },
     components: {
-        FilterCard
+        FilterCard,
+        ResultsCard
     },
     data () {
         return {
