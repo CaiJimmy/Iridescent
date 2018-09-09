@@ -37,11 +37,11 @@
                 slot-scope="{ item }"
                 md-selectable="multiple"
                 md-auto-select>
-                <md-table-cell md-label="Title"
+                <md-table-cell md-label="Título"
                     md-sort-by="title">{{ item.title }}</md-table-cell>
-                <md-table-cell md-label="Topic"
+                <md-table-cell md-label="Tema"
                     md-sort-by="topic">{{ getTopicName(item.topic) }}</md-table-cell>
-                <md-table-cell md-label="Date"
+                <md-table-cell md-label="Fecha"
                     md-sort-by="date">
                     <timeago :auto-update="60"
                         :since="item.date"></timeago>
