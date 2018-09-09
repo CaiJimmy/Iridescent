@@ -81,10 +81,11 @@
 
             <md-dialog-actions>
                 <md-button class="md-primary"
-                    @click="showDialog = false">Cancelar</md-button>
+                    @click="showDialog = false"
+                    :disabled="status.loading">Cancelar</md-button>
                 <md-button class="md-accent"
                     @click="bulkEdit()"
-                    :disabled="!confirmedAction">Aceptar</md-button>
+                    :disabled="!confirmedAction || status.loading">Aceptar</md-button>
             </md-dialog-actions>
 
             <md-progress-bar md-mode="determinate"
