@@ -1,5 +1,9 @@
 <template>
     <md-card>
+        <md-progress-bar md-mode="indeterminate"
+            class="md-accent"
+            v-if="loading"></md-progress-bar>
+
         <md-card-header>
             <div class="md-title">Filtros</div>
         </md-card-header>
@@ -86,7 +90,9 @@ export default {
                 /* Disable future dates */
 
                 return date > new Date();
-            }
+            },
+
+            loading: false
         }
     },
     created () {
@@ -95,6 +101,8 @@ export default {
     methods: {
         doSearch () {
             let _results = [];
+
+            this.loading = true;
 
             this.buildQuery().get().then(documentSnapshots => {
                 documentSnapshots.forEach((doc) => {
@@ -107,6 +115,8 @@ export default {
                 });
 
                 this.$emit('results', _results);
+
+                this.loading = false;
             })
         },
         buildQuery () {
