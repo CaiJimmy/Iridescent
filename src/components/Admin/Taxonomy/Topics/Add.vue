@@ -74,7 +74,11 @@ export default {
 			form: {
 				name: null,
 				questionCount: 5,
-				image: null
+				image: null,
+				count: {
+					hidden: 0,
+					total: 0
+				}
 			},
 			sending: false
 		};
@@ -124,8 +128,8 @@ export default {
 						let resizedImage = await resizeImage(response.file, 1500);
 
 						/// By default, the image will be uploaded to /coverImage/ folder, because we don't have yet the topic id
-						this.form.image = await uploadFile(resizedImage).then(snapshot => snapshot.downloadURL);   
-						
+						this.form.image = await uploadFile(resizedImage).then(snapshot => snapshot.downloadURL);
+
 						this.form.color = response.color;
 
 						firebase.firestore().collection("topics").add(this.form).then((topicRef) => {
