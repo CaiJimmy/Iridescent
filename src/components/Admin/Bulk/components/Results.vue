@@ -86,6 +86,11 @@
                     @click="bulkEdit()"
                     :disabled="!confirmedAction">Aceptar</md-button>
             </md-dialog-actions>
+
+            <md-progress-bar md-mode="determinate"
+                class="md-accent"
+                :md-value="status.progress"
+                v-if="status.loading"></md-progress-bar>
         </md-dialog>
     </div>
 </template>
@@ -110,6 +115,11 @@ export default {
             delete: 'Eliminar',
             show: 'Hacer visible',
             hide: 'Ocultar'
+        },
+
+        status: {
+            loading: false,
+            progress: 0
         }
     }),
     computed: {
@@ -124,6 +134,9 @@ export default {
             this.confirmedAction = false;
         },
         bulkEdit () {
+            this.status.loading = true;
+            this.status.progress = 0;
+
             const ref = firebase.firestore().collection('questions'),
                 action = this.action,
                 selected = this.selected;
@@ -142,9 +155,12 @@ export default {
                     })
                 };
 
+                this.status.progress = ((i + 1) / selected.length) * 100;
+
                 if (i == selected.length - 1) {
                     console.info(`${selected.length} questions ${action}`);
                     this.showDialog = false;
+                    this.status.loading = false;
                 }
             });
         },
