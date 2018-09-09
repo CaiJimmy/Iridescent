@@ -5,14 +5,14 @@
 
             <!-- Start sidebar -->
             <div class="md-layout-column md-layout-item md-size-30 md-small-size-100">
-                <FilterCard v-on:results="updateResults" />
+                <FilterCard v-on:results="updateResults" ref="FilterCard"/>
             </div>
 
             <!-- End sidebar -->
 
             <!-- Start result table -->
             <div class="md-layout-column md-layout-item md-size-70 md-small-size-100 md-gutter">
-                <ResultsCard :results="results" />
+                <ResultsCard :results="results" :FilterCard="this.$refs.FilterCard"/>
             </div>
             <!-- End result table -->
         </div>

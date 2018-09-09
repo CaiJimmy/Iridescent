@@ -108,7 +108,8 @@ import "firebase/firestore";
 export default {
     name: 'BulkEdit-Results',
     props: {
-        results: Array
+        results: Array,
+        FilterCard: Object /* A Vue component $ref is passed. This is a tricky way to trigger a function from another component */
     },
     data: () => ({
         selected: [],
@@ -174,6 +175,14 @@ export default {
                     this.status.loading = false;
                     this.status.snackbar.display = true;
                     this.status.snackbar.message = `${selected.length} questions ${action}`;
+
+                    /*
+                        After change being made, trigger doSearch() from FilterCard to request newest data
+                    */
+                    if (this.FilterCard.doSearch) {
+                        this.FilterCard.doSearch();
+
+                    }
                 }
             });
         },
