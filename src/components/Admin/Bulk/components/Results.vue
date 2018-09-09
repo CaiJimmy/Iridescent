@@ -41,8 +41,6 @@
                     md-sort-by="title">{{ item.title }}</md-table-cell>
                 <md-table-cell md-label="Topic"
                     md-sort-by="topic">{{ getTopicName(item.topic) }}</md-table-cell>
-                <md-table-cell md-label="Author"
-                    md-sort-by="author">{{ getUserName(item.author) }}</md-table-cell>
                 <md-table-cell md-label="Date"
                     md-sort-by="date">
                     <timeago :auto-update="60"
@@ -69,7 +67,7 @@
                 <ul>
                     <li v-for="question in selected"
                         :key="question.id">
-                        <strong>{{ question.title }}</strong> publicada por {{ getUserName(question.author) }}
+                        <strong>{{ question.title }}</strong>
                     </li>
                 </ul>
 

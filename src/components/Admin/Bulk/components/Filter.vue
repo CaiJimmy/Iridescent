@@ -65,7 +65,7 @@
 <script>
 import * as firebase from "firebase/app";
 import "firebase/firestore";
-import fetchUserDatas from '@/methods/fetchUserDatas.js';
+///import fetchUserDatas from '@/methods/fetchUserDatas.js';
 
 export default {
     name: 'BulkEdit-Filter',
@@ -112,7 +112,7 @@ export default {
 
                     _results.push(questionData);
 
-                    fetchUserDatas(questionData.author);
+                    ///fetchUserDatas(questionData.author);
                 });
 
                 this.$emit('results', _results);
