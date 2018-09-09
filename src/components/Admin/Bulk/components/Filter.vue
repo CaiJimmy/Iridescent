@@ -57,7 +57,8 @@
 
         <md-card-actions>
             <md-button class="md-accent"
-                v-on:click="doSearch()">Buscar</md-button>
+                v-on:click="doSearch()"
+                :disabled="loading">Buscar</md-button>
         </md-card-actions>
     </md-card>
 </template>
