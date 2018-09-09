@@ -32,7 +32,11 @@ import {
 	MdSubheader,
 	MdToolbar,
 	MdTooltip,
-	MdTabs
+	MdTabs,
+	MdMenu,
+	MdDatepicker,
+	MdTable,
+	MdContent
 } from 'vue-material/dist/components';
 import 'vue-material/dist/vue-material.min.css';
 
@@ -59,6 +63,10 @@ Vue.use(MdDialog)
 Vue.use(MdSubheader)
 Vue.use(MdTooltip)
 Vue.use(MdTabs)
+Vue.use(MdMenu)
+Vue.use(MdDatepicker)
+Vue.use(MdTable)
+Vue.use(MdContent)
 
 /*
 	Prevent the production tip on Vue startup.

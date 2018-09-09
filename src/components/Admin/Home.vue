@@ -33,6 +33,11 @@ export default {
                     name: "Exportar",
                     slug: "export",
                     icon: "launch"
+                },
+                {
+                    name: "Bulk Edit",
+                    slug: "bulk",
+                    icon: "check_box"
                 }
             ]
         }
