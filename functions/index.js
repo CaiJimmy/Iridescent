@@ -6,7 +6,7 @@ admin.initializeApp();
 const db = admin.firestore();
 
 exports.questionChange = functions.firestore.document('questions/{questionID}').onWrite(
-	(change) => {
+	async (change, context) => {
 
 		const oldQuestion = change.before.data(),
 			newQuestion = change.after.data();
@@ -26,39 +26,37 @@ exports.questionChange = functions.firestore.document('questions/{questionID}').
 			newTopicRef = db.collection('topics').doc(newTopic);
 		}
 
-
 		if (!change.before.exists) {
 			// New document Created : plus one to count.total
 
-			return newTopicRef.get().then(snap => {
-				return newTopicRef.set({
-					count: {
-						total: snap.data().count.total + 1
-					}
-				}, {
-					merge: true
-				});
-			});
+			const newTopicData = await newTopicRef.get().then(snap => snap.data());
 
+			return newTopicRef.set({
+				count: {
+					total: newTopicData.count.total + 1
+				}
+			}, {
+				merge: true
+			});
 		};
-		
+
 		if (!change.after.exists) {
 			// Deleting question : subtract one from count.total and count.hidden if the question was hidden
 
 			const wasHidden = oldQuestion.hidden;
 
-			return oldTopicRef.get().then(snap => {
-				return oldTopicRef.set({
-					count: {
-						hidden: snap.data().count.hidden + (wasHidden ? -1 : 0),
-						total: snap.data().count.total - 1
-					}
-				}, {
-					merge: true
-				});
+			const oldTopicData = await oldTopicRef.get().then(snap => snap.data());
+
+			return oldTopicRef.set({
+				count: {
+					hidden: oldTopicData.count.hidden + (wasHidden ? -1 : 0),
+					total: oldTopicData.count.total - 1
+				}
+			}, {
+				merge: true
 			});
 		};
-		
+
 		if (change.before.exists && change.after.exists) {
 			// Updating existing document
 			// Two Cases:
@@ -68,53 +66,48 @@ exports.questionChange = functions.firestore.document('questions/{questionID}').
 			if (oldTopic !== newTopic) { /* Case 1 */
 
 				/// Subtract one from old topic count.total
-				oldTopicRef.get().then(snap => {
-					oldTopicRef.set({
-						count: {
-							total: snap.data().count.total - 1
-						}
-					}, {
-						merge: true
-					});
+
+				const oldTopicData = await oldTopicRef.get().then(snap => snap.data()),
+					newTopicData = await newTopicRef.get().then(snap => snap.data());
+
+				oldTopicRef.set({
+					count: {
+						total: oldTopicData.count.total - 1
+					}
+				}, {
+					merge: true
 				});
 
 				if (oldQuestion.hidden == true) {
 					/// Subtract one from old topic count.hidden if that question was hidden
-					oldTopicRef.get().then(snap => {
-						oldTopicRef.set({
-							count: {
-								hidden: snap.data().count.hidden - 1
-							}
-						}, {
-							merge: true
-						});
-					});
-				};
-
-				/// Plus one to new topic count.total
-				newTopicRef.get().then(snap => {
-					newTopicRef.set({
+					oldTopicRef.set({
 						count: {
-							total: snap.data().count.total + 1
+							hidden: oldTopicData.count.hidden - 1
 						}
 					}, {
 						merge: true
 					});
+				};
+
+				/// Plus one to new topic count.total
+				newTopicRef.set({
+					count: {
+						total: newTopicData.count.total + 1
+					}
+				}, {
+					merge: true
 				});
 
 				if (newQuestion.hidden == true) {
 					/// Plus one to new topic count.hidden if that question is hidden
-					return newTopicRef.get().then(snap => {
-						return newTopicRef.set({
-							count: {
-								hidden: snap.data().count.hidden + 1
-							}
-						}, {
-							merge: true
-						});
+					return newTopicRef.set({
+						count: {
+							hidden: newTopicData.count.hidden + 1
+						}
+					}, {
+						merge: true
 					});
-				}
-				else{
+				} else {
 					return true;
 				}
 			} else if (oldQuestion.hidden !== newQuestion.hidden) { /* Case 2 */
@@ -124,14 +117,14 @@ exports.questionChange = functions.firestore.document('questions/{questionID}').
 
 				const isHidden = newQuestion.hidden;
 
-				return newTopicRef.get().then(snap => {
-					return newTopicRef.set({
-						count: {
-							hidden: snap.data().count.hidden + (isHidden ? +1 : -1)
-						}
-					}, {
-						merge: true
-					});
+				const newTopicData = await newTopicRef.get().then(snap => snap.data());
+
+				return newTopicRef.set({
+					count: {
+						hidden: newTopicData.count.hidden + (isHidden ? 1 : -1)
+					}
+				}, {
+					merge: true
 				});
 			};
 		}
@@ -146,7 +139,7 @@ const cors = require('cors')({
 const app = express();
 app.use(cors);
 
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
 	const topicID = req.query.topic,
 		topicRef = db.collection('topics').doc(topicID);
 
@@ -155,30 +148,28 @@ app.get('/', (req, res) => {
 		return;
 	};
 
-	const allQuestions = db.collection('questions').where('topic', '==', topicID);
+	const allQuestions = await db.collection('questions').where('topic', '==', topicID).get();
 
-	allQuestions.get().then(snap => {
-		let totalCount = snap.size,
-			hiddenCount = 0;
+	let totalCount = allQuestions.size,
+		hiddenCount = 0;
 
-		snap.forEach(item => {
-			if (item.data().hidden == true) {
-				hiddenCount++;
-			};
-		});
+	allQuestions.forEach(async item => {
+		if (item.data().hidden == true) {
+			hiddenCount++;
+		};
 
-		topicRef.set({
-			'count': {
+		await topicRef.set({
+			count: {
 				total: totalCount,
 				hidden: hiddenCount
 			}
 		}, {
 			merge: true
-		}).then(() => {
-			res.json({
-				total: totalCount,
-				hidden: hiddenCount
-			});
+		});
+
+		res.json({
+			total: totalCount,
+			hidden: hiddenCount
 		});
 	})
 });
