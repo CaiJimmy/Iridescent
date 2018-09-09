@@ -65,7 +65,6 @@ import * as firebase from "firebase/app";
 import "firebase/firestore";
 import getColorFromImage from '@/methods/getColorFromImage.js';
 import uploadFile from '@/methods/uploadFile.js';
-import resizeImage from '@/methods/resizeImage.js';
 
 export default {
 	name: "AddTopic",
@@ -90,6 +89,15 @@ export default {
 		}
 	},
 	methods: {
+		randomID () {
+			var text = "";
+			var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+			for (var i = 0; i < 8; i++)
+				text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+			return text;
+		},
 		editTopic () {
 			this.$validator.validateAll().then((result) => {
 				if (result) {
@@ -106,7 +114,7 @@ export default {
 			});
 		},
 		getRandomPic: async function () {
-			return fetch("https://source.unsplash.com/1500x500/?technology").then(async (response) => {   /// Fetch a random image from Unsplash, and add it to form
+			return fetch("https://source.unsplash.com/200x120/?technology").then(async (response) => {   /// Fetch a random image from Unsplash, and add it to form
 				let imageFile = await fetch(response.url).then(res => {
 					return res.blob();
 				});
@@ -119,32 +127,31 @@ export default {
 			})
 		},
 		addTopic: async function () {
-			this.$validator.validateAll().then((result) => {
-				if (result) {
-					this.sending = true;
-					this.form.level = this.selectedLevel;
+			const validated = await this.$validator.validateAll();
 
-					this.getRandomPic().then(async (response) => {
-						let resizedImage = await resizeImage(response.file, 1500);
+			if (validated) {
 
-						/// By default, the image will be uploaded to /coverImage/ folder, because we don't have yet the topic id
-						this.form.image = await uploadFile(resizedImage).then(snapshot => snapshot.downloadURL);
+				this.sending = true;
+				this.form.level = this.selectedLevel;
 
-						this.form.color = response.color;
+				const randomPic = await this.getRandomPic();
 
-						firebase.firestore().collection("topics").add(this.form).then((topicRef) => {
-							this.sending = false;
-							this.form = {
-								name: null
-							};
-							this.callback();
+				/// By default, the image will be uploaded to /coverImage/ folder, because we don't have yet the topic id
+				const uploadImageURL = await uploadFile(randomPic.file, `coverImage/${this.randomID()}`).then(snapshot => snapshot.downloadURL);
 
-							this.$router.push(`/t/${topicRef.id}`);
-						});
-					});
+				this.form = {
+					...this.form,
+					image: uploadImageURL,
+					color: randomPic.color
+				};
 
-				}
-			});
+				firebase.firestore().collection("topics").add(this.form).then((topicRef) => {
+					this.sending = false;
+					this.callback();
+
+					this.$router.push(`/t/${topicRef.id}`);
+				});
+			}
 		}
 	}
 };
