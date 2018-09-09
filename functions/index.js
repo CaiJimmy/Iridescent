@@ -6,7 +6,7 @@ admin.initializeApp();
 const db = admin.firestore();
 
 exports.questionChange = functions.firestore.document('questions/{questionID}').onWrite(
-	(change) => {
+	(change, context) => {
 
 		const oldQuestion = change.before.data(),
 			newQuestion = change.after.data();
