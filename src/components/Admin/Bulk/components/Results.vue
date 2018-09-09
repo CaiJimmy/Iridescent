@@ -92,6 +92,13 @@
                 :md-value="status.progress"
                 v-if="status.loading"></md-progress-bar>
         </md-dialog>
+
+        <md-snackbar md-position="left"
+            :md-duration="5000"
+            :md-active.sync="status.snackbar.display">
+            <span>{{ status.snackbar.message }}</span>
+        </md-snackbar>
+
     </div>
 </template>
 <script>
@@ -119,7 +126,12 @@ export default {
 
         status: {
             loading: false,
-            progress: 0
+            progress: 0,
+            snackbar: {
+                display: false,
+                message: null
+            }
+
         }
     }),
     computed: {
@@ -158,9 +170,10 @@ export default {
                 this.status.progress = ((i + 1) / selected.length) * 100;
 
                 if (i == selected.length - 1) {
-                    console.info(`${selected.length} questions ${action}`);
                     this.showDialog = false;
                     this.status.loading = false;
+                    this.status.snackbar.display = true;
+                    this.status.snackbar.message = `${selected.length} questions ${action}`;
                 }
             });
         },
