@@ -5,7 +5,7 @@
             md-card
             @md-selected="onSelect">
             <md-table-toolbar>
-                <h1 class="md-title">Resultados</h1>
+                <h1 class="md-title">{{ results.length }} Resultados</h1>
             </md-table-toolbar>
 
             <md-table-toolbar slot="md-table-alternate-header"
