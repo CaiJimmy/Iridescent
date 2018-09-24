@@ -1,16 +1,25 @@
 <template>
     <div>
-        <md-table v-if="results.length"
-            v-model="results"
+        <md-table v-model="results"
             md-card
-            @md-selected="onSelect">
+            @md-selected="onSelect"
+            ref="resultsTable">
             <md-table-toolbar>
                 <h1 class="md-title">{{ results.length }} Resultados</h1>
             </md-table-toolbar>
 
             <md-table-toolbar slot="md-table-alternate-header"
                 slot-scope="{ count }">
-                <div class="md-toolbar-section-start">{{ getAlternateLabel(count) }}</div>
+                <div class="md-toolbar-section-start">
+                    <md-button v-if="selected.length"
+                        class="md-icon-button"
+                        v-on:click="clearSelected()">
+                        <md-icon>close</md-icon>
+                        <md-tooltip md-direction="bottom">Deseleccionar todo</md-tooltip>
+                    </md-button>
+                    
+                    <h1 class="md-title">{{ getAlternateLabel(count) }}</h1>
+                </div>
 
                 <div class="md-toolbar-section-end">
                     <md-button class="md-icon-button"
@@ -33,6 +42,11 @@
                 </div>
             </md-table-toolbar>
 
+            <md-table-empty-state md-icon="search"
+                md-label="No hay resultados"
+                :md-description="`Prueba con otros parámetros`">
+            </md-table-empty-state>
+
             <md-table-row slot="md-table-row"
                 slot-scope="{ item }"
                 md-selectable="multiple"
@@ -48,12 +62,6 @@
                 </md-table-cell>
             </md-table-row>
         </md-table>
-
-        <md-empty-state v-else
-            md-icon="search"
-            md-label="No hay resultados"
-            md-description="Prueba con otros parámetros">
-        </md-empty-state>
 
         <md-dialog :md-active.sync="showDialog"
             :md-click-outside-to-close="false"
@@ -142,6 +150,15 @@ export default {
         }
     },
     methods: {
+        clearSelected(){
+            /*
+                It's necessary to access Md-Table component's state to empty array.
+                If we empty directly `this.selected`, there's no any effect.
+                
+                It will triggle @md-selected event, and empty automatically `this.selected`
+            */
+            this.$refs.resultsTable.MdTable.selectedItems = [];
+        },
         bulkAction (action) {
             this.action = action;
             this.showDialog = true;
@@ -178,11 +195,15 @@ export default {
                     this.status.snackbar.message = `${selected.length} questions ${action}`;
 
                     /*
+                        Reset selection
+                    */
+                    this.clearSelected();
+
+                    /*
                         After change being made, trigger doSearch() from FilterCard to request newest data
                     */
                     if (this.FilterCard.doSearch) {
                         this.FilterCard.doSearch();
-
                     }
                 }
             });
