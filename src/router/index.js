@@ -25,7 +25,8 @@ var router = new Router({
 		},
 		{
 			path: '/',
-			component: require('@/components/Home.vue').default,
+			component: () =>
+				import ('@/components/Home.vue'),
 			auth: true
 		},
 		{
@@ -60,12 +61,14 @@ var router = new Router({
 		},
 		{
 			path: '/t/:topicID/',
-			component: require('@/components/Topic/App.vue').default,
+			component: () =>
+				import ('@/components/Topic/App.vue'),
 			auth: true,
 			props: true,
 			children: [{
 					path: '',
-					component: require('@/components/Topic/Home.vue').default
+					component: () =>
+						import ('@/components/Topic/Home.vue')
 				},
 				{
 					path: 'exam',
@@ -101,7 +104,8 @@ var router = new Router({
 		},
 		{
 			path: '/profile/:userID',
-			component: require('@/components/Profile/App.vue').default,
+			component: () =>
+				import ('@/components/Profile/App.vue'),
 			props: true,
 			meta: {
 				"hideToolbarTitle": true,
