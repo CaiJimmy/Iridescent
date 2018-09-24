@@ -84,10 +84,13 @@ export default new Vuex.Store({
 				commit('ready', 'levels');
 			});
 
-			let user = firebase.auth().currentUser;
+			const user = firebase.auth().currentUser;
 			firebase.firestore().collection('users').doc(user.uid).onSnapshot((snapshot) => {
-				let userData = snapshot.data();
-				userData.uid = user.uid;
+				const userData = {
+					...snapshot.data(),
+					uid: user.uid
+				};
+
 				commit('setUserData', userData);
 				commit('addUser', userData);
 				commit('ready', 'user');
