@@ -1,7 +1,6 @@
 <template>
     <div>
-        <md-table v-if="results.length"
-            v-model="results"
+        <md-table v-model="results"
             md-card
             @md-selected="onSelect">
             <md-table-toolbar>
@@ -33,6 +32,11 @@
                 </div>
             </md-table-toolbar>
 
+            <md-table-empty-state md-icon="search"
+                md-label="No hay resultados"
+                :md-description="`Prueba con otros parámetros`">
+            </md-table-empty-state>
+
             <md-table-row slot="md-table-row"
                 slot-scope="{ item }"
                 md-selectable="multiple"
@@ -48,12 +52,6 @@
                 </md-table-cell>
             </md-table-row>
         </md-table>
-
-        <md-empty-state v-else
-            md-icon="search"
-            md-label="No hay resultados"
-            md-description="Prueba con otros parámetros">
-        </md-empty-state>
 
         <md-dialog :md-active.sync="showDialog"
             :md-click-outside-to-close="false"
