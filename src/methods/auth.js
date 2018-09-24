@@ -7,7 +7,7 @@ import 'firebase/auth';
  * @returns {Promise} Boolean which indicates account is valid or not
  */
 function validAccountCheck() {
-	let user = firebase.auth().currentUser;
+	const user = firebase.auth().currentUser;
 
 	return firebase.firestore().collection('users').doc(user.uid).set({
 		'displayName': user.displayName,
@@ -18,7 +18,7 @@ function validAccountCheck() {
 	}).then(() => {
 		return true;
 	}).catch((err) => { // Not a while-listed domain
-		console.log(err);
+		console.error(err);
 		return false;
 	});
 }
