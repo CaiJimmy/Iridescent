@@ -2,14 +2,24 @@
     <div>
         <md-table v-model="results"
             md-card
-            @md-selected="onSelect">
+            @md-selected="onSelect"
+            ref="resultsTable">
             <md-table-toolbar>
                 <h1 class="md-title">{{ results.length }} Resultados</h1>
             </md-table-toolbar>
 
             <md-table-toolbar slot="md-table-alternate-header"
                 slot-scope="{ count }">
-                <div class="md-toolbar-section-start">{{ getAlternateLabel(count) }}</div>
+                <div class="md-toolbar-section-start">
+                    <md-button v-if="selected.length"
+                        class="md-icon-button"
+                        v-on:click="clearSelected()">
+                        <md-icon>close</md-icon>
+                        <md-tooltip md-direction="bottom">Deseleccionar todo</md-tooltip>
+                    </md-button>
+                    
+                    <h1 class="md-title">{{ getAlternateLabel(count) }}</h1>
+                </div>
 
                 <div class="md-toolbar-section-end">
                     <md-button class="md-icon-button"
@@ -140,6 +150,15 @@ export default {
         }
     },
     methods: {
+        clearSelected(){
+            /*
+                It's necessary to access Md-Table component's state to empty array.
+                If we empty directly `this.selected`, there's no any effect.
+                
+                It will triggle @md-selected event, and empty automatically `this.selected`
+            */
+            this.$refs.resultsTable.MdTable.selectedItems = [];
+        },
         bulkAction (action) {
             this.action = action;
             this.showDialog = true;
