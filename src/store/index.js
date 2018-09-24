@@ -16,7 +16,8 @@ export default new Vuex.Store({
 		loading: {
 			topics: true,
 			levels: true,
-			user: true
+			user: true,
+			userValidation: true
 		}
 	},
 	mutations: {
