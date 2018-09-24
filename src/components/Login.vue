@@ -42,8 +42,18 @@ export default {
 		};
 	},
 	created: function () {
-		console.log(firebase.auth().currentUser);
 		if (firebase.auth().currentUser) { // Already Logged In
+			/*
+				Start downloading datas (levels and topics)
+			*/
+			this.$store.dispatch('initApp');
+
+			/*
+				If the user is logged in, he/she must have passed domain validation
+				So it can be ignored.
+			*/
+			this.$store.commit('ready', 'userValidation');   
+
 			this.redirect();
 		}
 	},
@@ -61,8 +71,10 @@ export default {
 
 				validAccountCheck().then((validAccount) => {  /// Check if user has a valid email account
 
-					if (validAccount) {
+					if (validAccount == true) {
 						this.redirect();
+						this.$store.dispatch('initApp');
+						this.$store.commit('ready', 'userValidation');
 					}
 					else {
 						this.snackbar.message = 'No es una cuenta válida';
