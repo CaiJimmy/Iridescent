@@ -195,11 +195,15 @@ export default {
                     this.status.snackbar.message = `${selected.length} questions ${action}`;
 
                     /*
+                        Reset selection
+                    */
+                    this.clearSelected();
+
+                    /*
                         After change being made, trigger doSearch() from FilterCard to request newest data
                     */
                     if (this.FilterCard.doSearch) {
                         this.FilterCard.doSearch();
-
                     }
                 }
             });
