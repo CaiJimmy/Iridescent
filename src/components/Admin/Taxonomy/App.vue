@@ -77,7 +77,7 @@
 	</div>
 </template>
 <script>
-import db from '@/database';
+import db from '@/firebase/database';
 
 import AddTopic from './Topics/Add.vue'
 import AddLevel from './Levels/Add.vue'

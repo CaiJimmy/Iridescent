@@ -106,7 +106,7 @@
     </div>
 </template>
 <script>
-import db from '@/database';
+import db from '@/firebase/database';
 
 import QuestionForm from './../Form.vue';
 import MoveQuestion from './MoveQuestion.vue';

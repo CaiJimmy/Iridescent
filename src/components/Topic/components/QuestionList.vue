@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import db from "@/database";
+import db from "@/firebase/database";
 import QuestionCard from './QuestionCard.vue';
 import fetchUserDatas from '@/methods/fetchUserDatas.js';
 import NewQuestions from './NewQuestions.vue';

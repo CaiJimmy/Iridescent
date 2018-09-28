@@ -9,7 +9,7 @@
     </md-card>
 </template>
 <script>
-import db from '@/database';
+import db from '@/firebase/database';
 
 import "firebase/auth";
 

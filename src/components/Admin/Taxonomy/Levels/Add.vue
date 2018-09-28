@@ -33,7 +33,7 @@
     </form>
 </template>
 <script>
-import db from '@/database';
+import db from '@/firebase/database';
 
 export default {
     name: "AddLevel",

@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import db from '@/database';
+import db from '@/firebase/database';
 
 import TopicHeader from './components/Header.vue';
 

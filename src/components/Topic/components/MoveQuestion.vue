@@ -34,7 +34,7 @@
     </md-card>
 </template>
 <script>
-import db from '@/database';
+import db from '@/firebase/database';
 
 export default {
     props: ['questionID', 'currentTopicID', 'authorData', 'questionData', 'snackbar', 'callback', 'exitMoving'],

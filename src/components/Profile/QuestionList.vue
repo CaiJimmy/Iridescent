@@ -110,7 +110,7 @@
     </div>
 </template>
 <script>
-import db from '@/database';
+import db from '@/firebase/database';
 
 import QuestionCard from '@/components/Topic/components/QuestionCard.vue';
 

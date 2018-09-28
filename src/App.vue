@@ -43,8 +43,7 @@
 </template>
 
 <script>
-import * as firebase from 'firebase/app';
-import 'firebase/auth';
+import auth from '@/firebase/auth'
 
 export default {
     name: "app",
@@ -64,7 +63,7 @@ export default {
         }
     },
     created () {
-        firebase.auth().onAuthStateChanged((user) => {
+        auth.onAuthStateChanged((user) => {
             if (user) {
                 this.loggedIn = true;
             }

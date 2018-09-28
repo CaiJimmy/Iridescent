@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import db from '@/database';
+import db from '@/firebase/database';
 
 import resizeImage from '@/methods/resizeImage.js';
 import EditTopic from '@/components/Admin/Taxonomy/Topics/Add.vue';
