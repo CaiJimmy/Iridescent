@@ -34,7 +34,7 @@
     </md-card>
 </template>
 <script>
-import Firestore from '@/firebase/firestore';
+import {Firestore} from '@/firebase/firestore';
 
 export default {
     props: ['questionID', 'currentTopicID', 'authorData', 'questionData', 'snackbar', 'callback', 'exitMoving'],

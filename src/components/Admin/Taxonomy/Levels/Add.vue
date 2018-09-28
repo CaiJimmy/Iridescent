@@ -33,7 +33,7 @@
     </form>
 </template>
 <script>
-import Firestore from '@/firebase/firestore';
+import {Firestore} from '@/firebase/firestore';
 
 export default {
     name: "AddLevel",

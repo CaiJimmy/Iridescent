@@ -65,7 +65,7 @@
     </div>
 </template>
 <script>
-import Firestore from '@/firebase/firestore';
+import {Firestore} from '@/firebase/firestore';
 
 import QuestionList from './QuestionList.vue'
 

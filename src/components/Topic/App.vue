@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import Firestore from '@/firebase/firestore';
+import {Firestore} from '@/firebase/firestore';
 
 import TopicHeader from './components/Header.vue';
 

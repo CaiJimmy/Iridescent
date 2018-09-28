@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import Firestore from "@/firebase/firestore";
+import {Firestore} from "@/firebase/firestore";
 import QuestionCard from './QuestionCard.vue';
 import fetchUserDatas from '@/methods/fetchUserDatas.js';
 import NewQuestions from './NewQuestions.vue';

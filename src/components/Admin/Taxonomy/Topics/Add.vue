@@ -61,7 +61,7 @@
 	</form>
 </template>
 <script>
-import Firestore from '@/firebase/firestore';
+import {Firestore} from '@/firebase/firestore';
 
 import getColorFromImage from '@/methods/getColorFromImage.js';
 import uploadFile from '@/methods/uploadFile.js';

@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import Firestore from '@/firebase/firestore';
+import {Firestore} from '@/firebase/firestore';
 
 import resizeImage from '@/methods/resizeImage.js';
 import EditTopic from '@/components/Admin/Taxonomy/Topics/Add.vue';

@@ -1,4 +1,4 @@
-import Firestore from '@/firebase/firestore';
+import {Firestore} from '@/firebase/firestore';
 import {Auth} from '@/firebase/auth';
 
 /**

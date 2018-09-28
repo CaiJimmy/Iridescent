@@ -16,7 +16,7 @@
     </div>
 </template>
 <script>
-import Firestore from '@/firebase/firestore';
+import {Firestore} from '@/firebase/firestore';
 
 export default {
     name: 'ExamPage',

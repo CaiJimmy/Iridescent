@@ -106,7 +106,7 @@
     </div>
 </template>
 <script>
-import Firestore from '@/firebase/firestore';
+import {Firestore} from '@/firebase/firestore';
 
 import QuestionForm from './../Form.vue';
 import MoveQuestion from './MoveQuestion.vue';

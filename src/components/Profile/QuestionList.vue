@@ -110,7 +110,7 @@
     </div>
 </template>
 <script>
-import Firestore from '@/firebase/firestore';
+import {Firestore} from '@/firebase/firestore';
 
 import QuestionCard from '@/components/Topic/components/QuestionCard.vue';
 

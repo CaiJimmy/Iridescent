@@ -77,7 +77,7 @@
 	</div>
 </template>
 <script>
-import Firestore from '@/firebase/firestore';
+import {Firestore} from '@/firebase/firestore';
 
 import AddTopic from './Topics/Add.vue'
 import AddLevel from './Levels/Add.vue'

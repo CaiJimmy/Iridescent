@@ -1,5 +1,5 @@
 import store from '@/store';
-import Firestore from '@/firebase/firestore';
+import {Firestore} from '@/firebase/firestore';
 
 /**
  * Fetch user's profile data from Firestore

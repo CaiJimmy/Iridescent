@@ -80,9 +80,8 @@
     </form>
 </template>
 <script>
-import * as firebase from 'firebase/app';
-import 'firebase/firestore';
-import "firebase/auth";
+import {Auth} from '@/firebase/auth';
+import {Firestore, firestore} from '@/firebase/firestore';
 
 export default {
     name: 'Send',
@@ -125,7 +124,7 @@ export default {
                 return this.$store.state.users[this.questionData.author];
             }
             else {
-                return firebase.auth().currentUser
+                return Auth.currentUser
             }
         }
     },
@@ -137,7 +136,7 @@ export default {
         deleteQuestion (questionID) {
             let questionData = this.question;
 
-            db.collection('questions').doc(questionID).delete().then(() => {
+            Firestore.collection('questions').doc(questionID).delete().then(() => {
                 this.snackbar.message = 'La pregunta ha sido eliminada';
                 this.snackbar.display = true;
 
@@ -154,7 +153,7 @@ export default {
             this.loading.form = true;
             this.$validator.validateAll().then((result) => {
                 if (result) {
-                    var ref = db.collection('questions/').doc(this.questionID);
+                    var ref = Firestore.collection('questions/').doc(this.questionID);
                     ref.set(this.question, { merge: true }).then((ref) => {
 
                         this.snackbar.message = "La pregunta ha sido editada correctamente";
@@ -181,18 +180,18 @@ export default {
             this.$validator.validateAll().then((result) => {
                 if (result) {
                     this.question.topic = this.topicRef.id;
-                    this.question.author = firebase.auth().currentUser.uid;
+                    this.question.author = Auth.currentUser.uid;
 
-                    var ref = db.collection('questions/');
+                    var ref = Firestore.collection('questions/');
                     ref.add({
                         ...this.question,
-                        date: firebase.firestore.FieldValue.serverTimestamp()
+                        date: firestore.FieldValue.serverTimestamp()
                     }).then((ref) => {
 
                         this.question = {
                             title: null,
                             date: null,
-                            author: firebase.auth().currentUser.uid,
+                            author: Auth.currentUser.uid,
                             correctAnswer: 'a',
                             answers: {
                                 a: null,
