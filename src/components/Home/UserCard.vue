@@ -21,8 +21,7 @@
     </div>
 </template>
 <script>
-import * as firebase from 'firebase/app';
-import 'firebase/auth';
+import {Auth} from '@/firebase/auth'
 
 export default {
     props: ['user'],
@@ -46,7 +45,7 @@ export default {
     },
     methods: {
         signOut: function () {
-            firebase.auth().signOut().then(() => {
+            Auth.signOut().then(() => {
                 if (!this.$route.query.go || this.$route.path !== '/login') {
                     this.$router.replace({
                         path: '/login',
