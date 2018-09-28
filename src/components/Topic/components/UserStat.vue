@@ -9,9 +9,8 @@
     </md-card>
 </template>
 <script>
-import * as firebase from "firebase/app";
-import "firebase/firestore";
-import "firebase/auth";
+import db from '@/firebase/database';
+import auth from '@/firebase/auth';
 
 export default {
     name: 'UserStat',
@@ -26,9 +25,9 @@ export default {
     },
     created () {
         const topicID = this.topicData.id;
-        this.userQuestionsRef = firebase.firestore().collection('questions')
+        this.userQuestionsRef = db.collection('questions')
             .where('topic', '==', topicID)
-            .where('author', '==', firebase.auth().currentUser.uid);
+            .where('author', '==', auth.currentUser.uid);
 
         this.$bind('userQuestions', this.userQuestionsRef).then(() => {
             this.loading = false;

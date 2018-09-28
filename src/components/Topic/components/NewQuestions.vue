@@ -23,8 +23,8 @@
     </div>
 </template>
 <script>
-import * as firebase from "firebase/app";
-import "firebase/firestore";
+import db from '@/firebase/database';
+
 import QuestionCard from './QuestionCard.vue';
 import fetchUserDatas from '@/methods/fetchUserDatas.js';
 
@@ -55,7 +55,7 @@ export default {
             if (newArr.length && newArr.length > oldArr.length) {
                 /* Triggered only when a question is added (newArr.length > oldArr.length) */
                 this.newQuestionAlert = true;
-            };
+            }
         }
     },
     methods: {

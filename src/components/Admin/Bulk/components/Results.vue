@@ -58,7 +58,7 @@
                 <md-table-cell md-label="Fecha"
                     md-sort-by="date">
                     <timeago :auto-update="60"
-                        :since="item.date"></timeago>
+                        :datetime="item.date.toDate()"></timeago>
                 </md-table-cell>
             </md-table-row>
         </md-table>
@@ -111,8 +111,7 @@
     </div>
 </template>
 <script>
-import * as firebase from "firebase/app";
-import "firebase/firestore";
+import db from '@/firebase/database';
 
 export default {
     name: 'BulkEdit-Results',
@@ -168,7 +167,7 @@ export default {
             this.status.loading = true;
             this.status.progress = 0;
 
-            const ref = firebase.firestore().collection('questions'),
+            const ref = db.collection('questions'),
                 action = this.action,
                 selected = this.selected;
 
@@ -184,7 +183,7 @@ export default {
                     await ref.doc(question.id).update({
                         hidden: false
                     })
-                };
+                }
 
                 this.status.progress = ((i + 1) / selected.length) * 100;
 

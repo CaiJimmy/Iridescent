@@ -41,8 +41,8 @@
 </template>
 
 <script>
-import * as firebase from "firebase/app";
-import "firebase/firestore";
+import db from '@/firebase/database';
+
 import resizeImage from '@/methods/resizeImage.js';
 import EditTopic from '@/components/Admin/Taxonomy/Topics/Add.vue';
 import getColorFromImage from '@/methods/getColorFromImage.js';

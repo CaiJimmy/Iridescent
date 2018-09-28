@@ -63,8 +63,7 @@
     </md-card>
 </template>
 <script>
-import * as firebase from "firebase/app";
-import "firebase/firestore";
+import db from '@/firebase/database';
 ///import fetchUserDatas from '@/methods/fetchUserDatas.js';
 
 export default {
@@ -121,19 +120,19 @@ export default {
             })
         },
         buildQuery () {
-            let query = firebase.firestore().collection('questions');
+            let query = db.collection('questions');
 
             if (this.filter.topicID !== 0) {
                 query = query.where('topic', '==', this.filter.topicID);
-            };
+            }
 
             if (this.filter.author) {
                 query = query.where('author', '==', this.filter.author);
-            };
+            }
 
             if (this.filter.date.start) {
                 query = query.where('date', '>=', this.filter.date.start);
-            };
+            }
 
             if (this.filter.date.end) {
                 query = query.where('date', '<=', new Date(this.filter.date.end.setHours(23, 59, 59, 999)));
@@ -144,7 +143,7 @@ export default {
             }
             else {
                 query = query.where('hidden', '==', false);
-            };
+            }
 
             return query;
         },
@@ -160,7 +159,7 @@ export default {
                         ...levels[topic.level],
                         topics: []
                     };
-                };
+                }
 
                 this.options.levelsAndTopics[topic.level].topics.push(topic);
             });

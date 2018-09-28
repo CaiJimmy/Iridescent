@@ -61,8 +61,8 @@
 	</form>
 </template>
 <script>
-import * as firebase from "firebase/app";
-import "firebase/firestore";
+import db from '@/firebase/database';
+
 import getColorFromImage from '@/methods/getColorFromImage.js';
 import uploadFile from '@/methods/uploadFile.js';
 
@@ -145,7 +145,7 @@ export default {
 					color: randomPic.color
 				};
 
-				firebase.firestore().collection("topics").add(this.form).then((topicRef) => {
+				db.collection("topics").add(this.form).then((topicRef) => {
 					this.sending = false;
 					this.callback();
 

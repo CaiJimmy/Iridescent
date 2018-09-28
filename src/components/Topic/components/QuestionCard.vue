@@ -38,7 +38,7 @@
                     <div class="md-subhead">
                         <span>
                             <timeago :auto-update="60"
-                                :since="question.date"></timeago>
+                                :datetime="question.date.toDate()"></timeago>
                         </span>
                     </div>
                 </md-card-header>
@@ -62,7 +62,7 @@
                             <div class="md-subhead">
                                 <span>
                                     <timeago :auto-update="60"
-                                        :since="question.date"></timeago>
+                                        :datetime="question.date.toDate()"></timeago>
                                 </span>
                             </div>
                         </md-card-header-text>
@@ -106,8 +106,8 @@
     </div>
 </template>
 <script>
-import * as firebase from "firebase/app";
-import "firebase/firestore";
+import db from '@/firebase/database';
+
 import QuestionForm from './../Form.vue';
 import MoveQuestion from './MoveQuestion.vue';
 
@@ -143,7 +143,7 @@ export default {
     },
     methods: {
         toggleHidden () {
-            const questionRef = firebase.firestore().collection('questions').doc(this.question.id);
+            const questionRef = db.collection('questions').doc(this.question.id);
 
             this.hidden = !this.hidden; /* Invert true/false */
 
@@ -181,7 +181,7 @@ export default {
             if (!this.isAdmin) {
                 e.clipboardData.setData('text/plain', 'Pa k kieres copiar eso jaja salu2');
                 e.preventDefault();
-            };
+            }
         }
     }
 }

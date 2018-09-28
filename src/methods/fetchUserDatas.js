@@ -1,6 +1,6 @@
 import store from '@/store';
-import * as firebase from "firebase/app";
-import "firebase/firestore";
+import db from '@/firebase/database';
+
 /**
  * Fetch user's profile data from Firestore
  * 
@@ -10,7 +10,7 @@ import "firebase/firestore";
 export default function (userID) {
 	if(!(store.state.user.isAdmin || userID == store.state.user.uid)){   /// Don't fetch user data if current user is not admin
 		return;
-	};
+	}
 
 	if (!store.state.users.hasOwnProperty(userID)) {
 
@@ -20,7 +20,7 @@ export default function (userID) {
 		};
 		store.commit('addUser', tempData);
 
-		firebase.firestore().collection('users').doc(userID).get().then(snapshot => {
+		db.collection('users').doc(userID).get().then(snapshot => {
 			let userData = snapshot.data();
 			userData.uid = userID;
 			userData.loading = false;

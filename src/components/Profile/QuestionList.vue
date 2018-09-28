@@ -110,8 +110,8 @@
     </div>
 </template>
 <script>
-import * as firebase from "firebase/app";
-import "firebase/firestore";
+import db from '@/firebase/database';
+
 import QuestionCard from '@/components/Topic/components/QuestionCard.vue';
 
 export default {
@@ -176,7 +176,7 @@ export default {
                         query: {}
                     })
                 }
-            };
+            }
 
             /*
                 Go to page 1 after filter change
@@ -230,10 +230,10 @@ export default {
             const questionWrapper = document.getElementById('questionWrapper');
             if(questionWrapper){
                 window.scrollTo(0, questionWrapper.offsetTop - 100);
-            };
+            }
         },
         bindQuestions () {
-            const questionRef = firebase.firestore().collection('questions')
+            const questionRef = db.collection('questions')
                 .where('author', '==', this.user.uid)
                 .orderBy("date", 'desc');
 
@@ -258,7 +258,7 @@ export default {
                             So, if that topic's data can not be found, means that topic ID is not valid.
                         */
                         return;
-                    };
+                    }
 
                     const levelID = topicData.level;
 

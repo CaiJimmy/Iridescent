@@ -142,7 +142,7 @@ router.afterEach(function (to, from, next) {
 				go: to.fullPath,
 			},
 		});
-	};
+	}
 })
 
 export default router
