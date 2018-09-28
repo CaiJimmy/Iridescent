@@ -1,11 +1,11 @@
-import storage from '@/firebase/storage';
+import {Storage} from '@/firebase/storage';
 
 export default function uploadFile(file, path) {
     const metadata = {
         contentType: file.type
     };
 
-    return storage
+    return Storage
         .ref(path || "coverImage/" + file.name)
         .put(file, metadata)
         .then(function (snapshot) {

@@ -1,7 +1,11 @@
 import firebase from '../'
 import 'firebase/storage';
 
-const storage = firebase.storage();
+const storage = firebase.storage,
+    Storage = storage();
 
-export default storage;
+export {
+    storage,
+    Storage
+};
 
