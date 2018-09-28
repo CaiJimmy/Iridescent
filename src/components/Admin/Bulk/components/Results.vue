@@ -58,7 +58,7 @@
                 <md-table-cell md-label="Fecha"
                     md-sort-by="date">
                     <timeago :auto-update="60"
-                        :since="item.date"></timeago>
+                        :datetime="item.date.toDate()"></timeago>
                 </md-table-cell>
             </md-table-row>
         </md-table>

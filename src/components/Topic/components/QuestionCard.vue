@@ -38,7 +38,7 @@
                     <div class="md-subhead">
                         <span>
                             <timeago :auto-update="60"
-                                :since="question.date"></timeago>
+                                :datetime="question.date.toDate()"></timeago>
                         </span>
                     </div>
                 </md-card-header>
@@ -62,7 +62,7 @@
                             <div class="md-subhead">
                                 <span>
                                     <timeago :auto-update="60"
-                                        :since="question.date"></timeago>
+                                        :datetime="question.date.toDate()"></timeago>
                                 </span>
                             </div>
                         </md-card-header-text>
