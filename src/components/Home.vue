@@ -26,9 +26,6 @@
 	</div>
 </template>
 <script>
-import * as firebase from 'firebase/app';
-import 'firebase/auth';
-
 import TopicList from './Home/TopicList.vue'
 import UserCard from './Home/UserCard.vue'
 
