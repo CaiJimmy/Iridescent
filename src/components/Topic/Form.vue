@@ -80,9 +80,11 @@
     </form>
 </template>
 <script>
-import * as firebase from "firebase/app";
-import "firebase/firestore";
+import * as firebase from 'firebase/app';
+import 'firebase/firestore';
 import "firebase/auth";
+
+import db from '@/database';
 
 export default {
     name: 'Send',
@@ -137,7 +139,7 @@ export default {
         deleteQuestion (questionID) {
             let questionData = this.question;
 
-            firebase.firestore().collection('questions').doc(questionID).delete().then(() => {
+            db.collection('questions').doc(questionID).delete().then(() => {
                 this.snackbar.message = 'La pregunta ha sido eliminada';
                 this.snackbar.display = true;
 
@@ -154,7 +156,7 @@ export default {
             this.loading.form = true;
             this.$validator.validateAll().then((result) => {
                 if (result) {
-                    var ref = firebase.firestore().collection('questions/').doc(this.questionID);
+                    var ref = db.collection('questions/').doc(this.questionID);
                     ref.set(this.question, { merge: true }).then((ref) => {
 
                         this.snackbar.message = "La pregunta ha sido editada correctamente";
@@ -183,7 +185,7 @@ export default {
                     this.question.topic = this.topicRef.id;
                     this.question.author = firebase.auth().currentUser.uid;
 
-                    var ref = firebase.firestore().collection('questions/');
+                    var ref = db.collection('questions/');
                     ref.add({
                         ...this.question,
                         date: firebase.firestore.FieldValue.serverTimestamp()

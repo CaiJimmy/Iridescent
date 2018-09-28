@@ -77,8 +77,7 @@
 	</div>
 </template>
 <script>
-import * as firebase from "firebase/app";
-import "firebase/firestore";
+import db from '@/database';
 
 import AddTopic from './Topics/Add.vue'
 import AddLevel from './Levels/Add.vue'
@@ -110,10 +109,10 @@ export default {
 		};
 	},
 	created: function () {
-		this.$bind("topics", firebase.firestore().collection("topics")).then(() => {
+		this.$bind("topics", db.collection("topics")).then(() => {
 			this.loading.topics = false;
 		});
-		this.$bind("levels", firebase.firestore().collection("levels")).then(() => {
+		this.$bind("levels", db.collection("levels")).then(() => {
 			this.loading.levels = false;
 		});;
 	},

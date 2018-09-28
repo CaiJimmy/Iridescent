@@ -61,8 +61,7 @@
 </template>
 
 <script>
-import * as firebase from "firebase/app";
-import "firebase/firestore";
+import db from "@/database";
 import QuestionCard from './QuestionCard.vue';
 import fetchUserDatas from '@/methods/fetchUserDatas.js';
 import NewQuestions from './NewQuestions.vue';
@@ -135,7 +134,7 @@ export default {
                     loading: true
                 });
 
-                this.ref.questions = firebase.firestore().collection('questions')
+                this.ref.questions = db.collection('questions')
                     .where('topic', '==', this.topicData.id)
                     .orderBy("date", 'desc');
             }
@@ -148,7 +147,7 @@ export default {
                     loading: true
                 });
 
-                this.ref.questions = firebase.firestore().collection('questions')
+                this.ref.questions = db.collection('questions')
                     .where('topic', '==', this.topicData.id)
                     .where('hidden', '==', false)
                     .orderBy("date", 'desc');
@@ -216,7 +215,7 @@ export default {
                     we can build it's documentSnapshot to query the following page only
                 */
 
-                const questionBeforeRef = firebase.firestore().collection('questions').doc(questionBefore.id),
+                const questionBeforeRef = db.collection('questions').doc(questionBefore.id),
                     questionBeforeSnapshot = await questionBeforeRef.get();
 
                 startAfter = this.ref.questions.startAfter(questionBeforeSnapshot).limit(per_page);

@@ -49,8 +49,8 @@
 </template>
 
 <script>
-import * as firebase from "firebase/app";
-import "firebase/firestore";
+import db from '@/database';
+
 import TopicHeader from './components/Header.vue';
 
 export default {
@@ -108,7 +108,7 @@ export default {
         }
     },
     created: function () {
-        this.ref.topic = firebase.firestore().collection('topics').doc(this.topicID);
+        this.ref.topic = db.collection('topics').doc(this.topicID);
 
         if (!this.$store.state.loading.topics) {
             this.bindTopic()

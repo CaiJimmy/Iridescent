@@ -106,8 +106,8 @@
     </div>
 </template>
 <script>
-import * as firebase from "firebase/app";
-import "firebase/firestore";
+import db from '@/database';
+
 import QuestionForm from './../Form.vue';
 import MoveQuestion from './MoveQuestion.vue';
 
@@ -143,7 +143,7 @@ export default {
     },
     methods: {
         toggleHidden () {
-            const questionRef = firebase.firestore().collection('questions').doc(this.question.id);
+            const questionRef = db.collection('questions').doc(this.question.id);
 
             this.hidden = !this.hidden; /* Invert true/false */
 

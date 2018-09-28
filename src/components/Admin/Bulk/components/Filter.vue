@@ -63,8 +63,7 @@
     </md-card>
 </template>
 <script>
-import * as firebase from "firebase/app";
-import "firebase/firestore";
+import db from '@/database';
 ///import fetchUserDatas from '@/methods/fetchUserDatas.js';
 
 export default {
@@ -121,7 +120,7 @@ export default {
             })
         },
         buildQuery () {
-            let query = firebase.firestore().collection('questions');
+            let query = db.collection('questions');
 
             if (this.filter.topicID !== 0) {
                 query = query.where('topic', '==', this.filter.topicID);

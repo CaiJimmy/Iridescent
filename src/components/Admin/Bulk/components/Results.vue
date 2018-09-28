@@ -111,8 +111,7 @@
     </div>
 </template>
 <script>
-import * as firebase from "firebase/app";
-import "firebase/firestore";
+import db from '@/database';
 
 export default {
     name: 'BulkEdit-Results',
@@ -168,7 +167,7 @@ export default {
             this.status.loading = true;
             this.status.progress = 0;
 
-            const ref = firebase.firestore().collection('questions'),
+            const ref = db.collection('questions'),
                 action = this.action,
                 selected = this.selected;
 

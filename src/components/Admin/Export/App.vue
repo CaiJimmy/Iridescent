@@ -42,8 +42,7 @@
     </div>
 </template>
 <script>
-import * as firebase from "firebase/app";
-import "firebase/firestore";
+import db from '@/database';
 
 export default {
     name: "Export",
@@ -82,7 +81,6 @@ export default {
     },
     methods: {
         async downloadCollection (collection) {
-            const db = firebase.firestore();
             return new Promise(resolve => {
                 db.collection(collection).get().then(documentSnapshots => {
                     let collectionData = [],
