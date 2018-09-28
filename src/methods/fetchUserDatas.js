@@ -10,7 +10,7 @@ import db from '@/database';
 export default function (userID) {
 	if(!(store.state.user.isAdmin || userID == store.state.user.uid)){   /// Don't fetch user data if current user is not admin
 		return;
-	};
+	}
 
 	if (!store.state.users.hasOwnProperty(userID)) {
 

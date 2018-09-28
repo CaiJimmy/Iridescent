@@ -176,7 +176,7 @@ export default {
                         query: {}
                     })
                 }
-            };
+            }
 
             /*
                 Go to page 1 after filter change
@@ -230,7 +230,7 @@ export default {
             const questionWrapper = document.getElementById('questionWrapper');
             if(questionWrapper){
                 window.scrollTo(0, questionWrapper.offsetTop - 100);
-            };
+            }
         },
         bindQuestions () {
             const questionRef = db.collection('questions')
@@ -258,7 +258,7 @@ export default {
                             So, if that topic's data can not be found, means that topic ID is not valid.
                         */
                         return;
-                    };
+                    }
 
                     const levelID = topicData.level;
 

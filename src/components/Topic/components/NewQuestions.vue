@@ -55,7 +55,7 @@ export default {
             if (newArr.length && newArr.length > oldArr.length) {
                 /* Triggered only when a question is added (newArr.length > oldArr.length) */
                 this.newQuestionAlert = true;
-            };
+            }
         }
     },
     methods: {

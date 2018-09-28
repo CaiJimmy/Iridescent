@@ -82,7 +82,7 @@ export default {
             }
             else {
                 return 1;
-            };
+            }
         },
         title () {
             return this.$root.title;

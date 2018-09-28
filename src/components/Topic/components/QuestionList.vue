@@ -120,7 +120,7 @@ export default {
         init () {
             if (!this.topicData) {
                 return;
-            };
+            }
 
             const count = this.topicData.count;
             
@@ -151,7 +151,7 @@ export default {
                     .where('topic', '==', this.topicData.id)
                     .where('hidden', '==', false)
                     .orderBy("date", 'desc');
-            };
+            }
 
             /*
                 Load questions of first page
@@ -202,7 +202,7 @@ export default {
 
             if (this.paging.loaded.includes(currentPage)) {
                 return;
-            };
+            }
 
             /* Display progress spinner */
             this.paging.loading = true;
@@ -222,7 +222,7 @@ export default {
 
                 if (index < 0) {
                     index = 0;
-                };
+                }
 
                 startAfterAvailable = true;
             }
@@ -240,7 +240,7 @@ export default {
                     */
 
                     limit = per_page;
-                };
+                }
 
                 startAfter = this.ref.questions.limit(limit);
                 index = 0;   /* Start loop from first page */
@@ -269,7 +269,7 @@ export default {
                     */
 
                     this.paging.loaded = Array.from(Array(currentPage).keys());
-                };
+                }
 
                 /* Scroll to the start of list after changed page */
                 const questionWrapper = document.getElementById('questionWrapper');
@@ -290,7 +290,7 @@ export default {
 
             if (!type) {
                 return;
-            };
+            }
 
             if (data.question) {
                 index = this.questions.findIndex((question) => question.id == data.question.id);
@@ -300,7 +300,7 @@ export default {
                     /* Replace old question data with new one, passed as parameter `data.question` */
                     if (index > -1) {
                         this.$set(this.questions, index, data.question)
-                    };
+                    }
                     break;
 
                 case 'delete':
@@ -309,7 +309,7 @@ export default {
 
                     if (index > -1) {
                         this.questions.splice(index, 1);
-                    };
+                    }
             }
 
         }

@@ -80,7 +80,7 @@ export default {
 						this.snackbar.message = 'No es una cuenta válida';
 						this.snackbar.display = true;
 						firebase.auth().signOut();
-					};
+					}
 
 				}).then(() => {
 					this.loading.login = false;

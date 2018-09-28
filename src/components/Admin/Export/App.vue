@@ -116,7 +116,7 @@ export default {
                         this.saveJSON(exportedData);
                         this.inProgress = false;
                         this.progress_bar = 0;
-                    };
+                    }
                 });
             });
 

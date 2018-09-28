@@ -38,7 +38,7 @@ export default {
                 let item = this.levels[value];
                 item.id = value;
                 array.push(item);
-            };
+            }
             return array;
         }
     },

@@ -129,7 +129,7 @@ if (process.env.NODE_ENV == 'production' && process.env.VUE_APP_SENTRY_API) {
 				.install();
 		});
 	});
-};
+}
 
 /*
 	Import & Load VuePaginate

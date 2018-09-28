@@ -181,7 +181,7 @@ export default {
             if (!this.isAdmin) {
                 e.clipboardData.setData('text/plain', 'Pa k kieres copiar eso jaja salu2');
                 e.preventDefault();
-            };
+            }
         }
     }
 }

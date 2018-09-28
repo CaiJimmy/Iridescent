@@ -183,7 +183,7 @@ export default {
                     await ref.doc(question.id).update({
                         hidden: false
                     })
-                };
+                }
 
                 this.status.progress = ((i + 1) / selected.length) * 100;
 

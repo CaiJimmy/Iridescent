@@ -87,7 +87,7 @@ export default {
             }
             else {
                 return {};
-            };
+            }
         }
     },
     watch: {
@@ -112,7 +112,7 @@ export default {
 
         if (!this.$store.state.loading.topics) {
             this.bindTopic()
-        };
+        }
     },
     methods: {
         bindTopic () {
@@ -123,7 +123,7 @@ export default {
             else {
                 this.loading.metadata = false;
                 this.notFound = true;
-            };
+            }
         }
     }
 }

@@ -76,7 +76,7 @@ export default {
                     */
 
                     await this.$bind('allQuestions', this.ref.questions);
-                };
+                }
 
                 this.examQuestions = this.shuffle(this.allQuestions).slice(0, this.config.numberOfQuestions);
                 resolve();

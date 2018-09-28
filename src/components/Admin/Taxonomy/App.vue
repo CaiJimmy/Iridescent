@@ -114,7 +114,7 @@ export default {
 		});
 		this.$bind("levels", db.collection("levels")).then(() => {
 			this.loading.levels = false;
-		});;
+		});
 	},
 	methods: {
 		closeAddLevelDialog: function (dialogRef) {
