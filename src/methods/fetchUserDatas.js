@@ -1,5 +1,5 @@
 import store from '@/store';
-import db from '@/firebase/database';
+import {Firestore} from '@/firebase/firestore';
 
 /**
  * Fetch user's profile data from Firestore
@@ -20,7 +20,7 @@ export default function (userID) {
 		};
 		store.commit('addUser', tempData);
 
-		db.collection('users').doc(userID).get().then(snapshot => {
+		Firestore.collection('users').doc(userID).get().then(snapshot => {
 			let userData = snapshot.data();
 			userData.uid = userID;
 			userData.loading = false;

@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import auth from '@/firebase/auth';
+import {Auth, auth} from '@/firebase/auth';
 import { validAccountCheck } from '@/methods/auth.js';
 
 export default {
@@ -41,7 +41,7 @@ export default {
 		};
 	},
 	created: function () {
-		if (auth.currentUser) { // Already Logged In
+		if (Auth.currentUser) { // Already Logged In
 			/*
 				Start downloading datas (levels and topics)
 			*/
@@ -65,8 +65,8 @@ export default {
 		login: function () {
 			this.loading.login = true;
 
-			let provider = new firebase.auth.GoogleAuthProvider();
-			auth.signInWithPopup(provider).then(result => {
+			let provider = new auth.GoogleAuthProvider();
+			Auth.signInWithPopup(provider).then(result => {
 
 				validAccountCheck().then((validAccount) => {  /// Check if user has a valid email account
 
@@ -78,7 +78,7 @@ export default {
 					else {
 						this.snackbar.message = 'No es una cuenta válida';
 						this.snackbar.display = true;
-						auth.signOut();
+						Auth.signOut();
 					}
 
 				}).then(() => {

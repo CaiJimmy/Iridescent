@@ -16,7 +16,7 @@
     </div>
 </template>
 <script>
-import db from '@/firebase/database';
+import {Firestore} from '@/firebase/firestore';
 
 export default {
     name: 'ExamPage',
@@ -26,7 +26,7 @@ export default {
     data () {
         return {
             ref: {
-                questions: db.collection('questions').where('topic', '==', this.topicID)
+                questions: Firestore.collection('questions').where('topic', '==', this.topicID)
             },
             allQuestions: [],
             examQuestions: [],

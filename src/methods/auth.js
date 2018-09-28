@@ -1,5 +1,5 @@
-import db from '@/firebase/database';
-import auth from '@/firebase/auth';
+import {Firestore} from '@/firebase/firestore';
+import {Auth} from '@/firebase/auth';
 
 /**
  * Check if the account used for login is valid
@@ -7,9 +7,9 @@ import auth from '@/firebase/auth';
  * @returns {Promise} Boolean which indicates account is valid or not
  */
 function validAccountCheck() {
-	const user = auth.currentUser;
+	const user = Auth.currentUser;
 
-	return db.collection('users').doc(user.uid).set({
+	return Firestore.collection('users').doc(user.uid).set({
 		'displayName': user.displayName,
 		'email': user.email,
 		'photoURL': user.photoURL

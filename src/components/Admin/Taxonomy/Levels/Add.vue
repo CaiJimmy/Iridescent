@@ -33,7 +33,7 @@
     </form>
 </template>
 <script>
-import db from '@/firebase/database';
+import {Firestore} from '@/firebase/firestore';
 
 export default {
     name: "AddLevel",
@@ -52,7 +52,7 @@ export default {
                 if (result) {
                     this.sending = true;
 
-                    db.collection("levels").add(this.form).then(() => {
+                    Firestore.collection("levels").add(this.form).then(() => {
                         this.sending = false;
                         this.form = {
                             name: null

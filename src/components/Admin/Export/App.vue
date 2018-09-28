@@ -42,7 +42,7 @@
     </div>
 </template>
 <script>
-import db from '@/firebase/database';
+import {Firestore} from '@/firebase/firestore';
 
 export default {
     name: "Export",
@@ -82,7 +82,7 @@ export default {
     methods: {
         async downloadCollection (collection) {
             return new Promise(resolve => {
-                db.collection(collection).get().then(documentSnapshots => {
+                Firestore.collection(collection).get().then(documentSnapshots => {
                     let collectionData = [],
                         collectionSize = documentSnapshots.size;
 

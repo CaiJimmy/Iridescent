@@ -23,7 +23,7 @@
     </div>
 </template>
 <script>
-import db from '@/firebase/database';
+import {Firestore} from '@/firebase/firestore';
 
 import QuestionCard from './QuestionCard.vue';
 import fetchUserDatas from '@/methods/fetchUserDatas.js';

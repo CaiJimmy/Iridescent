@@ -110,7 +110,7 @@
     </div>
 </template>
 <script>
-import db from '@/firebase/database';
+import {Firestore} from '@/firebase/firestore';
 
 import QuestionCard from '@/components/Topic/components/QuestionCard.vue';
 
@@ -233,7 +233,7 @@ export default {
             }
         },
         bindQuestions () {
-            const questionRef = db.collection('questions')
+            const questionRef = Firestore.collection('questions')
                 .where('author', '==', this.user.uid)
                 .orderBy("date", 'desc');
 
