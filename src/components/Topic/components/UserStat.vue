@@ -10,7 +10,7 @@
 </template>
 <script>
 import Firestore from '@/firebase/firestore';
-import Auth from '@/firebase/auth';
+import {Auth} from '@/firebase/auth';
 
 export default {
     name: 'UserStat',
