@@ -34,7 +34,7 @@
     </md-card>
 </template>
 <script>
-import db from '@/firebase/database';
+import Firestore from '@/firebase/firestore';
 
 export default {
     props: ['questionID', 'currentTopicID', 'authorData', 'questionData', 'snackbar', 'callback', 'exitMoving'],
@@ -73,7 +73,7 @@ export default {
     },
     methods: {
         moveQuestion (topicID) {
-            db.collection('questions').doc(this.questionID).set({
+            Firestore.collection('questions').doc(this.questionID).set({
                 'topic': this.selected
             }, {
                     merge: true

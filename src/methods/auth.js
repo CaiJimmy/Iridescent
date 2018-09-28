@@ -1,4 +1,4 @@
-import db from '@/firebase/database';
+import Firestore from '@/firebase/firestore';
 import auth from '@/firebase/auth';
 
 /**
@@ -9,7 +9,7 @@ import auth from '@/firebase/auth';
 function validAccountCheck() {
 	const user = auth.currentUser;
 
-	return db.collection('users').doc(user.uid).set({
+	return Firestore.collection('users').doc(user.uid).set({
 		'displayName': user.displayName,
 		'email': user.email,
 		'photoURL': user.photoURL

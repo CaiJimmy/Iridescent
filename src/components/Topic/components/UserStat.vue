@@ -9,7 +9,7 @@
     </md-card>
 </template>
 <script>
-import db from '@/firebase/database';
+import Firestore from '@/firebase/firestore';
 import auth from '@/firebase/auth';
 
 export default {
@@ -25,7 +25,7 @@ export default {
     },
     created () {
         const topicID = this.topicData.id;
-        this.userQuestionsRef = db.collection('questions')
+        this.userQuestionsRef = Firestore.collection('questions')
             .where('topic', '==', topicID)
             .where('author', '==', auth.currentUser.uid);
 

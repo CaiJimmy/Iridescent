@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import db from '@/firebase/database';
+import Firestore from '@/firebase/firestore';
 import auth from '@/firebase/auth';
 
 Vue.use(Vuex);
@@ -58,7 +58,7 @@ export default new Vuex.Store({
 			commit
 		}) {
 			/// TODO: Replace it with VuexFire
-			db.collection("topics").orderBy('name', 'asc').onSnapshot((snapshot) => { /// Listen and download /topics, and save it on state.topics
+			Firestore.collection("topics").orderBy('name', 'asc').onSnapshot((snapshot) => { /// Listen and download /topics, and save it on state.topics
 				snapshot.forEach((doc) => {
 					let topic = doc.data();
 					topic.id = doc.id;
@@ -71,7 +71,7 @@ export default new Vuex.Store({
 				commit('ready', 'topics');
 			});
 
-			db.collection("levels").orderBy('name', 'asc').onSnapshot((snapshot) => {
+			Firestore.collection("levels").orderBy('name', 'asc').onSnapshot((snapshot) => {
 				snapshot.forEach((doc) => {
 					let level = doc.data();
 					level.id = doc.id;
@@ -85,7 +85,7 @@ export default new Vuex.Store({
 			});
 
 			const user = auth.currentUser;
-			db.collection('users').doc(user.uid).onSnapshot((snapshot) => {
+			Firestore.collection('users').doc(user.uid).onSnapshot((snapshot) => {
 				const userData = {
 					...snapshot.data(),
 					uid: user.uid

@@ -65,7 +65,7 @@
     </div>
 </template>
 <script>
-import db from '@/firebase/database';
+import Firestore from '@/firebase/firestore';
 
 import QuestionList from './QuestionList.vue'
 
@@ -123,7 +123,7 @@ export default {
                     Otherwise, fetch user data and add it to $store.state.users[]
                 */
                 
-                db.collection('users').doc(this.userID).get().then((snapshot) => {
+                Firestore.collection('users').doc(this.userID).get().then((snapshot) => {
                     if (snapshot.exists) {
                         /* User ID found on databse */
                         this.user = snapshot.data();
