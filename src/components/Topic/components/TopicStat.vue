@@ -56,7 +56,7 @@ export default {
     },
     methods: {
         reCount () {
-            const firebase_function_url = process.env.FIREBASE_FUNCTION_URL;
+            const firebase_function_url = process.env.VUE_APP_FIREBASE_FUNCTION_URL;
             
             this.reCounting = true;
 
