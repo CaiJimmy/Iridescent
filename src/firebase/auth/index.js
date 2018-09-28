@@ -1,6 +1,10 @@
 import firebase from '../';
 import 'firebase/auth';
 
-const auth = firebase.auth();
+const auth = firebase.auth,
+    Auth = auth();
 
-export default auth;
+export {
+    auth,
+    Auth
+};

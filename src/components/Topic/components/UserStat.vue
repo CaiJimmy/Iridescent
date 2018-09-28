@@ -10,7 +10,7 @@
 </template>
 <script>
 import Firestore from '@/firebase/firestore';
-import auth from '@/firebase/auth';
+import Auth from '@/firebase/auth';
 
 export default {
     name: 'UserStat',
@@ -27,7 +27,7 @@ export default {
         const topicID = this.topicData.id;
         this.userQuestionsRef = Firestore.collection('questions')
             .where('topic', '==', topicID)
-            .where('author', '==', auth.currentUser.uid);
+            .where('author', '==', Auth.currentUser.uid);
 
         this.$bind('userQuestions', this.userQuestionsRef).then(() => {
             this.loading = false;
