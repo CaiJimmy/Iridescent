@@ -1,9 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Meta from 'vue-meta'
-import * as firebase from 'firebase/app';
-import 'firebase/auth';
-import store from '@/store';
+import {Auth} from '@/firebase/auth'
+import store from '@/store'
 
 Vue.use(Meta)
 Vue.use(Router)
@@ -108,7 +107,7 @@ var router = new Router({
 })
 
 router.beforeEach(function (to, from, next) {
-    if (to.auth && !firebase.auth().currentUser) {
+    if (to.auth && !Auth.currentUser) {
         next({
             path: '/login',
             query: {
@@ -127,7 +126,7 @@ router.beforeEach(function (to, from, next) {
 });
 
 router.afterEach(function (to, from, next) {
-    if (to.path !== '/login' && !firebase.auth().currentUser) {
+    if (to.path !== '/login' && !Auth.currentUser) {
         router.replace({
             path: '/login',
             query: {
