@@ -63,7 +63,7 @@
     </md-card>
 </template>
 <script>
-import firestore from '@/firebase/firestore';
+import {Firestore} from '@/firebase/firestore';
 ///import fetchUserDatas from '@/methods/fetchUserDatas.js';
 
 export default {
