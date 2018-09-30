@@ -8,30 +8,30 @@ import store from './store'
 	Only import needed components
 */
 import {
-	MdButton,
-	MdAvatar,
-	MdCard,
-	MdCheckbox,
-	MdDivider,
-	MdDialog,
-	MdElevation,
-	MdEmptyState,
-	MdField,
-	MdIcon,
-	MdList,
-	MdLayout,
-	MdRadio,
-	MdRipple,
-	MdProgress,
-	MdSnackbar,
-	MdSubheader,
-	MdToolbar,
-	MdTooltip,
-	MdTabs,
-	MdMenu,
-	MdDatepicker,
-	MdTable,
-	MdContent
+    MdButton,
+    MdAvatar,
+    MdCard,
+    MdCheckbox,
+    MdDivider,
+    MdDialog,
+    MdElevation,
+    MdEmptyState,
+    MdField,
+    MdIcon,
+    MdList,
+    MdLayout,
+    MdRadio,
+    MdRipple,
+    MdProgress,
+    MdSnackbar,
+    MdSubheader,
+    MdToolbar,
+    MdTooltip,
+    MdTabs,
+    MdMenu,
+    MdDatepicker,
+    MdTable,
+    MdContent
 } from 'vue-material/dist/components';
 import 'vue-material/dist/vue-material.min.css';
 
@@ -85,45 +85,46 @@ Vue.use(VeeValidate);
 */
 import VueTimeago from 'vue-timeago'
 Vue.use(VueTimeago, {
-	name: 'timeago',
-	locale: 'es-ES',
-	locales: {
-		'es-ES': [
-			"ahora", ["hace %s segundo", "hace %s segundos"],
-			["hace %s minuto", "hace %s minutos"],
-			["hace %s hora", "hace %s horas"],
-			["hace %s día", "hace %s días"],
-			["hace %s semana", "hace %s semanas"],
-			["hace %s mes", "hace %s meses"],
-			["hace %s año", "hace %s años"]
-		]
-	}
+    name: 'timeago',
+    locale: 'es-ES',
+    locales: {
+        'es-ES': [
+            "ahora", ["hace %s segundo", "hace %s segundos"],
+            ["hace %s minuto", "hace %s minutos"],
+            ["hace %s hora", "hace %s horas"],
+            ["hace %s día", "hace %s días"],
+            ["hace %s semana", "hace %s semanas"],
+            ["hace %s mes", "hace %s meses"],
+            ["hace %s año", "hace %s años"]
+        ]
+    }
 });
 
 /*
 	Import & Load VueAnalytics
 */
 if (process.env.NODE_ENV == 'production' && process.env.VUE_APP_GA_TRACKINGID) {
-	import ('vue-analytics').then((VueAnalytics) => {
-		Vue.use(VueAnalytics, {
-			id: process.env.VUE_APP_GA_TRACKINGID,
-			router
-		})
-	});
+    import ('vue-analytics').then((VueAnalytics) => {
+        Vue.use(VueAnalytics, {
+            id: process.env.VUE_APP_GA_TRACKINGID,
+            router
+        })
+    });
 }
 
 /*
 	Import & Load Sentry.io
 */
+
 if (process.env.NODE_ENV == 'production' && process.env.VUE_APP_SENTRY_API) {
-	import ('raven-js').then((Raven) => {
-		import ('raven-js/plugins/vue').then((RavenVue) => {
-			Raven
-				.config(process.env.VUE_APP_SENTRY_API)
-				.addPlugin(RavenVue, Vue)
-				.install();
-		});
-	});
+    import ('@sentry/browser').then((Sentry) => {
+        Sentry.init({
+            dsn: process.env.VUE_APP_SENTRY_API,
+            integrations: [new Sentry.Integrations.Vue({
+                Vue
+            })]
+        })
+    });
 }
 
 /*
@@ -134,14 +135,14 @@ Vue.use(VuePaginate)
 
 /* eslint-disable no-new */
 new Vue({
-	el: '#app',
-	router,
-	store,
-	template: '<App/>',
-	components: {
-		App
-	},
-	data: {
-		title: ""
-	}
+    el: '#app',
+    router,
+    store,
+    template: '<App/>',
+    components: {
+        App
+    },
+    data: {
+        title: ""
+    }
 });
