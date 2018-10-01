@@ -66,7 +66,8 @@
                                 </span>
                             </div>
                         </md-card-header-text>
-                        <md-button class="md-icon-button"
+                        <md-button v-if="isAdmin"
+                            class="md-icon-button"
                             v-on:click="toggleHidden()">
                             <md-icon v-if="hidden">visibility_off</md-icon>
                             <md-icon v-else>visibility</md-icon>
