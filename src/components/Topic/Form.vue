@@ -199,7 +199,8 @@ export default {
                                 b: null,
                                 c: null,
                                 d: null
-                            }
+                            },
+							hidden: false
                         };
                         this.$validator.reset();
                         this.loading.form = false;
